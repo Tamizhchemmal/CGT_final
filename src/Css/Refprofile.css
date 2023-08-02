@@ -1,0 +1,55 @@
+#navs{
+    position: sticky;
+    top: 0;
+}
+
+.crd-bg {
+    display: flex;
+    justify-content: center;
+}
+
+.ref-profdetails{
+    width: 85%;
+    height: 625px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
+    background-color: rgb(255, 255, 255);
+    margin-top: 2%;
+    font-family: "Poppins", sans-serif;
+}
+
+.colum{
+    display: flex;
+    width: calc(100% / 2);
+}
+
+.column1{
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.ref-bio{
+    width: 350px;
+    height: 325px;
+    /* border: 2px solid #3b3b33; */
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
+    background-color: rgb(255, 255, 255);
+}
+
+.ref-wallet{
+    width: 350px;
+    height: 200px;
+    
+    border-radius: 10px;
+    margin-top: 35px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
+    background-color: rgb(255, 255, 255);
+}
+
+.prof-logo{
+    width: 75px;
+    height: 75px; 
+}
+

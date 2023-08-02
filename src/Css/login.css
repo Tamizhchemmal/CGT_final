@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
+.login-card {
+  width: 35%;
+  max-width: 500px;
+  height: 500px;
+  border: 1px solid #002333;
+  border-radius: 15px;
+}
+.login-card h2 {
+  text-align: center;
+  margin: 10px 0 10px 0;
+  font-size: 15px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 7nnpm00;
+  color: #002333;
+}
+.main-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  height: 100vh;
+}
+.inputs-admin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#standard-basic {
+  font-size: 23px !important;
+  font-family: sans-serif !important;
+}
+.btn-admin {
+  border-color: #002333 !important;
+  color: #002333 !important;
+  margin: 20px 0 50px 0 !important;
+}
+.style-heading{
+  text-align: center;
+}
+.style-heading span {
+  font-family: "Josefin Sans", sans-serif;
+  font-size: 20px;
+ 
+  background-image: linear-gradient(gold, gold);
+  background-size: 100% 5px;
+  background-repeat: no-repeat;
+  background-position: 0% 110%;
+  transition: background-size 0.7s, background-position 0.5s ease-in-out;
+}
+.style-heading span:hover {
+  background-size: 100% 100%;
+  background-position: 0% 150%;
+  transition: background-position 0.7s, background-size 0.5s ease-in-out;
+}
+
+#logo-admin {
+  margin-top: 30px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+@media screen and (max-width: 1024px) {
+  .login-card {
+    width: 50%;
+  }
+}
+@media screen and (max-width: 769px) {
+  .login-card {
+    width: 60%;
+  }
+}
+@media screen and (max-width: 426px) {
+  .login-card {
+    width: 90%;
+  }
+}

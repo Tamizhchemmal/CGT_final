@@ -1,0 +1,262 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.card-refdetails {
+  width: 80%;
+  height: 100vh;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
+  background-color: rgb(255, 255, 255);
+  margin-top: 5%;
+  font-family: "Poppins", sans-serif;
+}
+.crd-bg {
+  display: flex;
+  justify-content: center;
+}
+#heading-ref {
+  font-size: 30px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #002333;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+.head-ref {
+  margin: 20px 15px 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#searchbar-ref {
+  position: relative;
+  font-size: 18px;
+  cursor: text;
+  width: 400px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  padding: 10px 50px 8px 20px;
+  margin-top: 15px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 8px;
+}
+#searchbar-ref:focus {
+  outline: 2px #002333a6;
+  box-shadow: rgba(149, 157, 165, 0.3) 0px 8px 24px;
+}
+.search-full {
+  position: relative;
+}
+#search-icon {
+  position: absolute;
+  right: 10px;
+  top: 26px;
+  font-size: 25px;
+  z-index: 2;
+  cursor: pointer;
+}
+#dropdown-basic-button {
+  background-color: #002333 !important;
+  border: none !important;
+  font-weight: 600;
+}
+.li-drop:active {
+  background-color: #002333 !important;
+}
+
+.create {
+  width: 30%;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #002333;
+  color: white;
+  font-size: 18px;
+  margin: 15px 0 0 15px;
+  font-family: "Poppins", sans-serif;
+}
+.create:hover {
+  box-shadow: rgba(0, 40, 97, 0.2) 2px 2px 25px;
+  text-decoration: underline;
+  transform: scale(0.99);
+}
+.inputref-box {
+  background-color: aliceblue;
+  border-radius: 10px;
+  padding: 25px 5px;
+  margin: 30px 20px;
+}
+.inputref {
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+.inputref input {
+  width: 80%;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  margin: 10px 0 10px 0;
+  border-radius: 10px;
+}
+.inputref input:focus {
+  box-shadow: rgba(0, 40, 97, 0.2) 2px 2px 25px;
+}
+#btn-createrefmodal {
+  background-color: #002333;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 18px;
+  padding: 8px 18px;
+  margin-right: 20px;
+}
+#table-body {
+  font-family: "Poppins", sans-serif;
+}
+#reftable {
+  margin-top: 40px;
+}
+/* Student Creation */
+.inputref-box {
+  background-color: aliceblue;
+  border-radius: 10px;
+  padding: 25px 5px;
+  margin: 30px 20px;
+}
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.inputstudent {
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+.inputstudent input {
+  width: 100%;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  margin: 10px;
+  border-radius: 10px;
+}
+.inputstudent input:focus {
+  box-shadow: rgba(0, 40, 97, 0.2) 2px 2px 25px;
+}
+.referaldropdown {
+  cursor: pointer;
+  width: 93%;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  margin: 10px 10px 10px 13px;
+  border-radius: 10px;
+}
+#startdate,
+#enddate {
+  width: 73%;
+  padding: 10px 15px;
+  border-radius: 7px;
+  margin: 10px;
+  border: none;
+  font-family: "Nunito", sans-serif;
+  cursor: pointer;
+}
+#enddate {
+  background-color: white;
+}
+#edit-icon,
+#dlt-icon {
+  font-size: 25px;
+  margin: 0 10px;
+  cursor: pointer;
+}
+
+/* Traier */
+.inputtrainer {
+  width: auto;
+  display: flex;
+  justify-content: center;
+}
+.inputtrainer input {
+  width: 93%;
+  padding: 10px 15px;
+  border: none;
+  outline: none;
+  margin: 10px 0 10px 0;
+  border-radius: 10px;
+}
+.inputtrainer input:focus {
+  box-shadow: rgba(0, 40, 97, 0.2) 2px 2px 25px;
+}
+
+.mods{
+  z-index: 9999 !important;
+  
+}
+
+
+@media screen and (max-width:1010px) {
+  #heading-ref{
+    font-size: 20px;
+  }
+  #searchbar-ref {
+  width: 300px;
+}
+.create {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 15px;
+ 
+}
+}
+@media screen and (max-width:814px) {
+  #heading-ref{
+    font-size: 18px;
+  }
+  #searchbar-ref {
+  width: 280px;
+  font-size: 15px;
+}
+.create {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 12px;
+ 
+}
+}
+@media screen and (max-width:768px) {
+  #heading-ref{
+    font-size: 15px;
+  }
+  #searchbar-ref {
+  width: 200px;
+  font-size: 15px;
+}
+.create {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 12px;
+ 
+}
+}
+
+@media screen and (max-width:500px) {
+  #heading-ref{
+    font-size: 10px;
+
+  }
+  #searchbar-ref {
+  width: 100px;
+  font-size: 10px;
+}
+.create {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 10px;
+}
+}
