@@ -17,7 +17,7 @@ import NavBar from "./NavBar";
 
 function Referralpagetwo() {
   const [show, setShow] = useState(false);
-  const[search, setSearch] = useState('')
+  const [search, setSearch] = useState("");
 
   const handleClose = () => {
     setShow(false);
@@ -29,38 +29,41 @@ function Referralpagetwo() {
 
   //creation
 
-const[name,setName] = useState('')
-const [mobilenumber,setMobilenumber] = useState('')
+  const [name, setName] = useState("");
+  const [mobilenumber, setMobilenumber] = useState("");
 
-const [email,setEmail] = useState('')
-const[companyname,setCompanyName]= useState('')
-const[password,setPassword]=useState('')
-const[confirmpassword,setConfirmpassword]=useState('')
+  const [email, setEmail] = useState("");
+  const [companyname, setCompanyName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
 
-const[role,setRole]=useState('referral')
+  const [role, setRole] = useState("referral");
 
-  const [errors, setErrors] = useState('');
- 
+  const [errors, setErrors] = useState("");
 
-  const submitReferral =async  (e) => {
+  const submitReferral = async (e) => {
     e.preventDefault();
-      if (password !== confirmpassword) {
-        setErrors('Password Should Be Same')
-      } else {
-        await axios.post("https://64a587de00c3559aa9bfdbd4.mockapi.io/refData", {
-        name,email,password,confirmpassword,role,companyname,mobilenumber
+    if (password !== confirmpassword) {
+      setErrors("Password Should Be Same");
+    } else {
+      await axios.post("https://64a587de00c3559aa9bfdbd4.mockapi.io/refData", {
+        name,
+        email,
+        password,
+        confirmpassword,
+        role,
+        companyname,
+        mobilenumber,
       });
-      setErrors('')
-      alert('Referral Created')
+      setErrors("");
+      alert("Referral Created");
       e.target.reset();
-  
-      }
-  
+    }
   };
   return (
     <>
       <div>
-        <NavBar/>
+        <NavBar />
         <div className="crd-bg">
           <div className="card-refdetails">
             <Container>
@@ -70,7 +73,7 @@ const[role,setRole]=useState('referral')
                 <div
                   style={{
                     display: "flex",
-                    
+
                     justifyContent: "space-around",
                   }}
                 >
@@ -124,7 +127,9 @@ const[role,setRole]=useState('referral')
                           name="fullname"
                           placeholder="Fullname"
                           autoComplete="new-password"
-                          onChange={(e)=>{setName(e.target.value)}}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
                           required
                         ></input>
                       </div>
@@ -136,7 +141,7 @@ const[role,setRole]=useState('referral')
                           placeholder="Mobile Number"
                           pattern="[6789][0-9]{9}"
                           autoComplete="new-password"
-                          onChange={(e)=>setMobilenumber(e.target.value)}
+                          onChange={(e) => setMobilenumber(e.target.value)}
                           required
                         ></input>
                       </div>
@@ -148,7 +153,9 @@ const[role,setRole]=useState('referral')
                           placeholder="Email Address"
                           pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                           required
-                          onChange={(e)=>{setEmail(e.target.value)}}
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                          }}
                         ></input>
                       </div>
                       <div className="inputref">
@@ -158,7 +165,9 @@ const[role,setRole]=useState('referral')
                           name="companyname"
                           placeholder="Company Name"
                           autoComplete="off"
-                          onChange={(e)=>{setCompanyName(e.target.value)}}
+                          onChange={(e) => {
+                            setCompanyName(e.target.value);
+                          }}
                           required
                         ></input>
                       </div>
@@ -169,7 +178,9 @@ const[role,setRole]=useState('referral')
                           name="password"
                           placeholder="Password"
                           autoComplete="off"
-                          onChange={(e)=>{setPassword(e.target.value)}}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                          }}
                           required
                         ></input>
                       </div>
@@ -180,18 +191,21 @@ const[role,setRole]=useState('referral')
                           name="confirmpassword"
                           placeholder="Confirm Password"
                           autoComplete="off"
-                          onChange={(e)=>{setConfirmpassword(e.target.value)}}
+                          onChange={(e) => {
+                            setConfirmpassword(e.target.value);
+                          }}
                           required
                         ></input>
                       </div>
                     </div>
                     {errors ? (
                       <p style={{ color: "red", textAlign: "center" }}>
-                      {errors}
+                        {errors}
                       </p>
-                    ) : ""}
+                    ) : (
+                      ""
+                    )}
                     <Modal.Footer>
-                     
                       <button type="submit" id="btn-createrefmodal">
                         Create
                       </button>

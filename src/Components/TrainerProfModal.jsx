@@ -1,5 +1,5 @@
 import React from "react";
-import "../Css/Refprofile.css";
+import "../Css/TrainerProfile.css";
 import { Container } from "react-bootstrap";
 import ProfileLogo from "../Assets/Images/boss.png";
 import { useEffect, useState } from "react";
@@ -13,36 +13,36 @@ import TableContainer from "@mui/material/TableContainer";
 import Button from "@mui/material/Button";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
+// import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 170, align: "center" },
+  { id: "batchcode", label: "Batch Code", minWidth: 170, align: "center" },
   {
-    id: "course",
-    label: "Course",
+    id: "startDate",
+    label: "Start Date",
     minWidth: 200,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "batchcode",
-    label: "Batch Code",
+    id: "currentTopic",
+    label: "Current Topic",
     minWidth: 200,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "feespaid",
-    label: "Fees Paid",
+    id: "status",
+    label: "Status",
     minWidth: 200,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
   },
 ];
 
-export default function RefProfModal() {
+export default function TrainerProfModal() {
   const [apiData, setApiData] = useState([]);
 
   const [page, setPage] = React.useState(0);
@@ -58,10 +58,10 @@ export default function RefProfModal() {
   };
 
   const callApiData = async (e) => {
-    const refData = await axios.get(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
+    const trainerData = await axios.get(
+      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
     );
-    setApiData(refData.data);
+    setApiData(trainerData.data);
   };
 
   useEffect(() => {
@@ -70,13 +70,13 @@ export default function RefProfModal() {
 
   return (
     <>
-      <div className="refProfileModel">
+      <div className="trainerProfileModel">
         <div className="crd-bg">
-          <div className="ref-profdetails">
+          <div className="trainer-profdetails">
             <Container>
               <div className="colum">
                 <div className="column1">
-                  <div className="ref-bio">
+                  <div className="trainer-bio">
                     <div className="profile">
                       <img
                         src={ProfileLogo}
@@ -84,12 +84,12 @@ export default function RefProfModal() {
                         className="prof-logo"
                       />
                     </div>
-                    <div className="ref-details">
-                      <div className="referral-label">
+                    <div className="trainer-details">
+                      <div className="trainer-label">
                         <Table>
                           <TableBody key={apiData.id}>
                             <TableRow>
-                              <div className="ref-label">Name</div>
+                              <div className="label">Name </div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -99,7 +99,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">Contact No</div>
+                              <div className="label">Email ID</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -109,7 +109,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">Email ID</div>
+                              <div className="label">Contact No</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -119,9 +119,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">
-                                No of Student Referred
-                              </div>
+                              <div className="label">Payment</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -131,7 +129,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">Referral Type</div>
+                              <div className="label">Domain</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -140,34 +138,9 @@ export default function RefProfModal() {
                                 );
                               })}
                             </TableRow>
-                            <TableRow>
-                              <div className="ref-label">Amount Benefited</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : 12000 */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
                           </TableBody>
                         </Table>
                       </div>
-                    </div>
-                  </div>
-                  <div className="ref-wallet">
-                    <div className="wallet-title">Account Balance</div>
-                    <div>
-                      <span className="ruppess">Rs. 10,000</span>
-                    </div>
-                    <div className="request-money">
-                      <Button
-                        variant="contained"
-                        startIcon={<CurrencyRupeeOutlinedIcon />}
-                        className="money-btn"
-                      >
-                        Request Money
-                      </Button>
                     </div>
                   </div>
                 </div>

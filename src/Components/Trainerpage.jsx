@@ -9,6 +9,8 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import "../Css/Referralstyle.css";
 import { Card } from "@mui/material";
+import TrainerPopUp from "./TrainerPopUp";
+import TrainerProfModal from "./TrainerProfModal";
 import {
   Container,
   Dropdown,
@@ -86,21 +88,23 @@ const columns = [
 ];
 //table
 
-function Trainerpage() {
+export default function Trainerpage() {
   const [show, setShow] = useState(false);
   const [tableshow, setTableshow] = useState(false);
   const [search, setSearch] = useState("");
+  const [showRef, setShowref] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
-  const[name,setName]=useState('')
-  const[mobilenumber,setMobilenumber]=useState('')
-  const[email,setEmail]=useState('')
-  const[course,setCourse]=useState('')
-  const[companyname,setCompanyname]=useState('')
-  const[paymentmode,setPaymentmode]=useState('')
-  const[password,setPassword]=useState('')
-  const[confirmpassword,setConfirmpassword]=useState('')
-  const[paymentdetails,setPaymentdetails]=useState('')
-  const[role,setRole]=useState('')
+  const [name, setName] = useState("");
+  const [mobilenumber, setMobilenumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [course, setCourse] = useState("");
+  const [companyname, setCompanyname] = useState("");
+  const [paymentmode, setPaymentmode] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
+  const [paymentdetails, setPaymentdetails] = useState("");
+  const [role, setRole] = useState("");
 
   console.log(search);
   const [courseList, setCourseList] = useState([
@@ -140,8 +144,6 @@ function Trainerpage() {
       name: "BANK ACCOUNT",
     },
   ]);
-
-
 
   const handleClose = () => {
     setShow(false);
@@ -186,6 +188,14 @@ function Trainerpage() {
     callApiData();
   };
 
+  const opnetable = async (apiData) => {
+    setShowref(apiData);
+    setShowModal(true);
+  };
+  const handleCloseModal = (e) => {
+    setShowModal(false);
+  };
+
   // Table content End
 
   // date Change
@@ -194,11 +204,20 @@ function Trainerpage() {
   const submitStudent = async (e) => {
     e.preventDefault();
 
-    if (password !==confirmpassword) {
+    if (password !== confirmpassword) {
       setErrors("Password Should Be Same");
     } else {
       await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/trainers", {
-        name,email,password,confirmpassword,course,paymentdetails,paymentmode,role,companyname,mobilenumber
+        name,
+        email,
+        password,
+        confirmpassword,
+        course,
+        paymentdetails,
+        paymentmode,
+        role,
+        companyname,
+        mobilenumber,
       });
 
       setErrors("");
@@ -245,7 +264,7 @@ function Trainerpage() {
               </div>
               <hr></hr>
 
-              {/* /modal popup for student Creation */}
+              {/* /modal popup for Trainer Creation */}
               <Modal
                 show={show}
                 className="mods"
@@ -279,7 +298,7 @@ function Trainerpage() {
                             name="name"
                             placeholder="Fullname"
                             autoComplete="new-password"
-                            onChange={(e)=>setName(e.target.value)}
+                            onChange={(e) => setName(e.target.value)}
                             required
                           ></input>
                         </div>
@@ -291,7 +310,7 @@ function Trainerpage() {
                             placeholder="Mobile Number"
                             pattern="[6789][0-9]{9}"
                             autoComplete="new-password"
-                            onChange={(e)=>setMobilenumber(e.target.value)}
+                            onChange={(e) => setMobilenumber(e.target.value)}
                             required
                           ></input>
                         </div>
@@ -303,7 +322,7 @@ function Trainerpage() {
                             placeholder="Email Address"
                             pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                             required
-                            onChange={(e)=>setEmail(e.target.value)}
+                            onChange={(e) => setEmail(e.target.value)}
                           ></input>
                         </div>
 
@@ -314,7 +333,7 @@ function Trainerpage() {
                             name="companyname"
                             placeholder="Company Name"
                             autoComplete="new-password"
-                            onChange={(e)=>setCompanyname(e.target.value)}
+                            onChange={(e) => setCompanyname(e.target.value)}
                             required
                           ></input>
                         </div>
@@ -325,7 +344,7 @@ function Trainerpage() {
                             name="paymentmode"
                             className="referaldropdown"
                             required
-                            onChange={(e)=>setPaymentmode(e.target.value)}
+                            onChange={(e) => setPaymentmode(e.target.value)}
                           >
                             <option value="none">Payment Mode</option>
                             {paymentmodelist.map((paymentmode, index1) => (
@@ -341,7 +360,7 @@ function Trainerpage() {
                             name="paymentdetails"
                             placeholder="Payment Details (Ac.no/Upi id)"
                             autoComplete="off"
-                            onChange={(e)=>setPaymentdetails(e.target.value)}
+                            onChange={(e) => setPaymentdetails(e.target.value)}
                             required
                           ></input>
                         </div>
@@ -352,7 +371,7 @@ function Trainerpage() {
                             name="course"
                             className="referaldropdown"
                             required
-                            onChange={(e)=>setCourse(e.target.value)}
+                            onChange={(e) => setCourse(e.target.value)}
                           >
                             <option value="none">Course</option>
                             {courseList.map((courseData, index1) => (
@@ -369,7 +388,7 @@ function Trainerpage() {
                             name="password"
                             placeholder="Password"
                             autoComplete="off"
-                            onChange={(e)=>setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)}
                             required
                           ></input>
                         </div>
@@ -380,7 +399,7 @@ function Trainerpage() {
                             name="confirmpassword"
                             placeholder="Confirm Password"
                             autoComplete="off"
-                            onChange={(e)=>setConfirmpassword(e.target.value)}
+                            onChange={(e) => setConfirmpassword(e.target.value)}
                             required
                           ></input>
                         </div>
@@ -432,9 +451,14 @@ function Trainerpage() {
                               page * rowsPerPage + rowsPerPage
                             )
                             .filter((apiData) => {
-                              return search.toLowerCase() === ''
+                              return search.toLowerCase() === ""
                                 ? apiData
-                                : apiData.name.toLowerCase().includes(search) || apiData.name.includes(search) || apiData.course.toLowerCase().includes(search) || apiData.course.includes(search)
+                                : apiData.name.toLowerCase().includes(search) ||
+                                    apiData.name.includes(search) ||
+                                    apiData.course
+                                      .toLowerCase()
+                                      .includes(search) ||
+                                    apiData.course.includes(search);
                             })
                             .map((apiData) => {
                               return (
@@ -447,7 +471,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.name}
                                   </TableCell>
@@ -455,7 +479,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.mobilenumber}
                                   </TableCell>
@@ -463,7 +487,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.email}
                                   </TableCell>
@@ -471,7 +495,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.course}
                                   </TableCell>
@@ -479,7 +503,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.companyname}
                                   </TableCell>
@@ -487,7 +511,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.paymentmode}
                                   </TableCell>
@@ -495,7 +519,7 @@ function Trainerpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    // onClick={opnetable}
+                                    onClick={() => opnetable(apiData)}
                                   >
                                     {apiData.paymentdetails}
                                   </TableCell>
@@ -553,29 +577,7 @@ function Trainerpage() {
                     </Modal.Header>
                     <Modal.Body>
                       <div>
-                        <Card
-                          sx={{
-                            display: "flex",
-                            width: "100%",
-                            height: "400px",
-                            boxShadow: "rgba(66, 84, 102, 0.1) 0px 8px 25px ",
-                          }}
-                        >
-                          <Card
-                            sx={{
-                              width: "50%",
-                              height: "70%",
-                              margin: "15px 15px",
-                              boxShadow: "rgba(66, 84, 102, 0.3) 0px 8px 25px ",
-                            }}
-                          >
-                            <div
-                              style={{ margin: "10px 30px", fontSize: "18px" }}
-                            >
-                              Name : XXXX
-                            </div>
-                          </Card>
-                        </Card>
+                        <TrainerProfModal />
                       </div>
                       <hr></hr>
                       <Modal.Footer>
@@ -594,8 +596,13 @@ function Trainerpage() {
           </div>
         </div>
       </div>
+      {showRef && (
+        <TrainerPopUp
+          user={showRef}
+          showmodal={showModal}
+          onClosemodal={handleCloseModal}
+        />
+      )}
     </>
   );
 }
-
-export default Trainerpage;

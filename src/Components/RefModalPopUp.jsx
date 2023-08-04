@@ -1,5 +1,5 @@
 import React from "react";
-import "../Css/Refprofile.css";
+import "../Css/RefModalPopUp.css";
 import { Container } from "react-bootstrap";
 import ProfileLogo from "../Assets/Images/boss.png";
 import { useEffect, useState } from "react";
@@ -16,11 +16,11 @@ import TablePagination from "@mui/material/TablePagination";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 170, align: "center" },
+  { id: "name", label: "Name", minWidth: 140, align: "center" },
   {
     id: "course",
     label: "Course",
-    minWidth: 200,
+    minWidth: 170,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
@@ -28,7 +28,7 @@ const columns = [
   {
     id: "batchcode",
     label: "Batch Code",
-    minWidth: 200,
+    minWidth: 170,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
@@ -36,13 +36,13 @@ const columns = [
   {
     id: "feespaid",
     label: "Fees Paid",
-    minWidth: 200,
+    minWidth: 170,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
   },
 ];
 
-export default function RefProfModal() {
+export default function RefModalPopUp() {
   const [apiData, setApiData] = useState([]);
 
   const [page, setPage] = React.useState(0);
@@ -71,17 +71,17 @@ export default function RefProfModal() {
   return (
     <>
       <div className="refProfileModel">
-        <div className="crd-bg">
-          <div className="ref-profdetails">
+        <div className="crd-bg1">
+          <div className="ref-profdetails1">
             <Container>
               <div className="colum">
                 <div className="column1">
-                  <div className="ref-bio">
+                  <div className="ref-bio1">
                     <div className="profile">
                       <img
                         src={ProfileLogo}
                         alt="profile-logo"
-                        className="prof-logo"
+                        className="prof-logo1"
                       />
                     </div>
                     <div className="ref-details">
@@ -155,7 +155,7 @@ export default function RefProfModal() {
                       </div>
                     </div>
                   </div>
-                  <div className="ref-wallet">
+                  <div className="ref-wallet1">
                     <div className="wallet-title">Account Balance</div>
                     <div>
                       <span className="ruppess">Rs. 10,000</span>

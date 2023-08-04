@@ -1,5 +1,5 @@
 import React from "react";
-import "../Css/Refprofile.css";
+import "../Css/TrainerPopUpDetails.css";
 import { Container } from "react-bootstrap";
 import ProfileLogo from "../Assets/Images/boss.png";
 import { useEffect, useState } from "react";
@@ -16,33 +16,33 @@ import TablePagination from "@mui/material/TablePagination";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 170, align: "center" },
+  { id: "batchcode", label: "Batch Code", minWidth: 140, align: "center" },
   {
-    id: "course",
-    label: "Course",
-    minWidth: 200,
+    id: "startdate",
+    label: "Start Date",
+    minWidth: 140,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "batchcode",
-    label: "Batch Code",
-    minWidth: 200,
+    id: "currenttopic",
+    label: "Current Topic",
+    minWidth: 170,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "feespaid",
-    label: "Fees Paid",
-    minWidth: 200,
+    id: "status",
+    label: "Status",
+    minWidth: 140,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
   },
 ];
 
-export default function RefProfModal() {
+export default function TrainerPopUpDetails() {
   const [apiData, setApiData] = useState([]);
 
   const [page, setPage] = React.useState(0);
@@ -70,26 +70,26 @@ export default function RefProfModal() {
 
   return (
     <>
-      <div className="refProfileModel">
-        <div className="crd-bg">
-          <div className="ref-profdetails">
+      <div className="trainerProfileModel">
+        <div className="crd-bg1">
+          <div className="trainer-profdetails1">
             <Container>
               <div className="colum">
                 <div className="column1">
-                  <div className="ref-bio">
+                  <div className="trainer-bio1">
                     <div className="profile">
                       <img
                         src={ProfileLogo}
                         alt="profile-logo"
-                        className="prof-logo"
+                        className="prof-logo1"
                       />
                     </div>
-                    <div className="ref-details">
-                      <div className="referral-label">
+                    <div className="trainer-details">
+                      <div className="trainer-label">
                         <Table>
                           <TableBody key={apiData.id}>
                             <TableRow>
-                              <div className="ref-label">Name</div>
+                              <div className="label">Name</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -99,7 +99,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">Contact No</div>
+                              <div className="label">Email ID</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -109,7 +109,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">Email ID</div>
+                              <div className="label">Contact No</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -119,9 +119,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">
-                                No of Student Referred
-                              </div>
+                              <div className="label">Payment</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -131,7 +129,7 @@ export default function RefProfModal() {
                               })}
                             </TableRow>
                             <TableRow>
-                              <div className="ref-label">Referral Type</div>
+                              <div className="label">Domain</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
@@ -140,34 +138,9 @@ export default function RefProfModal() {
                                 );
                               })}
                             </TableRow>
-                            <TableRow>
-                              <div className="ref-label">Amount Benefited</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : 12000 */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
                           </TableBody>
                         </Table>
                       </div>
-                    </div>
-                  </div>
-                  <div className="ref-wallet">
-                    <div className="wallet-title">Account Balance</div>
-                    <div>
-                      <span className="ruppess">Rs. 10,000</span>
-                    </div>
-                    <div className="request-money">
-                      <Button
-                        variant="contained"
-                        startIcon={<CurrencyRupeeOutlinedIcon />}
-                        className="money-btn"
-                      >
-                        Request Money
-                      </Button>
                     </div>
                   </div>
                 </div>

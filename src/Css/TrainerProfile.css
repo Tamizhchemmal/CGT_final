@@ -8,7 +8,7 @@
   justify-content: center;
 }
 
-.ref-profdetails {
+.trainer-profdetails {
   width: 85%;
   height: 625px;
   border-radius: 10px;
@@ -33,43 +33,13 @@
   margin: 30px 0;
 }
 
-.ref-bio {
+.trainer-bio {
   width: 425px;
-  height: 325px;
+  height: 525px;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
-}
-
-.ref-wallet {
-  width: 425px;
-  height: 200px;
-  font-family: "Open Sans", sans-serif;
-  border-radius: 10px;
-  margin-top: 35px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
-  background-color: rgb(255, 255, 255);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 25px;
-}
-
-.request-money {
-  line-height: 50px;
-  width: 185px !important;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px !important;
-}
-
-.money-btn {
-  background-color: #001665 !important;
-}
-
-.ruppess {
-  line-height: 50px;
-  font-weight: 900 !important;
-  font-size: 28px;
 }
 
 .profile {
@@ -86,20 +56,17 @@
   text-align: center;
 }
 
-.referral-label {
+.trainer-label {
   width: 100%;
   margin: 0 24px;
 }
 
-.ref-label {
-  margin: 4px 0;
+.label {
+  margin: 20px 0;
 }
 
-.ref-details {
+.trainer-details {
   display: flex;
   font-family: "Open Sans", sans-serif;
-}
-
-.mods {
-  z-index: 9999999;
+  margin-top: 20px;
 }
