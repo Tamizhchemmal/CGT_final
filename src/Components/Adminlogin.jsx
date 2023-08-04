@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 import "../Css/login.css";
 import boss from "../Assets/Images/boss.png";
@@ -14,7 +14,9 @@ import Modal from "react-bootstrap/Modal";
 import { TextField, Button } from "@mui/material";
 import { ModalBody, ModalFooter } from "react-bootstrap";
 
-function Adminlogin() {
+export const rolecontext = createContext();
+
+function Adminlogin(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -54,7 +56,7 @@ function Adminlogin() {
 
         return error;
       }
-    } else if(role == "referral") {
+    } else if (role == "referral") {
       if (email == "abc@gmail.com" && password == "12345") {
         setSuccess(true);
         setError("");
@@ -69,8 +71,8 @@ function Adminlogin() {
         return error;
       }
     }
-  }
-
+    props.onSubmit(role);
+  };
 
   const handleaccess = (e) => {
     if (role == "admin") {

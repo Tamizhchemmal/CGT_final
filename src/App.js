@@ -22,24 +22,20 @@ import Modal from "react-bootstrap/Modal";
 import { TextField, Button } from "@mui/material";
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
-  const role = {
-    admin:"admin",
-    referral:"referral",
-    trainer:"trainer"
-
-  }
-
 
 function App() {
+  const getrole = (role) => {
+    console.log(role);
+  };
   return (
     <>
       <Routes>
-        <Route path="/referralpage" element={<Referralpagetwo/>}></Route>
+        <Route path="/referralpage" element={<Referralpagetwo />}></Route>
         <Route path="/studentpage" element={<Studentpage />}></Route>
         <Route path="/" element={<Adminlogin />}></Route>
-        <Route path="/home" element={<HomePage/>}></Route>
-        <Route path="/trainerpage" element={<Trainerpage/>}></Route>
-        <Route path="/error" element={<Noaccess/>}></Route>
+        <Route path="/home" element={<HomePage />}></Route>
+        <Route path="/trainerpage" element={<Trainerpage />}></Route>
+        <Route path="/error" element={<Noaccess />}></Route>
       </Routes>
     </>
   );
@@ -48,7 +44,7 @@ export default App;
 
 // const ProductedTrainerpage=({children})=>{
 //   console.log(role)
-//  if(role=="admin"){ 
+//  if(role=="admin"){
 //   return children;
 //  }else{
 //   return <Noaccess/>
