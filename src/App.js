@@ -25,11 +25,7 @@ import { TextField, Button } from "@mui/material";
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
 
-
 function App() {
-  const getrole = (role) => {
-    console.log(role);
-  };
   return (
     <>
       <Routes>

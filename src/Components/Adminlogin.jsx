@@ -42,8 +42,8 @@ function Adminlogin(props) {
 
         return error;
       }
-    } else if (role == "trainer") {
-      if (email == "abc@gmail.com" && password == "12345") {
+    } else if (role === "trainer") {
+      if (email === "abc@gmail.com" && password === "12345") {
         setSuccess(true);
         setError("");
       } else if (email !== "abc@gmail.com") {
@@ -56,8 +56,8 @@ function Adminlogin(props) {
 
         return error;
       }
-    } else if (role == "referral") {
-      if (email == "abc@gmail.com" && password == "12345") {
+    } else if (role === "referral") {
+      if (email === "abc@gmail.com" && password === "12345") {
         setSuccess(true);
         setError("");
       } else if (email !== "abc@gmail.com") {
@@ -71,15 +71,14 @@ function Adminlogin(props) {
         return error;
       }
     }
-    props.onSubmit(role);
   };
 
   const handleaccess = (e) => {
-    if (role == "admin") {
+    if (role === "admin") {
       navigate("home");
-    } else if (role == "trainer") {
+    } else if (role === "trainer") {
       navigate("trainerpage");
-    } else if (role == "referral") {
+    } else if (role === "referral") {
       navigate("referralpage");
     }
   };
@@ -89,7 +88,7 @@ function Adminlogin(props) {
       <div className="main-page">
         <div className="login-card">
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <img src={boss} id="logo-admin"></img>
+            <img src={boss} id="logo-admin" alt="admin Logo"></img>
           </div>
           <div className="style-heading">
             <span>Career Guidance Technologies</span>
