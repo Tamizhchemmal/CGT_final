@@ -3,18 +3,18 @@
   top: 0;
 }
 
-.crd-bg {
+.crd-bg1 {
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 
-.ref-profdetails {
-  width: 85%;
-  height: 625px;
+.trainer-profdetails1 {
+  width: 73%;
+  height: 525px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
-  margin-top: 2%;
+  /* margin-top: 2%; */
   font-family: "Poppins", sans-serif;
 }
 
@@ -33,43 +33,13 @@
   margin: 30px 0;
 }
 
-.ref-bio {
+.trainer-bio1 {
   width: 425px;
-  height: 325px;
+  height: 475px;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
-}
-
-.ref-wallet {
-  width: 425px;
-  height: 200px;
-  font-family: "Open Sans", sans-serif;
-  border-radius: 10px;
-  margin-top: 35px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
-  background-color: rgb(255, 255, 255);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 25px;
-}
-
-.request-money {
-  line-height: 50px;
-  width: 185px !important;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px !important;
-}
-
-.money-btn {
-  background-color: #001665 !important;
-}
-
-.ruppess {
-  line-height: 50px;
-  font-weight: 900 !important;
-  font-size: 28px;
 }
 
 .profile {
@@ -78,26 +48,27 @@
   padding: 15px;
 }
 
-.prof-logo {
-  width: 75px;
-  height: 75px;
+.prof-logo1 {
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   text-align: center;
 }
 
-.referral-label {
+.trainer-label {
   width: 100%;
   margin: 0 24px;
 }
 
-.ref-label {
-  margin: 4px 0;
+.label {
+  margin: 15px 0;
 }
 
-.ref-details {
+.trainer-details {
   display: flex;
   font-family: "Open Sans", sans-serif;
+  margin-top: 20px;
 }
 
 .mods {

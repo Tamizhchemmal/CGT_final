@@ -69,10 +69,9 @@ const columns = [
 
 // const rows = [];
 
-export default function RefTable({search}) {
+export default function RefTable({ search }) {
   const [showModal, setShowModal] = useState(false);
-  const [showRef , setShowref]=  useState([])
-
+  const [showRef, setShowref] = useState([]);
 
   const handleShow = () => {};
 
@@ -101,19 +100,14 @@ export default function RefTable({search}) {
   useEffect(() => {
     callApiData();
   }, []);
-   
 
-
-  
- 
-  const opnetable = async(apiData) => {
+  const opnetable = async (apiData) => {
     setShowref(apiData);
-    setShowModal(true)
-   
-   
-  }
-  const handleCloseModal=(e) => { setShowModal(false); }
-
+    setShowModal(true);
+  };
+  const handleCloseModal = (e) => {
+    setShowModal(false);
+  };
 
   const handleedit = (e) => {
     alert("button");
@@ -165,18 +159,19 @@ export default function RefTable({search}) {
                 {apiData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .filter((apiData) => {
-                    return search.toLowerCase() === ''
+                    return search.toLowerCase() === ""
                       ? apiData
-                      : apiData.name.toLowerCase().includes(search) || apiData.name.includes(search)
+                      : apiData.name.toLowerCase().includes(search) ||
+                          apiData.name.includes(search);
                   })
                   .map((apiData) => {
                     return (
-                      <TableRow key={apiData.id} hover role="checkbox" >
+                      <TableRow key={apiData.id} hover role="checkbox">
                         <TableCell
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={()=>opnetable(apiData)}
+                          onClick={() => opnetable(apiData)}
                         >
                           {apiData.name}
                         </TableCell>
@@ -184,7 +179,7 @@ export default function RefTable({search}) {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={()=>opnetable(apiData)}
+                          onClick={() => opnetable(apiData)}
                         >
                           {apiData.mobilenumber}
                         </TableCell>
@@ -192,7 +187,7 @@ export default function RefTable({search}) {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={()=>opnetable(apiData)}
+                          onClick={() => opnetable(apiData)}
                         >
                           {apiData.email}
                         </TableCell>
@@ -200,7 +195,7 @@ export default function RefTable({search}) {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={()=>opnetable(apiData)}
+                          onClick={() => opnetable(apiData)}
                         >
                           12
                         </TableCell>
@@ -208,7 +203,7 @@ export default function RefTable({search}) {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={()=>opnetable(apiData)}
+                          onClick={() => opnetable(apiData)}
                         >
                           {" "}
                           <Type count={15} />
@@ -244,12 +239,14 @@ export default function RefTable({search}) {
           />
         </Paper>
         {/* model profile */}
-     
       </div>
-      {
-       showRef &&  <Modalpopup user={showRef} showmodal={showModal} onClosemodal={handleCloseModal}/>
-      }
-     
+      {showRef && (
+        <Modalpopup
+          user={showRef}
+          showmodal={showModal}
+          onClosemodal={handleCloseModal}
+        />
+      )}
     </>
   );
 }

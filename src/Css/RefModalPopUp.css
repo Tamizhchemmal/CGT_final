@@ -3,18 +3,18 @@
   top: 0;
 }
 
-.crd-bg {
+.crd-bg1 {
   display: flex;
-  justify-content: center;
+  justify-content: start;
 }
 
-.ref-profdetails {
-  width: 85%;
-  height: 625px;
+.ref-profdetails1 {
+  width: 73%;
+  height: 525px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
-  margin-top: 2%;
+  /* margin-top: 2%; */
   font-family: "Poppins", sans-serif;
 }
 
@@ -33,18 +33,18 @@
   margin: 30px 0;
 }
 
-.ref-bio {
-  width: 425px;
-  height: 325px;
+.ref-bio1 {
+  width: 350px;
+  height: 300px;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
 }
 
-.ref-wallet {
-  width: 425px;
-  height: 200px;
+.ref-wallet1 {
+  width: 350px;
+  height: 150px;
   font-family: "Open Sans", sans-serif;
   border-radius: 10px;
   margin-top: 35px;
@@ -53,23 +53,27 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 25px;
+  padding: 15px;
 }
 
 .request-money {
   line-height: 50px;
-  width: 185px !important;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px !important;
+  width: 170px !important;
+  background: #fff;
 }
 
 .money-btn {
   background-color: #001665 !important;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px !important;
+  width: 185px !important;
+  height: 50px !important;
+  font-size: 16px !important;
 }
 
 .ruppess {
-  line-height: 50px;
+  line-height: 40px;
   font-weight: 900 !important;
-  font-size: 28px;
+  font-size: 18px;
 }
 
 .profile {
@@ -78,9 +82,9 @@
   padding: 15px;
 }
 
-.prof-logo {
-  width: 75px;
-  height: 75px;
+.prof-logo1 {
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   text-align: center;

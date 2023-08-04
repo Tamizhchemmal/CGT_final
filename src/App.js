@@ -6,6 +6,8 @@ import HomePage from "./Components/HomePage";
 import { Home } from "@mui/icons-material";
 import Trainerpage from "./Components/Trainerpage";
 import Referralpagetwo from "./Components/Referralpagetwo";
+import TrainerProfile from "./Components/TrainerProfile";
+import RefProfile from "./Components/RefProfile";
 import React, { useState } from "react";
 
 import "./Css/login.css";
@@ -23,6 +25,7 @@ import { TextField, Button } from "@mui/material";
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
 
+
 function App() {
   const getrole = (role) => {
     console.log(role);
@@ -35,6 +38,10 @@ function App() {
         <Route path="/" element={<Adminlogin />}></Route>
         <Route path="/home" element={<HomePage />}></Route>
         <Route path="/trainerpage" element={<Trainerpage />}></Route>
+
+        <Route path="/refprofile" element={<RefProfile />}></Route>
+        <Route path="/trainerprofile" element={<TrainerProfile />}></Route>
+
         <Route path="/error" element={<Noaccess />}></Route>
       </Routes>
     </>

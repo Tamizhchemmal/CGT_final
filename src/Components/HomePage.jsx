@@ -18,24 +18,25 @@ import NavBar from "./NavBar";
 import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
 
-
 export default function HomePage() {
+  //creation
+  //  const [batchInput, setBatchinput] = useState({
+  //   batchcode: "",
+  //   batchtiming: "",
+  //   numofstudent: "",
+  //   trainername: "",
+  //   batchstartdate: "",
+  //   batchenddate: "",
+  // });
 
-   //creation
-   const [batchInput, setBatchinput] = useState({
-    batchcode: "",
-    batchtiming: "",
-    numofstudent: "",
-    trainername: "",
-    batchstartdate: "",
-    batchenddate: "",
-  });
+  const [batchcode, setbatchcode] = useState("");
+
+  const [numofstudent, setnumofstudent] = useState("");
+  const [trainername, settrainername] = useState("");
+
   const [show, setShow] = useState(false);
-  
 
   const navigate = useNavigate();
-
-  
 
   const [batchList, setBatchList] = useState([
     {
@@ -99,57 +100,58 @@ export default function HomePage() {
     setShow(true);
   };
 
- 
-
   const [errors, setErrors] = useState({});
-  const handleChange = (e) => {
-    setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
-  };
-
+  // const handleChange = (e) => {
+  //   setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
+  // };
 
   const submitBatch = async (e) => {
     e.preventDefault();
     await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
-      batchInput,
+      batchcode,
+      selectedBatchTime,
+      numofstudent,
+      trainername,
+      startBatchDate,
+      endBatchDate,
     });
     e.target.reset();
     setShow(false);
-    console.log(batchInput);
-    
+    // console.log(batchInput);
   };
 
   //Date change Automatic
-  const [startDate, setStartDate] = useState([]);
-  const [endDate, setEndDate] = useState([]);
+  const [startBatchDate, setStartBatchDate] = useState([]);
+  const [endBatchDate, setEndBatchDate] = useState([]);
 
+  //Date change
   const handleStartDateChange = (e) => {
     const selectedStartDate = new Date(e.target.value);
     const selectedEndDate = new Date(selectedStartDate);
     selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
     const sDate = e.target.value;
-    setStartDate(sDate);
+    setStartBatchDate(sDate);
     const eDate = selectedEndDate.toISOString().substr(0, 10);
-    setEndDate(eDate);
-    setBatchinput({ ...batchInput, batchstartdate: sDate, batchenddate: eDate });
+    setEndBatchDate(eDate);
 
     //Search function
   };
 
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedBatchTime, setSelectedBatchTime] = useState("");
 
   const handleTimeChange = (e) => {
     const btchTiming = e.target.value;
-    setSelectedTime(btchTiming);
-    setBatchinput({...batchInput,batchtiming:btchTiming});
+    setSelectedBatchTime(btchTiming);
+    // setBatchinput({...batchInput,batchtiming:btchTiming});
   };
 
   return (
     <>
       <div className="home-page">
         <div id="navs">
-        <NavBar  />
+          <NavBar />
         </div>
-       
+
         <div className="home-card">
           <div className="home-crd1">
             <div className="home-count1">
@@ -240,7 +242,7 @@ export default function HomePage() {
                             name="batchcode"
                             className="batchdropdown"
                             required
-                            onChange={handleChange}
+                            onChange={(e) => setbatchcode(e.target.value)}
                           >
                             <option value="null">Batch Code</option>
                             {batchList.map((data, index) => (
@@ -255,7 +257,7 @@ export default function HomePage() {
                             type="time"
                             name="batchtiming"
                             id="batchtiming"
-                            value={selectedTime}
+                            value={selectedBatchTime}
                             onChange={handleTimeChange}
                           />
                         </div>
@@ -265,8 +267,8 @@ export default function HomePage() {
                             name="numofstudent"
                             id="numofstudent"
                             placeholder="No of Student"
-                            value={batchInput.numofstudent}
-                            onChange={handleChange}
+                            value={numofstudent}
+                            onChange={(e) => setnumofstudent(e.target.value)}
                           />
                         </div>
                         <div className="inputbatch">
@@ -275,7 +277,7 @@ export default function HomePage() {
                             name="trainername"
                             className="trainerdropdown"
                             required
-                            onChange={handleChange}
+                            onChange={(e) => settrainername(e.target.value)}
                           >
                             <option value="null">Trainers Name</option>
                             {trainerList.map((data, index) => (
@@ -296,11 +298,11 @@ export default function HomePage() {
                                 Start date
                               </label>
                               <input
-                              name="batchstartdate"
+                                name="batchstartdate"
                                 type="date"
                                 id="batchstartdate"
                                 placeholder="Start date"
-                                value={startDate}
+                                value={startBatchDate}
                                 onChange={handleStartDateChange}
                                 required
                               />
@@ -314,10 +316,12 @@ export default function HomePage() {
                                 id="batchenddate"
                                 name="batchenddate"
                                 placeholder="End date"
-                                value={endDate}
+                                value={endBatchDate}
                                 readOnly
                                 disabled
-                                onChange={handleChange}
+                                onChange={(e) =>
+                                  setEndBatchDate(e.target.value)
+                                }
                               />
                             </div>
                           </div>
@@ -340,8 +344,6 @@ export default function HomePage() {
                     </form>
                   </Modal.Body>
                 </Modal>
-
-               
 
                 {/* Model profile */}
 

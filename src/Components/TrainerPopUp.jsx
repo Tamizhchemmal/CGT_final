@@ -4,8 +4,9 @@ import Modal from "react-bootstrap/Modal";
 import { CloseButton } from "react-bootstrap";
 import RefModalPopUp from "./RefModalPopUp";
 import "../Css/Refprofile.css";
+import TrainerPopUpDetails from "./TrainerPopUpDetails";
 
-function Modalpopup({ user, showmodal, onClosemodal }) {
+export default function TrainerPopUp({ user, showmodal, onClosemodal }) {
   return (
     <>
       <Modal
@@ -24,7 +25,7 @@ function Modalpopup({ user, showmodal, onClosemodal }) {
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
         <Modal.Body style={{ width: "100vw" }}>
-          <RefModalPopUp />
+          <TrainerPopUpDetails />
 
           {/* <Modal.Footer>
             <Button variant="secondary" onClick={onClosemodal}>
@@ -36,5 +37,3 @@ function Modalpopup({ user, showmodal, onClosemodal }) {
     </>
   );
 }
-
-export default Modalpopup;
