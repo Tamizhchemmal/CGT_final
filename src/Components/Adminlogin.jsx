@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 import "../Css/login.css";
 import boss from "../Assets/Images/boss.png";
@@ -14,7 +14,9 @@ import Modal from "react-bootstrap/Modal";
 import { TextField, Button } from "@mui/material";
 import { ModalBody, ModalFooter } from "react-bootstrap";
 
-function Adminlogin() {
+export const rolecontext = createContext();
+
+function Adminlogin(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -25,23 +27,53 @@ function Adminlogin() {
 
   const submitAdminLogin = (e) => {
     e.preventDefault();
-    if (email === "abc@gmail.com" && password === "12345") {
-      setSuccess(true);
-      // alert(`${role} success`);
-      setError("");
+    if (role === "admin") {
+      if (email === "admin" && password === "12345") {
+        setSuccess(true);
+        // alert(`${role} success`);
+        setError("");
+      } else if (email !== "admin") {
+        setError("Incorrect Email");
+        return error;
+      } else {
+        setError("incorrect password");
+        setEmail("");
+        setPassword("");
 
-      console.log(role);
-    } else if (email !== "abc@gmail.com") {
-      setError("Incorrect Email");
-      return error;
-    } else {
-      setError("incorrect password");
-      setEmail("");
-      setPassword("");
+        return error;
+      }
+    } else if (role == "trainer") {
+      if (email == "abc@gmail.com" && password == "12345") {
+        setSuccess(true);
+        setError("");
+      } else if (email !== "abc@gmail.com") {
+        setError("Incorrect Email");
+        return error;
+      } else {
+        setError("incorrect password");
+        setEmail("");
+        setPassword("");
 
-      return error;
+        return error;
+      }
+    } else if (role == "referral") {
+      if (email == "abc@gmail.com" && password == "12345") {
+        setSuccess(true);
+        setError("");
+      } else if (email !== "abc@gmail.com") {
+        setError("Incorrect Email");
+        return error;
+      } else {
+        setError("incorrect password");
+        setEmail("");
+        setPassword("");
+
+        return error;
+      }
     }
+    props.onSubmit(role);
   };
+
   const handleaccess = (e) => {
     if (role == "admin") {
       navigate("home");
@@ -51,6 +83,7 @@ function Adminlogin() {
       navigate("referralpage");
     }
   };
+
   return (
     <>
       <div className="main-page">
@@ -81,7 +114,7 @@ function Adminlogin() {
                 />
                 <TextField
                   id="standard-basic"
-                  type="password"
+                  type="text"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -164,19 +197,19 @@ function Adminlogin() {
                   Login
                 </Button>
                 {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
-                <Modal
-                  show={success}
-                  backdrop="static"
-                  keyboard={false}
-                >
-                  <Modal.Header >
-                    <Modal.Title ><h4 style={{color:"green"}}>Login Successful</h4></Modal.Title>
+                <Modal show={success} backdrop="static" keyboard={false}>
+                  <Modal.Header>
+                    <Modal.Title>
+                      <h4 style={{ color: "green" }}>Login Successful</h4>
+                    </Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
                     <h5>You are Login as a {role}.....</h5>
                   </Modal.Body>
                   <Modal.Footer>
-                    <Button variant="primary" onClick={handleaccess}>Okay</Button>
+                    <Button variant="primary" onClick={handleaccess}>
+                      Okay
+                    </Button>
                   </Modal.Footer>
                 </Modal>
               </div>
