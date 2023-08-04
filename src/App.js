@@ -3,7 +3,6 @@ import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import Studentpage from "./Components/Studentpage";
 import HomePage from "./Components/HomePage";
-import { Home } from "@mui/icons-material";
 import Trainerpage from "./Components/Trainerpage";
 import Referralpagetwo from "./Components/Referralpagetwo";
 import TrainerProfile from "./Components/TrainerProfile";
