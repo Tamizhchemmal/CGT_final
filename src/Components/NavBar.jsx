@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../Css/NavBar.css";
 import { useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
@@ -10,10 +10,12 @@ import Button from "@mui/material/Button";
 import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { rolecontext } from "./Adminlogin";
 
 export default function NavBar() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBars, setShowbars] = useState(true);
+  const role = useContext(rolecontext);
   const navigate = useNavigate();
 
   const HandleOpen = () => {
@@ -38,7 +40,6 @@ export default function NavBar() {
               <li>
                 <Button
                   variant="text"
-                 
                   className="navbtn-icon"
                   onClick={() => {
                     navigate("/home");
@@ -50,7 +51,6 @@ export default function NavBar() {
               <li>
                 <Button
                   variant="text"
-                 
                   className="navbtn-icon"
                   onClick={() => {
                     navigate("/referralpage");
@@ -62,7 +62,6 @@ export default function NavBar() {
               <li>
                 <Button
                   variant="text"
-                 
                   className="navbtn-icon"
                   onClick={() => {
                     navigate("/studentpage");
@@ -74,7 +73,6 @@ export default function NavBar() {
               <li>
                 <Button
                   variant="text"
-                 
                   className="navbtn-icon"
                   onClick={() => {
                     navigate("/trainerpage");

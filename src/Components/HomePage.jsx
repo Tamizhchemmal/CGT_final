@@ -17,6 +17,7 @@ import "../Css/HomePage.css";
 import NavBar from "./NavBar";
 import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
+import "../Css/HomePage.css";
 
 export default function HomePage() {
   //creation

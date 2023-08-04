@@ -78,9 +78,9 @@ function Adminlogin(props) {
     if (role == "admin") {
       navigate("home");
     } else if (role == "trainer") {
-      navigate("trainerpage");
+      navigate("home");
     } else if (role == "referral") {
-      navigate("referralpage");
+      navigate("home");
     }
   };
 
