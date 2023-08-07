@@ -9,12 +9,15 @@
 }
 
 .trainer-profdetails {
-  width: 85%;
+  /* width: 85%;
   height: 625px;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
-  margin-top: 2%;
+  margin-top: 2%; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Poppins", sans-serif;
 }
 

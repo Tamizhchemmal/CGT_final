@@ -9,11 +9,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Button from "@mui/material/Button";
 import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 export default function NavBar() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBars, setShowbars] = useState(true);
+
   const navigate = useNavigate();
 
   const HandleOpen = () => {
@@ -36,58 +37,50 @@ export default function NavBar() {
           <div className="nav-btn">
             <ul className="btn-list">
               <li>
-                <Button
+                <NavLink
                   variant="text"
-                 
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/home");
-                  }}
+                  activeclassName="active"
+                  id="inactive-button"
+                  to={"/home"}
                 >
                   Home
-                </Button>
+                </NavLink>
               </li>
               <li>
-                <Button
+                <NavLink
                   variant="text"
-                 
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/referralpage");
-                  }}
+                  activeclassName="active"
+                  id="inactive-button"
+                  to={"/referralpage"}
                 >
                   Referral
-                </Button>
+                </NavLink>
               </li>
               <li>
-                <Button
+                <NavLink
+                  activeclassName="active"
                   variant="text"
-                 
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/studentpage");
-                  }}
+                  id="inactive-button"
+                  to={"/studentpage"}
                 >
                   Student
-                </Button>
+                </NavLink>
               </li>
               <li>
-                <Button
+                <NavLink
                   variant="text"
-                 
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/trainerpage");
-                  }}
+                  activeclassName="active"
+                  id="inactive-button"
+                  to={"/trainerpage"}
                 >
                   Trainer
-                </Button>
+                </NavLink>
               </li>
               <li>
                 <Button
                   variant="text"
                   endIcon={<LogoutIcon />}
-                  className="navbtn-icon"
+                  className="logout-btn"
                   onClick={() => {
                     navigate("/");
                   }}
@@ -96,93 +89,8 @@ export default function NavBar() {
                 </Button>
               </li>
             </ul>
-            {/* <div className="burger">
-              <input type="checkbox" id="check" hidden></input>
-              <label
-                htmlFor="check"
-                className="burger-icon"
-                onClick={HandleOpen}
-                style={{ display: showBars ? "block" : "none" }}
-              >
-                <FaBars />
-              </label>
-            </div> */}
           </div>
         </div>
-        {/* {showSidebar && (
-          <div className="dropdwn" id="drop">
-            <div className="cls-btn">
-              <input type="checkbox" id="close" hidden></input>
-              <label
-                htmlFor="close"
-                className="close-icon"
-                onClick={HandleClose}
-              >
-                <FaTimes />
-              </label>
-            </div>
-            <div className="nav-btn">
-            <ul className="btn-list-dropdown">
-              <li>
-                <Button
-                  variant="text"
-                  endIcon={<HomeIcon />}
-                  className="navbtn-icon"
-                >
-                  Home
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="text"
-                  endIcon={<ContactsIcon />}
-                  className="navbtn-icon"
-                >
-                  Referral
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="text"
-                  endIcon={<ThreePIcon />}
-                  className="navbtn-icon"
-                >
-                  Student
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="text"
-                  endIcon={<PhotoCameraFrontIcon />}
-                  className="navbtn-icon"
-                >
-                  Trainer
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="text"
-                  endIcon={<LogoutIcon />}
-                  className="navbtn-icon"
-                >
-                  Logout
-                </Button>
-              </li>
-            </ul>
-            <div className="burger">
-              <input type="checkbox" id="check" hidden></input>
-              <label
-                htmlFor="check"
-                className="burger-icon"
-                onClick={HandleOpen}
-                style={{ display: showBars ? "block" : "none" }}
-              >
-                <FaBars />
-              </label>
-            </div>
-          </div>
-          </div>
-        )} */}
       </AppBar>
     </>
   );

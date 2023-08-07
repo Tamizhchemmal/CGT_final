@@ -33,13 +33,27 @@
   margin: 0 15px !important;
 }
 
-.navbtn-icon {
+#inactive-button {
   color: #fff !important;
-  font-size: 18px !important ;
+  font-size: 24px !important ;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 3px 5px;
 }
 
-.navbtn-icon:hover {
-  color: #2b2b2b !important;
+.logout-btn {
+  color: #fff !important;
+  background-color: #57f8aa !important;
+  border-radius: 8px;
+}
+
+.active {
+  color: #fff;
+  background-color: #57f8aa !important;
+  border-radius: 8px;
+}
+
+#inactive-button:hover {
   background-color: #57f8aa !important;
 }
 
@@ -73,12 +87,17 @@
   .btn-list > li {
     margin: 0 12px;
   }
-  .navbtn-icon {
+  #inactive-button {
     color: #fff !important;
     font-size: 12px !important ;
   }
   .nav-btn {
     margin: 0 10px !important;
+  }
+  .active {
+    color: #2b2b2b !important;
+    background-color: #57f8aa !important;
+    border-radius: 8px;
   }
 }
 
@@ -118,6 +137,12 @@
   }
   .nav-btn {
     margin: 0 14px;
+  }
+
+  .active {
+    color: #2b2b2b !important;
+    background-color: #57f8aa !important;
+    border-radius: 8px;
   }
 }
 

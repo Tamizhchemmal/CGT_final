@@ -51,7 +51,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #batchstrt,
 #batchend {
-  width: 100px;
+  width: 35%;
   align-items: center;
   margin: 15px 0 15px 15px;
 }

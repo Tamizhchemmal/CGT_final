@@ -120,8 +120,6 @@ export default function BatchTable() {
     },
   ]);
 
-  // const [editRow, setEditRow] = useState({});
-
   const [show, setShow] = useState(false);
 
   const naviagte = useNavigate();
@@ -139,17 +137,13 @@ export default function BatchTable() {
     setErrors("");
   };
 
-  // const handleChange = (e) => {
-  //   setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
-  // };
-
   const [errors, setErrors] = useState({});
   const [apiData, setApiData] = useState([]);
   const [editShow, setEditShow] = useState(false);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  // const [alertt, setAlertt] = useState(null);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -189,30 +183,13 @@ export default function BatchTable() {
   //Edit Batch
 
   const handleedit = (rowData) => {
-    // setEditRow(rowData)
     setEditShow(true);
     console.log(rowData);
-    // fetchDataFromAPi(rowData.id);
+
     setEditedData({
       ...rowData,
     });
   };
-
-  // const handleEditChange = (e) => {
-  //   setEditedData((prevData) => ({
-  //     ...prevData,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
-
-  // const handleSaveChanges =(updatedData)=>{
-  //   setApiData((prevData)=>
-  //     prevData.map((apiData)=>
-  //     apiData.id === updatedData.id ? {...apiData, ...updatedData}:apiData
-  //     )
-  //   )
-  //   setEditShow(false);
-  // }
 
   const [startBatchDate, setStartBatchDate] = useState([]);
   const [endBatchDate, setEndBatchDate] = useState([]);
@@ -243,7 +220,23 @@ export default function BatchTable() {
 
   const submitEdit = async (id) => {
     // e.preventDefault();
-    await axios.put("https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + id);
+    // await axios.put("https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + id);
+    // fetch("https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + id, {
+    //   method: "put",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({ editedData }),
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     // Handle the API response if needed
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     // Handle errors if any
+    //     console.error("Error:", error);
+    //   });
     setEditShow(false);
   };
 

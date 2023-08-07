@@ -19,16 +19,6 @@ import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
 
 export default function HomePage() {
-  //creation
-  //  const [batchInput, setBatchinput] = useState({
-  //   batchcode: "",
-  //   batchtiming: "",
-  //   numofstudent: "",
-  //   trainername: "",
-  //   batchstartdate: "",
-  //   batchenddate: "",
-  // });
-
   const [batchcode, setbatchcode] = useState("");
 
   const [numofstudent, setnumofstudent] = useState("");
@@ -101,9 +91,6 @@ export default function HomePage() {
   };
 
   const [errors, setErrors] = useState({});
-  // const handleChange = (e) => {
-  //   setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
-  // };
 
   const submitBatch = async (e) => {
     e.preventDefault();
@@ -117,7 +104,6 @@ export default function HomePage() {
     });
     e.target.reset();
     setShow(false);
-    // console.log(batchInput);
   };
 
   //Date change Automatic
@@ -142,7 +128,6 @@ export default function HomePage() {
   const handleTimeChange = (e) => {
     const btchTiming = e.target.value;
     setSelectedBatchTime(btchTiming);
-    // setBatchinput({...batchInput,batchtiming:btchTiming});
   };
 
   return (
