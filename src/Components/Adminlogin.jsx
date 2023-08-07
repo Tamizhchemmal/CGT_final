@@ -13,7 +13,6 @@ import Modal from "react-bootstrap/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
-import { ModalBody, ModalFooter } from "react-bootstrap";
 
 function Adminlogin(props) {
   const [email, setEmail] = useState("");
@@ -29,6 +28,7 @@ function Adminlogin(props) {
     if (role === "admin") {
       if (email === "admin" && password === "12345") {
         setSuccess(true);
+        localStorage.setItem("access", true);
         setError("");
       } else if (email !== "admin") {
         setError("Incorrect Email");
@@ -90,7 +90,7 @@ function Adminlogin(props) {
             <img src={boss} id="logo-admin"></img>
           </div>
           <div className="style-heading">
-            <span>Career Guidance Technologies</span>
+            <h4>Career Guidance Technologies</h4>
           </div>
 
           {/* <h2>Login</h2> */}
@@ -112,7 +112,7 @@ function Adminlogin(props) {
                 />
                 <TextField
                   id="standard-basic"
-                  type="text"
+                  type="password"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -124,6 +124,7 @@ function Adminlogin(props) {
                 />
                 <FormControl>
                   <RadioGroup
+                    className="radio-btn"
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"

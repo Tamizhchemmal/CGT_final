@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "../Css/NavBar.css";
 import { useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
@@ -25,6 +25,12 @@ export default function NavBar() {
     setShowSidebar(false);
     setShowbars(true);
   };
+
+  useEffect(() => {
+    if (!localStorage.getItem("access")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <>
@@ -87,6 +93,7 @@ export default function NavBar() {
                   className="navbtn-icon"
                   onClick={() => {
                     navigate("/");
+                    localStorage.removeItem("access");
                   }}
                 >
                   Logout

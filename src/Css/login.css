@@ -12,7 +12,7 @@
   margin: 10px 0 10px 0;
   font-size: 15px;
   font-family: "Open Sans", sans-serif;
-  font-weight: 7nnpm00;
+  font-weight: 700;
   color: #002333;
 }
 .main-page {
@@ -38,23 +38,8 @@
   color: #002333 !important;
   margin: 20px 0 50px 0 !important;
 }
-.style-heading{
+.style-heading {
   text-align: center;
-}
-.style-heading span {
-  font-family: "Josefin Sans", sans-serif;
-  font-size: 20px;
- 
-  background-image: linear-gradient(gold, gold);
-  background-size: 100% 5px;
-  background-repeat: no-repeat;
-  background-position: 0% 110%;
-  transition: background-size 0.7s, background-position 0.5s ease-in-out;
-}
-.style-heading span:hover {
-  background-size: 100% 100%;
-  background-position: 0% 150%;
-  transition: background-position 0.7s, background-size 0.5s ease-in-out;
 }
 
 #logo-admin {
@@ -76,5 +61,18 @@
 @media screen and (max-width: 426px) {
   .login-card {
     width: 90%;
+  }
+}
+@media screen and (max-width: 320px) {
+  .login-card {
+    width: 90%;
+    height: 550px;
+  }
+  .radio-btn {
+    margin: 0 !important;
+    margin-left: 2px !important;
+    font-size: 10px !important;
+    display: flex !important;
+    flex-direction: column !important;
   }
 }

@@ -104,7 +104,7 @@ export default function Trainerpage() {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [paymentdetails, setPaymentdetails] = useState("");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState("trainer");
 
   console.log(search);
   const [courseList, setCourseList] = useState([
@@ -219,6 +219,20 @@ export default function Trainerpage() {
         companyname,
         mobilenumber,
       });
+
+      let obj = { email, password, role };
+      fetch("http://localhost:8000/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(obj),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("saved");
+        })
+        .catch((err) => {
+          console.log("error");
+        });
 
       setErrors("");
       alert("trainer Created");

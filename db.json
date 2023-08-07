@@ -1,0 +1,16 @@
+{
+  "user": [
+    {
+      "email": "tamizhchemmal@gmail.com",
+      "password": "111",
+      "role": "trainer",
+      "id": 1
+    },
+    {
+      "email": "tamizhchemmal1@gmail.com",
+      "password": "123",
+      "role": "trainer",
+      "id": 2
+    }
+  ]
+}
