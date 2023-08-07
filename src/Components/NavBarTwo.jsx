@@ -11,10 +11,9 @@ import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBarTwo(props) {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBars, setShowbars] = useState(true);
-  // const role = useContext(rolecontext);
   const navigate = useNavigate();
 
   const HandleOpen = () => {
@@ -47,39 +46,19 @@ export default function NavBar() {
                   Home
                 </Button>
               </li>
+
               <li>
                 <Button
                   variant="text"
                   className="navbtn-icon"
                   onClick={() => {
-                    navigate("/referralpage");
+                    navigate("/refprofile");
                   }}
                 >
-                  Referral
+                  Profile
                 </Button>
               </li>
-              <li>
-                <Button
-                  variant="text"
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/studentpage");
-                  }}
-                >
-                  Student
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="text"
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/trainerpage");
-                  }}
-                >
-                  Trainer
-                </Button>
-              </li>
+
               <li>
                 <Button
                   variant="text"

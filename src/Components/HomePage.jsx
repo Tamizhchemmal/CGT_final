@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import "../Css/Referralstyle.css";
 import { useNavigate } from "react-router-dom";
@@ -18,17 +18,11 @@ import NavBar from "./NavBar";
 import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
 import "../Css/HomePage.css";
+import { rolecontext } from "../App";
+import NavBarTwo from "./NavBarTwo";
 
 export default function HomePage() {
-  //creation
-  //  const [batchInput, setBatchinput] = useState({
-  //   batchcode: "",
-  //   batchtiming: "",
-  //   numofstudent: "",
-  //   trainername: "",
-  //   batchstartdate: "",
-  //   batchenddate: "",
-  // });
+  const role = useContext(rolecontext);
 
   const [batchcode, setbatchcode] = useState("");
 
@@ -102,9 +96,6 @@ export default function HomePage() {
   };
 
   const [errors, setErrors] = useState({});
-  // const handleChange = (e) => {
-  //   setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
-  // };
 
   const submitBatch = async (e) => {
     e.preventDefault();
@@ -118,7 +109,6 @@ export default function HomePage() {
     });
     e.target.reset();
     setShow(false);
-    // console.log(batchInput);
   };
 
   //Date change Automatic
@@ -143,15 +133,12 @@ export default function HomePage() {
   const handleTimeChange = (e) => {
     const btchTiming = e.target.value;
     setSelectedBatchTime(btchTiming);
-    // setBatchinput({...batchInput,batchtiming:btchTiming});
   };
 
   return (
     <>
       <div className="home-page">
-        <div id="navs">
-          <NavBar />
-        </div>
+        <div id="navs">{role == "admin" ? <NavBar /> : <NavBarTwo />}</div>
 
         <div className="home-card">
           <div className="home-crd1">
@@ -182,179 +169,184 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-        <div className="batch-table">
-          <div className="crd-bg">
-            <div className="card-refdetails">
-              <Container>
-                <div className="head-ref">
-                  <div id="heading-ref">Batch List</div>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "50%",
-                      justifyContent: "space-around",
-                    }}
-                  >
-                    <div className="search-full">
-                      <input
-                        type="search"
-                        placeholder="Search Batch"
-                        id="searchbar-ref"
-                      ></input>
-                      <FcSearch id="search-icon" title="Search" />
+        {role == "admin" && (
+          <div className="batch-table">
+            <div className="crd-bg">
+              <div className="card-refdetails">
+                <Container>
+                  <div className="head-ref">
+                    <div id="heading-ref">Batch List</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        width: "50%",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <div className="search-full">
+                        <input
+                          type="search"
+                          placeholder="Search Batch"
+                          id="searchbar-ref"
+                        ></input>
+                        <FcSearch id="search-icon" title="Search" />
+                      </div>
+                      <button className="create ref" onClick={handleShow}>
+                        Create Batch
+                      </button>
                     </div>
-                    <button className="create ref" onClick={handleShow}>
-                      Create Batch
-                    </button>
                   </div>
-                </div>
 
-                <hr></hr>
+                  <hr></hr>
 
-                {/* /modal */}
-                <Modal
-                  show={show}
-                  onHide={handleClose}
-                  backdrop="static"
-                  keyboard={false}
-                  size="lg"
-                  aria-labelledby="contained-modal-title-vcenter"
-                  centered
-                  className="mods"
-                >
-                  <Modal.Header
-                    style={{ backgroundColor: " #002333 ", color: "white" }}
+                  {/* /modal */}
+                  <Modal
+                    show={show}
+                    onHide={handleClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                    className="mods"
                   >
-                    <Modal.Title style={{ color: "white" }}>
-                      Create Batch
-                    </Modal.Title>
+                    <Modal.Header
+                      style={{ backgroundColor: " #002333 ", color: "white" }}
+                    >
+                      <Modal.Title style={{ color: "white" }}>
+                        Create Batch
+                      </Modal.Title>
 
-                    <CloseButton variant="white" onClick={handleClose} />
-                  </Modal.Header>
-                  <Modal.Body>
-                    <ModalTitle style={{ textAlign: "center" }}>
-                      CREATE AN BATCH
-                    </ModalTitle>
-                    <form onSubmit={submitBatch}>
-                      <div className="inputbatch-box">
-                        <div className="inputbatch">
-                          <select
-                            id="batchcode"
-                            name="batchcode"
-                            className="batchdropdown"
-                            required
-                            onChange={(e) => setbatchcode(e.target.value)}
-                          >
-                            <option value="null">Batch Code</option>
-                            {batchList.map((data, index) => (
-                              <option key={index} value={index.course}>
-                                {data.course}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="inputbatch">
-                          <input
-                            type="time"
-                            name="batchtiming"
-                            id="batchtiming"
-                            value={selectedBatchTime}
-                            onChange={handleTimeChange}
-                          />
-                        </div>
-                        <div className="inputbatch">
-                          <input
-                            type="number"
-                            name="numofstudent"
-                            id="numofstudent"
-                            placeholder="No of Student"
-                            value={numofstudent}
-                            onChange={(e) => setnumofstudent(e.target.value)}
-                          />
-                        </div>
-                        <div className="inputbatch">
-                          <select
-                            id="trainername"
-                            name="trainername"
-                            className="trainerdropdown"
-                            required
-                            onChange={(e) => settrainername(e.target.value)}
-                          >
-                            <option value="null">Trainers Name</option>
-                            {trainerList.map((data, index) => (
-                              <option key={index} value={index.name}>
-                                {data.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <div className="inputbatch">
-                          <div className="batchDate">
-                            <div className="btchDate">
-                              <label
-                                id="batchstrt"
-                                htmlFor="startdate"
-                                className="text-muted date"
-                              >
-                                Start date
-                              </label>
-                              <input
-                                name="batchstartdate"
-                                type="date"
-                                id="batchstartdate"
-                                placeholder="Start date"
-                                value={startBatchDate}
-                                onChange={handleStartDateChange}
-                                required
-                              />
-                            </div>
-                            <div className="btchDate">
-                              <label id="batchend" className="text-muted date">
-                                End date
-                              </label>
-                              <input
-                                type="date"
-                                id="batchenddate"
-                                name="batchenddate"
-                                placeholder="End date"
-                                value={endBatchDate}
-                                readOnly
-                                disabled
-                                onChange={(e) =>
-                                  setEndBatchDate(e.target.value)
-                                }
-                              />
+                      <CloseButton variant="white" onClick={handleClose} />
+                    </Modal.Header>
+                    <Modal.Body>
+                      <ModalTitle style={{ textAlign: "center" }}>
+                        CREATE AN BATCH
+                      </ModalTitle>
+                      <form onSubmit={submitBatch}>
+                        <div className="inputbatch-box">
+                          <div className="inputbatch">
+                            <select
+                              id="batchcode"
+                              name="batchcode"
+                              className="batchdropdown"
+                              required
+                              onChange={(e) => setbatchcode(e.target.value)}
+                            >
+                              <option value="null">Batch Code</option>
+                              {batchList.map((data, index) => (
+                                <option key={index} value={index.course}>
+                                  {data.course}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="inputbatch">
+                            <input
+                              type="time"
+                              name="batchtiming"
+                              id="batchtiming"
+                              value={selectedBatchTime}
+                              onChange={handleTimeChange}
+                            />
+                          </div>
+                          <div className="inputbatch">
+                            <input
+                              type="number"
+                              name="numofstudent"
+                              id="numofstudent"
+                              placeholder="No of Student"
+                              value={numofstudent}
+                              onChange={(e) => setnumofstudent(e.target.value)}
+                            />
+                          </div>
+                          <div className="inputbatch">
+                            <select
+                              id="trainername"
+                              name="trainername"
+                              className="trainerdropdown"
+                              required
+                              onChange={(e) => settrainername(e.target.value)}
+                            >
+                              <option value="null">Trainers Name</option>
+                              {trainerList.map((data, index) => (
+                                <option key={index} value={index.name}>
+                                  {data.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="inputbatch">
+                            <div className="batchDate">
+                              <div className="btchDate">
+                                <label
+                                  id="batchstrt"
+                                  htmlFor="startdate"
+                                  className="text-muted date"
+                                >
+                                  Start date
+                                </label>
+                                <input
+                                  name="batchstartdate"
+                                  type="date"
+                                  id="batchstartdate"
+                                  placeholder="Start date"
+                                  value={startBatchDate}
+                                  onChange={handleStartDateChange}
+                                  required
+                                />
+                              </div>
+                              <div className="btchDate">
+                                <label
+                                  id="batchend"
+                                  className="text-muted date"
+                                >
+                                  End date
+                                </label>
+                                <input
+                                  type="date"
+                                  id="batchenddate"
+                                  name="batchenddate"
+                                  placeholder="End date"
+                                  value={endBatchDate}
+                                  readOnly
+                                  disabled
+                                  onChange={(e) =>
+                                    setEndBatchDate(e.target.value)
+                                  }
+                                />
+                              </div>
                             </div>
                           </div>
+                          <div className="inputbatch"></div>
                         </div>
-                        <div className="inputbatch"></div>
-                      </div>
-                      {errors.confirmpassword && (
-                        <p style={{ color: "red", textAlign: "center" }}>
-                          {errors.confirmpassword}
-                        </p>
-                      )}
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
-                        <button type="submit" id="btn-createrefmodal">
-                          Create
-                        </button>
-                      </Modal.Footer>
-                    </form>
-                  </Modal.Body>
-                </Modal>
+                        {errors.confirmpassword && (
+                          <p style={{ color: "red", textAlign: "center" }}>
+                            {errors.confirmpassword}
+                          </p>
+                        )}
+                        <Modal.Footer>
+                          <Button variant="secondary" onClick={handleClose}>
+                            Close
+                          </Button>
+                          <button type="submit" id="btn-createrefmodal">
+                            Create
+                          </button>
+                        </Modal.Footer>
+                      </form>
+                    </Modal.Body>
+                  </Modal>
 
-                {/* Model profile */}
+                  {/* Model profile */}
 
-                <div id="reftable">
-                  <BatchTable />
-                </div>
-              </Container>
+                  <div id="reftable">
+                    <BatchTable />
+                  </div>
+                </Container>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

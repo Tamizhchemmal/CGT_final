@@ -13,6 +13,7 @@ import "./Css/login.css";
 
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
+import { ToastContainer } from "react-toastify";
 
 export const rolecontext = createContext();
 
@@ -26,16 +27,30 @@ function App() {
     <>
       <rolecontext.Provider value={roles}>
         <Routes>
-          <Route path="/referralpage" element={<Referralpagetwo />}></Route>
-          <Route path="/studentpage" element={<Studentpage />}></Route>
           <Route path="/" element={<Adminlogin onSubmit={getrole} />}></Route>
           <Route path="/home" element={<HomePage />}></Route>
           <Route
             path="/trainerpage"
             element={
-              <ProductedTrainerpage>
+              <Productedpage>
                 <Trainerpage />
-              </ProductedTrainerpage>
+              </Productedpage>
+            }
+          ></Route>
+          <Route
+            path="/referralpage"
+            element={
+              <Productedpage>
+                <Referralpagetwo />
+              </Productedpage>
+            }
+          ></Route>
+          <Route
+            path="/studentpage"
+            element={
+              <Productedpage>
+                <Studentpage />
+              </Productedpage>
             }
           ></Route>
 
@@ -50,10 +65,12 @@ function App() {
 }
 export default App;
 
-const ProductedTrainerpage = ({ children }) => {
+const Productedpage = ({ children }) => {
   const roless = useContext(rolecontext);
   console.log(roless);
-  if (roless == "admin") {
+  if (roless == "referral" || roless == "trainer") {
+    return <Noaccess />;
+  } else if (roless == "admin") {
     return children;
   } else {
     return <Noaccess />;

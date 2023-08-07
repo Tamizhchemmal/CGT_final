@@ -10,11 +10,10 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { teal } from "@mui/material/colors";
 import Modal from "react-bootstrap/Modal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
 import { ModalBody, ModalFooter } from "react-bootstrap";
-
-export const rolecontext = createContext();
 
 function Adminlogin(props) {
   const [email, setEmail] = useState("");
@@ -30,7 +29,6 @@ function Adminlogin(props) {
     if (role === "admin") {
       if (email === "admin" && password === "12345") {
         setSuccess(true);
-        // alert(`${role} success`);
         setError("");
       } else if (email !== "admin") {
         setError("Incorrect Email");
