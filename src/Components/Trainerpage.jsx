@@ -231,7 +231,7 @@ export default function Trainerpage() {
           console.log("saved");
         })
         .catch((err) => {
-          console.log("error");
+          console.log("error" + err.message);
         });
 
       setErrors("");

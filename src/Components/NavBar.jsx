@@ -92,8 +92,8 @@ export default function NavBar() {
                   endIcon={<LogoutIcon />}
                   className="navbtn-icon"
                   onClick={() => {
-                    navigate("/");
                     localStorage.removeItem("access");
+                    navigate("/");
                   }}
                 >
                   Logout

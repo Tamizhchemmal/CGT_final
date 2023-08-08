@@ -65,6 +65,7 @@ export default function NavBarTwo(props) {
                   endIcon={<LogoutIcon />}
                   className="navbtn-icon"
                   onClick={() => {
+                    localStorage.removeItem("access");
                     navigate("/");
                   }}
                 >

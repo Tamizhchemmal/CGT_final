@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import "../Css/login.css";
 import boss from "../Assets/Images/boss.png";
@@ -13,6 +13,7 @@ import Modal from "react-bootstrap/Modal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
+import { RollerShadesClosedRounded } from "@mui/icons-material";
 
 function Adminlogin(props) {
   const [email, setEmail] = useState("");
@@ -23,12 +24,20 @@ function Adminlogin(props) {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("access")) {
+      navigate("/home");
+    }
+  }, []);
+
   const submitAdminLogin = (e) => {
     e.preventDefault();
+
     if (role === "admin") {
       if (email === "admin" && password === "12345") {
         setSuccess(true);
         localStorage.setItem("access", true);
+        localStorage.setItem("role", role);
         setError("");
       } else if (email !== "admin") {
         setError("Incorrect Email");
@@ -69,16 +78,19 @@ function Adminlogin(props) {
         return error;
       }
     }
-    props.onSubmit(role);
+    // const hifi = localStorage.getItem("role", role);
+    const hifi = localStorage.getItem("role");
+    console.log(hifi);
+    props.onSubmit(hifi);
   };
 
   const handleaccess = (e) => {
-    if (role == "admin") {
-      navigate("home");
-    } else if (role == "trainer") {
-      navigate("home");
-    } else if (role == "referral") {
-      navigate("home");
+    if (role === "admin") {
+      navigate("/home");
+    } else if (role === "trainer") {
+      navigate("/home");
+    } else if (role === "referral") {
+      navigate("/home");
     }
   };
 

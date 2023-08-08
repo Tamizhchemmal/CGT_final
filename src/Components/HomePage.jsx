@@ -33,6 +33,10 @@ export default function HomePage() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!localStorage.getItem("access")) navigate("/");
+  }, []);
+
   const [batchList, setBatchList] = useState([
     {
       id: 1,
