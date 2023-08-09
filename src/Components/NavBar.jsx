@@ -93,6 +93,7 @@ export default function NavBar() {
                   className="navbtn-icon"
                   onClick={() => {
                     localStorage.removeItem("access");
+                    localStorage.removeItem("role");
                     navigate("/");
                   }}
                 >

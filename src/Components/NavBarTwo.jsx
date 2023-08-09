@@ -40,7 +40,7 @@ export default function NavBarTwo(props) {
                   variant="text"
                   className="navbtn-icon"
                   onClick={() => {
-                    navigate("/home");
+                    navigate("/trainerhome");
                   }}
                 >
                   Home

@@ -13,22 +13,38 @@ import "./Css/login.css";
 
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
-import { ToastContainer } from "react-toastify";
+
+import HomeTrainer from "./Components/HomeTrainer";
 
 export const rolecontext = createContext();
 
 function App() {
-  const [roles, setRoles] = useState("");
-  const getrole = (role) => {
-    setRoles(role);
-  };
+  // const [roles, setRoles] = useState("");
+  // const getrole = (role) => {
+  //   setRoles(role);
+  // };
 
   return (
     <>
-      <rolecontext.Provider value={roles}>
+      <rolecontext.Provider>
         <Routes>
-          <Route path="/" element={<Adminlogin onSubmit={getrole} />}></Route>
-          <Route path="/home" element={<HomePage />}></Route>
+          <Route path="/" element={<Adminlogin />}></Route>
+          <Route
+            path="/home"
+            element={
+              <ProductedHome>
+                <HomePage />
+              </ProductedHome>
+            }
+          ></Route>
+          <Route
+            path="/trainerhome"
+            element={
+              <ProductedHomeTrainer>
+                <HomeTrainer />
+              </ProductedHomeTrainer>
+            }
+          ></Route>
           <Route
             path="/trainerpage"
             element={
@@ -66,11 +82,31 @@ function App() {
 export default App;
 
 const Productedpage = ({ children }) => {
-  const roless = useContext(rolecontext);
+  // // const roless = useContext(rolecontext);
+  // console.log(roless);
+  const roless = localStorage.getItem("role");
   console.log(roless);
-  if (roless == "referral" || roless == "trainer") {
+
+  if (roless == "admin") {
+    return children;
+  } else if (roless == "referral" || roless == "trainer") {
     return <Noaccess />;
-  } else if (roless == "admin") {
+  } else {
+    return <Noaccess />;
+  }
+};
+
+const ProductedHome = ({ children }) => {
+  const roless = localStorage.getItem("role");
+  if (roless == "admin") {
+    return children;
+  } else {
+    return <Noaccess />;
+  }
+};
+const ProductedHomeTrainer = ({ children }) => {
+  const roless = localStorage.getItem("role");
+  if (roless == "trainer") {
     return children;
   } else {
     return <Noaccess />;

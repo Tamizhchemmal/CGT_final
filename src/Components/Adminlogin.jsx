@@ -33,6 +33,14 @@ function Adminlogin(props) {
   const submitAdminLogin = (e) => {
     e.preventDefault();
 
+    // if (email == "") {
+    //   setError("Enter Email address");
+    // } else if (password == "") {
+    //   setError("Enter password");
+    // } else if (role == "") {
+    //   setError("Select role");
+    // }
+
     if (role === "admin") {
       if (email === "admin" && password === "12345") {
         setSuccess(true);
@@ -53,6 +61,9 @@ function Adminlogin(props) {
       if (email == "abc@gmail.com" && password == "12345") {
         setSuccess(true);
         setError("");
+        setSuccess(true);
+        localStorage.setItem("access", true);
+        localStorage.setItem("role", role);
       } else if (email !== "abc@gmail.com") {
         setError("Incorrect Email");
         return error;
@@ -67,6 +78,8 @@ function Adminlogin(props) {
       if (email == "abc@gmail.com" && password == "12345") {
         setSuccess(true);
         setError("");
+        localStorage.setItem("access", true);
+        localStorage.setItem("role", role);
       } else if (email !== "abc@gmail.com") {
         setError("Incorrect Email");
         return error;
@@ -78,17 +91,18 @@ function Adminlogin(props) {
         return error;
       }
     }
+
     // const hifi = localStorage.getItem("role", role);
-    const hifi = localStorage.getItem("role");
-    console.log(hifi);
-    props.onSubmit(hifi);
+    // const hifi = localStorage.getItem("role");
+    // console.log(hifi);
+    // props.onSubmit(role);
   };
 
   const handleaccess = (e) => {
     if (role === "admin") {
       navigate("/home");
     } else if (role === "trainer") {
-      navigate("/home");
+      navigate("/trainerhome");
     } else if (role === "referral") {
       navigate("/home");
     }
@@ -108,7 +122,7 @@ function Adminlogin(props) {
           {/* <h2>Login</h2> */}
 
           <div>
-            <form>
+            <form onSubmit={submitAdminLogin}>
               <div className="inputs-admin">
                 <TextField
                   id="standard-basic"
@@ -145,6 +159,7 @@ function Adminlogin(props) {
                     onChange={(e) => {
                       setRole(e.target.value);
                     }}
+                    aria-required
                   >
                     <FormControlLabel
                       value="admin"
@@ -165,6 +180,7 @@ function Adminlogin(props) {
                       value="trainer"
                       control={
                         <Radio
+                          required
                           size="small"
                           sx={{
                             color: teal[500],
@@ -180,6 +196,7 @@ function Adminlogin(props) {
                       value="referral"
                       control={
                         <Radio
+                          required
                           size="small"
                           sx={{
                             color: teal[500],
@@ -199,7 +216,7 @@ function Adminlogin(props) {
                 <Button
                   type="submit"
                   sx={{ width: "80%" }}
-                  onClick={submitAdminLogin}
+                  // onClick={submitAdminLogin}
                   size="large"
                   variant="outlined"
                   className="btn-admin"
@@ -207,24 +224,24 @@ function Adminlogin(props) {
                 >
                   Login
                 </Button>
-                {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
-                <Modal show={success} backdrop="static" keyboard={false}>
-                  <Modal.Header>
-                    <Modal.Title>
-                      <h4 style={{ color: "green" }}>Login Successful</h4>
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <h5>You are Login as a {role}.....</h5>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="primary" onClick={handleaccess}>
-                      Okay
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
               </div>
             </form>
+            {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
+            <Modal show={success} backdrop="static" keyboard={false}>
+              <Modal.Header>
+                <Modal.Title>
+                  <h4 style={{ color: "green" }}>Login Successful</h4>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <h5>You are Login as a {role}.....</h5>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={handleaccess}>
+                  Okay
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
       </div>
