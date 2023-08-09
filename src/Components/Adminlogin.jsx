@@ -91,11 +91,6 @@ function Adminlogin(props) {
         return error;
       }
     }
-
-    // const hifi = localStorage.getItem("role", role);
-    // const hifi = localStorage.getItem("role");
-    // console.log(hifi);
-    // props.onSubmit(role);
   };
 
   const handleaccess = (e) => {
@@ -165,6 +160,7 @@ function Adminlogin(props) {
                       value="admin"
                       control={
                         <Radio
+                          required
                           size="small"
                           sx={{
                             color: teal[500],

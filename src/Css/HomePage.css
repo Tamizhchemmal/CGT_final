@@ -207,3 +207,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .mods {
   z-index: 9999999 !important;
 }
+.button-access:hover {
+  background-color: aliceblue !important;
+  color: #002333 !important;
+}
