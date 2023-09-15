@@ -69,7 +69,7 @@ input::-webkit-inner-spin-button {
 
 .create {
   width: 30%;
-  padding: 10px 15px;
+  /* padding: 10px 15px; */
   border-radius: 5px;
   background-color: #002333;
   color: white;
@@ -94,7 +94,7 @@ input::-webkit-inner-spin-button {
   justify-content: center;
 }
 .inputref input {
-  width: 80%;
+  width: 80% !important;
   padding: 10px 15px;
   border: none;
   outline: none;
@@ -105,14 +105,14 @@ input::-webkit-inner-spin-button {
   box-shadow: rgba(0, 40, 97, 0.2) 2px 2px 25px;
 }
 #btn-createrefmodal {
-  background-color: #002333;
-  outline: none;
-  border: none;
-  color: white;
-  border-radius: 5px;
-  font-size: 18px;
-  padding: 8px 18px;
-  margin-right: 20px;
+  background-color: #002333 !important;
+  outline: none !important;
+  border: none !important;
+  color: white !important;
+  border-radius: 5px !important;
+  font-size: 18px !important;
+  padding: 8px 18px !important;
+  margin-right: 20px !important;
 }
 #table-body {
   font-family: "Poppins", sans-serif;
@@ -120,6 +120,11 @@ input::-webkit-inner-spin-button {
 #reftable {
   margin-top: 40px;
 }
+
+.modal-footer {
+  border-top: none !important;
+}
+
 /* Student Creation */
 .inputref-box {
   background-color: aliceblue;

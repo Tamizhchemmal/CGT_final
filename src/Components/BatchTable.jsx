@@ -5,12 +5,17 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import "../Css/HomePage.css";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
 import { useEffect, useState } from "react";
 import { Modal, Button, ModalTitle, CloseButton } from "react-bootstrap";
+
+import BatchPopUp from "./BatchPopUp";
+
 import "../Css/HomePage.css";
+
 
 import axios from "axios";
 
@@ -61,7 +66,8 @@ const columns = [
   },
 ];
 
-export default function BatchTable() {
+export default function BatchTable({ search }) {
+  const [showBatchModal, setShowBatchModal] = useState(false);
   const [batchcode, setbatchcode] = useState("");
   const [numofstudent, setnumofstudent] = useState("");
   const [trainername, settrainername] = useState("");
@@ -69,27 +75,105 @@ export default function BatchTable() {
   const [batchList, setBatchList] = useState([
     {
       id: 1,
-      course: "D",
+      course: "DEVP",
     },
     {
       id: 2,
-      course: "T",
+      course: "TESTING",
     },
     {
       id: 3,
-      course: "A",
+      course: "AWS",
     },
     {
       id: 4,
-      course: "UI",
+      course: "UI & UX",
     },
     {
       id: 5,
-      course: "P",
+      course: "PYTHON",
     },
     {
       id: 6,
-      course: "FD",
+      course: "FULLSTACK",
+    },
+  ]);
+
+  const [batchNumber, setBatchNumber] = useState([
+    {
+      id: 1,
+      number: "1",
+    },
+    {
+      id: 2,
+      number: "2",
+    },
+    {
+      id: 3,
+      number: "3",
+    },
+    {
+      id: 4,
+      number: "4",
+    },
+    {
+      id: 5,
+      number: "5",
+    },
+    {
+      id: 6,
+      number: "6",
+    },
+  ]);
+
+  const [batchMonth, setBatchMonth] = useState([
+    {
+      id: 1,
+      month: "Jan",
+    },
+    {
+      id: 2,
+      month: "Feb",
+    },
+    {
+      id: 3,
+      month: "Mar",
+    },
+    {
+      id: 4,
+      month: "Apr",
+    },
+    {
+      id: 5,
+      month: "May",
+    },
+    {
+      id: 6,
+      month: "Jun",
+    },
+    {
+      id: 7,
+      month: "Jul",
+    },
+    {
+      id: 8,
+      month: "Aug",
+    },
+    {
+      id: 9,
+      month: "Sep",
+    },
+    {
+      id: 10,
+      month: "Oct",
+    },
+    {
+      id: 11,
+      month: "Nov",
+    },
+    {
+      id: 12,
+      month: "Dec",
     },
   ]);
 
@@ -120,8 +204,6 @@ export default function BatchTable() {
     },
   ]);
 
-  // const [editRow, setEditRow] = useState({});
-
   const [show, setShow] = useState(false);
 
   const naviagte = useNavigate();
@@ -129,27 +211,19 @@ export default function BatchTable() {
     setShow(false);
   };
 
-  const batchCreate = (e) => {
-    e.preventDefault();
-    naviagte("/home");
-  };
-
   const edithandleClose = () => {
     setEditShow(false);
     setErrors("");
   };
 
-  // const handleChange = (e) => {
-  //   setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
-  // };
-
   const [errors, setErrors] = useState({});
   const [apiData, setApiData] = useState([]);
   const [editShow, setEditShow] = useState(false);
+  const [showBatch, setShowBatch] = useState([]);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  // const [alertt, setAlertt] = useState(null);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -170,8 +244,13 @@ export default function BatchTable() {
     callApiData();
   }, []);
 
-  const opnetable = (apiData) => {
-    setShow(true);
+  const openBatchTable = (apiData) => {
+    setShowBatch(apiData);
+    setShowBatchModal(true);
+  };
+
+  const handleBatchCloseModal = (e) => {
+    setShowBatchModal(false);
   };
 
   // Delete Batch
@@ -180,45 +259,32 @@ export default function BatchTable() {
       "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + id
     );
     alert("Batch deleted");
-
     callApiData();
   };
 
-  const [editedData, setEditedData] = useState({});
+  const [editedData, setEditedData] = useState({
+    batchcode: "",
+    selectedBatchTime: "",
+    numofstudent: "",
+    trainername: "",
+    startBatchDate: "",
+    endBatchDate: "",
+  });
 
   //Edit Batch
 
   const handleedit = (rowData) => {
-    // setEditRow(rowData)
     setEditShow(true);
-    console.log(rowData);
-    // fetchDataFromAPi(rowData.id);
     setEditedData({
       ...rowData,
     });
   };
 
-  // const handleEditChange = (e) => {
-  //   setEditedData((prevData) => ({
-  //     ...prevData,
-  //     [e.target.name]: e.target.value,
-  //   }));
-  // };
-
-  // const handleSaveChanges =(updatedData)=>{
-  //   setApiData((prevData)=>
-  //     prevData.map((apiData)=>
-  //     apiData.id === updatedData.id ? {...apiData, ...updatedData}:apiData
-  //     )
-  //   )
-  //   setEditShow(false);
-  // }
-
   const [startBatchDate, setStartBatchDate] = useState([]);
   const [endBatchDate, setEndBatchDate] = useState([]);
 
   //Date change
-  const handleStartDateChange = (e) => {
+  const handleStartDateChange = (e, editedData) => {
     const selectedStartDate = new Date(e.target.value);
     const selectedEndDate = new Date(selectedStartDate);
     selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
@@ -226,6 +292,9 @@ export default function BatchTable() {
     setStartBatchDate(sDate);
     const eDate = selectedEndDate.toISOString().substr(0, 10);
     setEndBatchDate(eDate);
+
+    setEditedData({ ...editedData, startBatchDate: e.target.value });
+    setEditedData({ ...editedData, endBatchDate: e.target.value });
 
     //Search function
   };
@@ -241,10 +310,44 @@ export default function BatchTable() {
 
   const Active = ({ count }) => {};
 
-  const submitEdit = async (id) => {
-    // e.preventDefault();
-    await axios.put("https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + id);
+  const submitEdit = async (event) => {
+    event.preventDefault();
+
+    const response = await axios.put(
+      "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + editedData.id,
+      editedData
+    );
+
+    console.log(response.data);
+
     setEditShow(false);
+  };
+
+  // combined dropdown values
+  const batchCodeHandleChange = (e) => {
+    const newValue = e.target.value;
+    setBatchList(newValue);
+    setEditedData({ ...editedData, newValue });
+    combineDropdownValues(newValue, batchMonth, batchNumber);
+  };
+
+  const batchMonthHandleChange = (e) => {
+    const newValue = e.target.value;
+    setBatchMonth(newValue);
+    setEditedData({ ...editedData, newValue });
+    combineDropdownValues(batchList, newValue, batchNumber);
+  };
+
+  const batchNumberHandleChange = (e) => {
+    const newValue = e.target.value;
+    setBatchNumber(newValue);
+    setEditedData({ ...editedData, newValue });
+    combineDropdownValues(batchList, batchMonth, newValue);
+  };
+
+  const combineDropdownValues = (value1, value2, value3) => {
+    const combined = `${value1}-${value2}-${value3}`;
+    setbatchcode(combined);
   };
 
   return (
@@ -274,6 +377,12 @@ export default function BatchTable() {
               <TableBody>
                 {apiData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((apiData) => {
+                    return search.toLowerCase() === ""
+                      ? apiData
+                      : apiData.name.toLowerCase().includes(search) ||
+                          apiData.name.includes(search);
+                  })
                   .map((apiData) => {
                     return (
                       <TableRow key={apiData.id} hover role="checkbox">
@@ -281,7 +390,7 @@ export default function BatchTable() {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={opnetable}
+                          onClick={() => openBatchTable(apiData)}
                         >
                           {apiData.batchcode}
                         </TableCell>
@@ -289,7 +398,7 @@ export default function BatchTable() {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={opnetable}
+                          onClick={() => openBatchTable(apiData)}
                         >
                           {apiData.startBatchDate}
                         </TableCell>
@@ -297,7 +406,7 @@ export default function BatchTable() {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={opnetable}
+                          onClick={() => openBatchTable(apiData)}
                         >
                           {apiData.trainername}
                         </TableCell>
@@ -305,7 +414,7 @@ export default function BatchTable() {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={opnetable}
+                          onClick={() => openBatchTable(apiData)}
                         >
                           HTML
                         </TableCell>
@@ -313,9 +422,8 @@ export default function BatchTable() {
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
-                          onClick={opnetable}
+                          onClick={() => openBatchTable(apiData)}
                         >
-                          {" "}
                           <Active count={15} />
                         </TableCell>
                         <TableCell
@@ -348,71 +456,13 @@ export default function BatchTable() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
-        {/* model profile */}
-        <Modal
-          show={show}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header
-            style={{ backgroundColor: " #002333 ", color: "white" }}
-          >
-            <Modal.Title style={{ color: "white" }}>
-              Referral Profile
-            </Modal.Title>
-
-            <CloseButton variant="white" onClick={handleClose} />
-          </Modal.Header>
-          <Modal.Body>
-            <div>
-              <Card
-                sx={{
-                  display: "flex",
-                  width: "100%",
-                  height: "400px",
-                  boxShadow: "rgba(66, 84, 102, 0.1) 0px 8px 25px ",
-                }}
-              >
-                <Card
-                  sx={{
-                    width: "50%",
-                    height: "70%",
-                    margin: "15px 15px",
-                    boxShadow: "rgba(66, 84, 102, 0.3) 0px 8px 25px ",
-                  }}
-                >
-                  <div style={{ margin: "10px 30px", fontSize: "18px" }}>
-                    Name : XXXX
-                  </div>
-                </Card>
-              </Card>
-            </div>
-            <hr></hr>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Close
-              </Button>
-              <button
-                type="submit"
-                id="btn-createrefmodal"
-                onClick={batchCreate}
-              >
-                Create
-              </button>
-            </Modal.Footer>
-          </Modal.Body>
-        </Modal>
 
         {/* Edit */}
-        {/* {apiData && ( */}
         <Modal
           data={apiData}
           show={editShow}
           onHide={edithandleClose}
+          className="mods"
           backdrop="static"
           keyboard={false}
           size="lg"
@@ -430,25 +480,60 @@ export default function BatchTable() {
             <ModalTitle style={{ textAlign: "center" }}>
               Update AN BATCH
             </ModalTitle>
-            <form>
+            <form onSubmit={submitEdit}>
               <div className="inputbatch-box">
-                <div className="inputbatch">
-                  <select
-                    id="batchcode"
-                    name="batchcode"
-                    className="batchdropdown"
-                    required
-                    onChange={(e) => setbatchcode(e.target.value)}
-                    value={editedData.batchcode}
-                    onSubmit={submitEdit}
-                  >
-                    <option value="null">Batch Code</option>
-                    {batchList.map((data, index) => (
-                      <option key={index} value={index.course}>
-                        {data.course}
-                      </option>
-                    ))}
-                  </select>
+                <div className="combine-dropdwn">
+                  <div className="inputbatch">
+                    <select
+                      id="batchcode"
+                      name="batchcode"
+                      className="batchdropdown"
+                      required
+                      onChange={batchCodeHandleChange}
+                      value={editedData.batchcode}
+                    >
+                      <option value="null">Batch Code</option>
+                      {batchList.map((data, index) => (
+                        <option key={index} value={index.course}>
+                          {data.course}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="inputbatch">
+                    <select
+                      id="batchcode"
+                      name="batchcode"
+                      className="batchdropdown"
+                      required
+                      onChange={batchMonthHandleChange}
+                      value={editedData.batchcode}
+                    >
+                      <option value="null">Batch Month</option>
+                      {batchMonth.map((data, index) => (
+                        <option key={index} value={index.month}>
+                          {data.month}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="inputbatch">
+                    <select
+                      id="batchcode"
+                      name="batchcode"
+                      className="batchdropdown"
+                      required
+                      onChange={batchNumberHandleChange}
+                      value={editedData.batchcode}
+                    >
+                      <option value="null">Batch Number</option>
+                      {batchNumber.map((data, index) => (
+                        <option key={index} value={index.number}>
+                          {data.number}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
                 <div className="inputbatch">
                   <input
@@ -456,7 +541,12 @@ export default function BatchTable() {
                     name="batchtiming"
                     id="batchtiming"
                     value={editedData.selectedBatchTime}
-                    onChange={handleTimeChange}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        selectedBatchTime: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="inputbatch">
@@ -466,7 +556,12 @@ export default function BatchTable() {
                     id="numofstudent"
                     placeholder="No of Student"
                     value={editedData.numofstudent}
-                    onChange={(e) => setnumofstudent(e.target.value)}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        numofstudent: e.target.value,
+                      })
+                    }
                   />
                 </div>
                 <div className="inputbatch">
@@ -475,7 +570,12 @@ export default function BatchTable() {
                     name="trainername"
                     className="trainerdropdown"
                     required
-                    onChange={(e) => settrainername(e.target.value)}
+                    onChange={(e) =>
+                      setEditedData({
+                        ...editedData,
+                        trainername: e.target.value,
+                      })
+                    }
                     value={editedData.trainername}
                   >
                     <option value="">Trainers Name</option>
@@ -513,36 +613,48 @@ export default function BatchTable() {
                       <input
                         type="date"
                         id="batchenddate"
-                        name="batchenddate"
+                        name="endBatchdate"
                         placeholder="End date"
                         value={editedData.endBatchDate}
                         readOnly
                         disabled
-                        onChange={(e) => setEndBatchDate(e.target.value)}
+                        onChange={(e) => {
+                          setEditedData({
+                            endBatchDate: e.target.value,
+                          });
+                        }}
+                        // onChange={(e) => set}
                       />
                     </div>
                   </div>
                 </div>
               </div>
-              {errors.confirmpassword && (
-                <p style={{ color: "red", textAlign: "center" }}>
-                  {errors.confirmpassword}
-                </p>
-              )}
+
               <Modal.Footer>
-                <Button variant="secondary" onClick={edithandleClose}>
-                  Close
-                </Button>
                 <button type="submit" id="btn-createrefmodal">
                   Update
                 </button>
+                <Button
+                  variant="secondary"
+                  id="btn-createrefmodal"
+                  onClick={edithandleClose}
+                >
+                  Close
+                </Button>
               </Modal.Footer>
             </form>
           </Modal.Body>
         </Modal>
-        {/* ) */}
-        {/* } */}
       </div>
+      {/* Modal Profile */}
+      {showBatch && (
+        <BatchPopUp
+          id={apiData.id}
+          user={showBatch}
+          showmodal={showBatchModal}
+          onClosemodal={handleBatchCloseModal}
+        />
+      )}
     </>
   );
 }

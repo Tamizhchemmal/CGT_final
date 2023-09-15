@@ -158,7 +158,10 @@ export default function RefProfModal() {
                   <div className="ref-wallet">
                     <div className="wallet-title">Account Balance</div>
                     <div>
-                      <span className="ruppess">Rs. 10,000</span>
+                      <span className="ruppess">
+                        <CurrencyRupeeOutlinedIcon className="rupee-icon" />{" "}
+                        10,000
+                      </span>
                     </div>
                     <div className="request-money">
                       <Button

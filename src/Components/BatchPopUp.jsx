@@ -1,11 +1,10 @@
 import React from "react";
-// import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import { CloseButton } from "react-bootstrap";
-import RefModalPopUp from "./RefModalPopUp";
 import "../Css/Refprofile.css";
+import BatchModalPopUp from "./BatchModalPopUp";
 
-function Modalpopup({ user, showmodal, onClosemodal }) {
+export default function BatchPopUp({ user, showmodal, onClosemodal }) {
   return (
     <>
       <Modal
@@ -19,16 +18,14 @@ function Modalpopup({ user, showmodal, onClosemodal }) {
         className="mods"
       >
         <Modal.Header style={{ backgroundColor: " #002333 ", color: "white" }}>
-          <Modal.Title style={{ color: "white" }}>Referral Profile</Modal.Title>
+          <Modal.Title style={{ color: "white" }}>Batch Profile</Modal.Title>
 
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
         <Modal.Body style={{ width: "100vw" }}>
-          <RefModalPopUp />
+          <BatchModalPopUp />
         </Modal.Body>
       </Modal>
     </>
   );
 }
-
-export default Modalpopup;

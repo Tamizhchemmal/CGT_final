@@ -21,10 +21,16 @@ import "../Css/HomePage.css";
 import { rolecontext } from "../App";
 import NavBarTwo from "./NavBarTwo";
 
-export default function HomePage() {
+
+export default function HomePage({ callApiData }) {
+  const [search, setSearch] = useState("");
+  const [batchcode, setBatchcode] = useState(" ");
+  const [batchCourse, setBatchCourse] = useState("");
+  const [batchMonth, setBatchMonth] = useState("");
+  const [batchNumber, setBatchNumber] = useState("");
+
   const role = useContext(rolecontext);
 
-  const [batchcode, setbatchcode] = useState("");
 
   const [numofstudent, setnumofstudent] = useState("");
   const [trainername, settrainername] = useState("");
@@ -33,34 +39,109 @@ export default function HomePage() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!localStorage.getItem("access")) navigate("/");
-  }, []);
 
-  const [batchList, setBatchList] = useState([
+  const [batchCourseList, setBatchCourseList] = useState([
     {
       id: 1,
-      course: "D",
+      course: "DEVP",
     },
     {
       id: 2,
-      course: "T",
+      course: "TESTING",
     },
     {
       id: 3,
-      course: "A",
+      course: "AWS",
     },
     {
       id: 4,
-      course: "UI",
+      course: "UI & UI",
     },
     {
       id: 5,
-      course: "P",
+      course: "PYTHON",
     },
     {
       id: 6,
-      course: "FD",
+      course: "FULLSTACK",
+    },
+  ]);
+
+  const [batchMonthList, setBatchMonthList] = useState([
+    {
+      id: 1,
+      month: "Jan",
+    },
+    {
+      id: 2,
+      month: "Feb",
+    },
+    {
+      id: 3,
+      month: "Mar",
+    },
+    {
+      id: 4,
+      month: "Apr",
+    },
+    {
+      id: 5,
+      month: "May",
+    },
+    {
+      id: 6,
+      month: "Jun",
+    },
+    {
+      id: 7,
+      month: "Jul",
+    },
+    {
+      id: 8,
+      month: "Aug",
+    },
+    {
+      id: 9,
+      month: "Sep",
+    },
+    {
+      id: 10,
+      month: "Oct",
+    },
+    {
+      id: 11,
+      month: "Nov",
+    },
+    {
+      id: 12,
+      month: "Dec",
+    },
+  ]);
+
+  const [batchNumberList, setBatchNumberList] = useState([
+    {
+      id: 1,
+      number: "1",
+    },
+    {
+      id: 2,
+      number: "2",
+    },
+    {
+      id: 3,
+      number: "3",
+    },
+    {
+      id: 4,
+      number: "4",
+    },
+    {
+      id: 5,
+      number: "5",
+    },
+    {
+      id: 6,
+      number: "6",
     },
   ]);
 
@@ -102,6 +183,13 @@ export default function HomePage() {
   const [errors, setErrors] = useState({});
 
   const submitBatch = async (e) => {
+    const batchcode = `${batchCourse}-${batchMonth}-${batchNumber}`;
+    setTimeout(() => {
+      setBatchcode(batchcode);
+      console.log(batchcode);
+      console.log("Batch code", batchcode);
+    }, 1000);
+
     e.preventDefault();
     await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
       batchcode,
@@ -113,6 +201,10 @@ export default function HomePage() {
     });
     e.target.reset();
     setShow(false);
+
+    // callApiData();
+=======
+
   };
 
   //Date change Automatic
@@ -138,6 +230,34 @@ export default function HomePage() {
     const btchTiming = e.target.value;
     setSelectedBatchTime(btchTiming);
   };
+
+  // Batch Code generate
+
+  // const batchCodeHandleChange = (e) => {
+  //   const newValue1 = e.target.value;
+  //   setBatchList(newValue1);
+  //   console.log(newValue1);
+  //   // combineDropdownValues(newValue, batchMonth, batchNumber);
+  // };
+
+  // const batchMonthHandleChange = (e) => {
+  //   const newValue2 = e.target.value;
+  //   setBatchMonth(newValue2);
+  //   console.log(newValue2);
+  //   // combineDropdownValues(batchList, newValue, batchNumber);
+  // };
+
+  // const batchNumberHandleChange = (e) => {
+  //   const newValue3 = e.target.value;
+  //   setBatchNumber(newValue3);
+  //   console.log(newValue3);
+  //   // combineDropdownValues(batchList, batchMonth, newValue);
+  // };
+
+  // const combineDropdownValues = (value1, value2, value3) => {
+  //   const combined = `${value1}-${value2}-${value3}`;
+  //   setbatchcode(combined);
+  // };
 
   return (
     <>
@@ -192,6 +312,7 @@ export default function HomePage() {
                         type="search"
                         placeholder="Search Batch"
                         id="searchbar-ref"
+                        onChange={(e) => setSearch(e.target.value)}
                       ></input>
                       <FcSearch id="search-icon" title="Search" />
                     </div>
@@ -229,21 +350,55 @@ export default function HomePage() {
                     </ModalTitle>
                     <form onSubmit={submitBatch}>
                       <div className="inputbatch-box">
-                        <div className="inputbatch">
-                          <select
-                            id="batchcode"
-                            name="batchcode"
-                            className="batchdropdown"
-                            required
-                            onChange={(e) => setbatchcode(e.target.value)}
-                          >
-                            <option value="null">Batch Code</option>
-                            {batchList.map((data, index) => (
-                              <option key={index} value={index.course}>
-                                {data.course}
-                              </option>
-                            ))}
-                          </select>
+                        <div className="combine-dropdwn">
+                          <div className="inputbatch">
+                            <select
+                              id="batchcode"
+                              // name="batchcode"
+                              className="batchdropdown"
+                              required
+                              onChange={(e) => setBatchCourse(e.target.value)}
+                            >
+                              <option value="null">Batch Code</option>
+                              {batchCourseList.map((data) => (
+                                <option key={data.id} value={data.course}>
+                                  {data.course}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="inputbatch">
+                            <select
+                              id="batchcode"
+                              // name="batchcode"
+                              className="batchdropdown"
+                              required
+                              onChange={(e) => setBatchMonth(e.target.value)}
+                            >
+                              <option value="null">Batch Month</option>
+                              {batchMonthList.map((data1) => (
+                                <option key={data1.id} value={data1.month}>
+                                  {data1.month}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="inputbatch">
+                            <select
+                              id="batchcode"
+                              // name="batchcode"
+                              className="batchdropdown"
+                              required
+                              onChange={(e) => setBatchNumber(e.target.value)}
+                            >
+                              <option value="null">Batch Number</option>
+                              {batchNumberList.map((data2) => (
+                                <option key={data2.id} value={data2.number}>
+                                  {data2.number}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
                         </div>
                         <div className="inputbatch">
                           <input
@@ -327,12 +482,16 @@ export default function HomePage() {
                         </p>
                       )}
                       <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
-                          Close
-                        </Button>
                         <button type="submit" id="btn-createrefmodal">
                           Create
                         </button>
+                        <Button
+                          variant="secondary"
+                          id="btn-createrefmodal"
+                          onClick={handleClose}
+                        >
+                          Close
+                        </Button>
                       </Modal.Footer>
                     </form>
                   </Modal.Body>
@@ -341,7 +500,7 @@ export default function HomePage() {
                 {/* Model profile */}
 
                 <div id="reftable">
-                  <BatchTable />
+                  <BatchTable search={search} />
                 </div>
               </Container>
             </div>

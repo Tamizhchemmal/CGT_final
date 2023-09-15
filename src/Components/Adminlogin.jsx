@@ -53,8 +53,8 @@ function Adminlogin(props) {
 
         return error;
       }
-    } else if (role == "trainer") {
-      if (email == "abc@gmail.com" && password == "12345") {
+    } else if (role === "trainer") {
+      if (email === "abc@gmail.com" && password === "12345") {
         setSuccess(true);
         setError("");
         setSuccess(true);
@@ -70,8 +70,8 @@ function Adminlogin(props) {
 
         return error;
       }
-    } else if (role == "referral") {
-      if (email == "abc@gmail.com" && password == "12345") {
+    } else if (role === "referral") {
+      if (email === "abc@gmail.com" && password === "12345") {
         setSuccess(true);
         setError("");
         localStorage.setItem("access", true);
@@ -91,11 +91,13 @@ function Adminlogin(props) {
 
   const handleaccess = (e) => {
     if (role === "admin") {
+
       navigate("/home");
     } else if (role === "trainer") {
       navigate("/trainerhome");
     } else if (role === "referral") {
       navigate("/home");
+
     }
   };
 
@@ -104,7 +106,7 @@ function Adminlogin(props) {
       <div className="main-page">
         <div className="login-card">
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <img src={boss} id="logo-admin"></img>
+            <img src={boss} id="logo-admin" alt="admin Logo"></img>
           </div>
           <div className="style-heading">
             <h4>Career Guidance Technologies</h4>
@@ -150,6 +152,8 @@ function Adminlogin(props) {
                     onChange={(e) => {
                       setRole(e.target.value);
                     }}
+
+                    required
                     aria-required
                   >
                     <FormControlLabel
@@ -208,7 +212,9 @@ function Adminlogin(props) {
                 <Button
                   type="submit"
                   sx={{ width: "80%" }}
+
                   // onClick={submitAdminLogin}
+
                   size="large"
                   variant="outlined"
                   className="btn-admin"

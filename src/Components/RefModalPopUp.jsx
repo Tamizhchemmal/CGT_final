@@ -87,13 +87,13 @@ export default function RefModalPopUp() {
                     <div className="ref-details">
                       <div className="referral-label">
                         <Table>
-                          <TableBody key={apiData.id}>
-                            <TableRow>
+                          <TableBody>
+                            <TableRow key={apiData.id}>
                               <div className="ref-label">Name</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
-                                    {/* : {apiData.name} */}
+                                    {/* :{apiData.name} */}
                                   </TableCell>
                                 );
                               })}
@@ -158,7 +158,10 @@ export default function RefModalPopUp() {
                   <div className="ref-wallet1">
                     <div className="wallet-title">Account Balance</div>
                     <div>
-                      <span className="ruppess">Rs. 10,000</span>
+                      <span className="ruppess">
+                        <CurrencyRupeeOutlinedIcon className="rupee-icon" />
+                        10,000
+                      </span>
                     </div>
                     <div className="request-money">
                       <Button

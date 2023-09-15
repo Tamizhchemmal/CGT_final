@@ -24,7 +24,6 @@ function App() {
   // const getrole = (role) => {
   //   setRoles(role);
   // };
-
   return (
     <>
       <Routes>
