@@ -10,10 +10,9 @@ import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import Button from "@mui/material/Button";
+
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
-import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
   { id: "batchcode", label: "Batch Code", minWidth: 140, align: "center" },
@@ -58,10 +57,10 @@ export default function TrainerPopUpDetails() {
   };
 
   const callApiData = async (e) => {
-    const refData = await axios.get(
+    const trainerData = await axios.get(
       "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
     );
-    setApiData(refData.data);
+    setApiData(trainerData.data);
   };
 
   useEffect(() => {

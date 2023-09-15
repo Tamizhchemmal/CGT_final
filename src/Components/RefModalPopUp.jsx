@@ -87,13 +87,13 @@ export default function RefModalPopUp() {
                     <div className="ref-details">
                       <div className="referral-label">
                         <Table>
-                          <TableBody key={apiData.id}>
-                            <TableRow>
+                          <TableBody>
+                            <TableRow key={apiData.id}>
                               <div className="ref-label">Name</div>
                               {apiData.map((apiData) => {
                                 return (
                                   <TableCell className="details">
-                                    {/* : {apiData.name} */}
+                                    {/* :{apiData.name} */}
                                   </TableCell>
                                 );
                               })}

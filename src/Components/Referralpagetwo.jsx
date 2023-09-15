@@ -58,6 +58,7 @@ function Referralpagetwo() {
       setErrors("");
       alert("Referral Created");
       e.target.reset();
+      setShow(false);
     }
   };
   return (
@@ -124,7 +125,7 @@ function Referralpagetwo() {
                         <input
                           type="text"
                           id="input-name"
-                          name="fullname"
+                          name="name"
                           placeholder="Fullname"
                           autoComplete="new-password"
                           onChange={(e) => {
@@ -209,6 +210,13 @@ function Referralpagetwo() {
                       <button type="submit" id="btn-createrefmodal">
                         Create
                       </button>
+                      <Button
+                        variant="secondary"
+                        id="btn-createrefmodal"
+                        onClick={handleClose}
+                      >
+                        Close
+                      </Button>
                     </Modal.Footer>
                   </form>
                 </Modal.Body>

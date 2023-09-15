@@ -70,6 +70,13 @@ const columns = [
 // const rows = [];
 
 export default function RefTable({ search }) {
+  const [name, setName] = useState("");
+  const [mobilenumber, setMobilenumber] = useState("");
+
+  const [email, setEmail] = useState("");
+  const [companyname, setCompanyName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmpassword, setConfirmpassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showRef, setShowref] = useState([]);
 
@@ -101,17 +108,48 @@ export default function RefTable({ search }) {
     callApiData();
   }, []);
 
-  const opnetable = async (apiData) => {
+  const [show, setShow] = useState(false);
+
+  const naviagte = useNavigate();
+  const handleClose = () => {
+    setShow(false);
+  };
+
+  const [errors, setErrors] = useState({});
+
+  const [editRefShow, setEditRefShow] = useState(false);
+
+  const edithandleClose = () => {
+    setEditRefShow(false);
+    setErrors("");
+  };
+
+  const opnetable = (apiData) => {
     setShowref(apiData);
     setShowModal(true);
   };
+
   const handleCloseModal = (e) => {
     setShowModal(false);
   };
 
-  const handleedit = (e) => {
-    alert("button");
+  const [editedRefData, setEditedRefData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmpassword: "",
+    companyname: "",
+    mobilenumber: "",
+  });
+
+  const handlerefedit = (rowRefData) => {
+    console.log(rowRefData);
+    setEditRefShow(true);
+    setEditedRefData({
+      ...rowRefData,
+    });
   };
+
   // Delete referral
   const deleteref = async (id) => {
     await axios.delete(
@@ -121,6 +159,19 @@ export default function RefTable({ search }) {
 
     callApiData();
   };
+
+  const submitRefEdit = async (e) => {
+    e.preventDefault();
+    const refResponse = await axios.put(
+      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" + editedRefData.id,
+      editedRefData
+    );
+
+    console.log(refResponse.data);
+
+    setEditRefShow(false);
+  };
+
   var count;
 
   const Type = ({ count }) => {
@@ -205,7 +256,6 @@ export default function RefTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => opnetable(apiData)}
                         >
-                          {" "}
                           <Type count={15} />
                         </TableCell>
                         <TableCell
@@ -215,7 +265,7 @@ export default function RefTable({ search }) {
                         >
                           <BiSolidMessageSquareEdit
                             id="edit-icon"
-                            onClick={handleedit}
+                            onClick={() => handlerefedit(apiData)}
                           />
                           <MdDelete
                             id="dlt-icon"
@@ -238,10 +288,159 @@ export default function RefTable({ search }) {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
+        {/* Edit */}
+        <Modal
+          data={apiData}
+          className="mods"
+          show={editRefShow}
+          onHide={edithandleClose}
+          backdrop="static"
+          keyboard={false}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header
+            style={{ backgroundColor: " #002333 ", color: "white" }}
+          >
+            <Modal.Title style={{ color: "white" }}>
+              Update Referral
+            </Modal.Title>
+
+            <CloseButton variant="white" onClick={edithandleClose} />
+          </Modal.Header>
+          <Modal.Body>
+            <form onSubmit={submitRefEdit}>
+              <div className="inputref-box">
+                <div className="inputref">
+                  <input
+                    type="text"
+                    id="input-name"
+                    name="name"
+                    placeholder="Fullname"
+                    autoComplete="new-password"
+                    value={editedRefData.name}
+                    onChange={(e) =>
+                      setEditedRefData({
+                        ...editedRefData,
+                        name: e.target.value,
+                      })
+                    }
+                    required
+                  ></input>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="tel"
+                    id="input-tele"
+                    name="mobilenumber"
+                    placeholder="Mobile Number"
+                    pattern="[6789][0-9]{9}"
+                    autoComplete="new-password"
+                    value={editedRefData.mobilenumber}
+                    onChange={(e) =>
+                      setEditedRefData({
+                        ...editedRefData,
+                        mobilenumber: e.target.value,
+                      })
+                    }
+                    required
+                  ></input>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="email"
+                    id="input-email"
+                    name="email"
+                    placeholder="Email Address"
+                    pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                    required
+                    value={editedRefData.email}
+                    onChange={(e) =>
+                      setEditedRefData({
+                        ...editedRefData,
+                        email: e.target.value,
+                      })
+                    }
+                  ></input>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="text"
+                    id="input-comp"
+                    name="companyname"
+                    placeholder="Company Name"
+                    autoComplete="off"
+                    value={editedRefData.companyname}
+                    onChange={(e) =>
+                      setEditedRefData({
+                        ...editedRefData,
+                        companyname: e.target.value,
+                      })
+                    }
+                    required
+                  ></input>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="Password"
+                    id="input-pwd"
+                    name="password"
+                    placeholder="Password"
+                    autoComplete="off"
+                    value={editedRefData.password}
+                    onChange={(e) =>
+                      setEditedRefData({
+                        ...editedRefData,
+                        password: e.target.value,
+                      })
+                    }
+                    required
+                  ></input>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="Password"
+                    id="input-conpwd"
+                    name="confirmpassword"
+                    placeholder="Confirm Password"
+                    autoComplete="off"
+                    value={editedRefData.confirmpassword}
+                    onChange={(e) =>
+                      setEditedRefData({
+                        ...editedRefData,
+                        confirmpassword: e.target.value,
+                      })
+                    }
+                    required
+                  ></input>
+                </div>
+              </div>
+              {/* {errors ? (
+                <p style={{ color: "red", textAlign: "center" }}>{errors}</p>
+              ) : (
+                ""
+              )} */}
+              <Modal.Footer>
+                <button type="submit" id="btn-createrefmodal">
+                  Update
+                </button>
+                <Button
+                  variant="secondary"
+                  id="btn-createrefmodal"
+                  onClick={edithandleClose}
+                >
+                  Close
+                </Button>
+              </Modal.Footer>
+            </form>
+          </Modal.Body>
+        </Modal>
         {/* model profile */}
       </div>
       {showRef && (
         <Modalpopup
+          id={apiData.id}
           user={showRef}
           showmodal={showModal}
           onClosemodal={handleCloseModal}

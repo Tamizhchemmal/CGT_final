@@ -157,7 +157,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 
   .home-search {
-    width: 250px !important;
+    width: 25% !important;
   }
   .home-count1,
   .home-count2,
@@ -195,7 +195,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 
   .home-search {
-    width: 200px !important;
+    width: 20% !important;
   }
   .home-count1,
   .home-count2,
@@ -206,4 +206,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .mods {
   z-index: 9999999 !important;
+}
+
+.combine-dropdwn {
+  display: flex;
+  justify-content: center;
+}
+
+#batchcode {
+  width: 100% !important;
 }

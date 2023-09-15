@@ -1,0 +1,11 @@
+.crd-bg1 {
+  display: flex;
+  justify-content: start;
+}
+
+.batch-profdetails1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+}

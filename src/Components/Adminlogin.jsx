@@ -97,7 +97,7 @@ function Adminlogin(props) {
           {/* <h2>Login</h2> */}
 
           <div>
-            <form>
+            <form onSubmit={submitAdminLogin}>
               <div className="inputs-admin">
                 <TextField
                   id="standard-basic"
@@ -113,7 +113,7 @@ function Adminlogin(props) {
                 />
                 <TextField
                   id="standard-basic"
-                  type="text"
+                  type="password"
                   value={password}
                   onChange={(e) => {
                     setPassword(e.target.value);
@@ -133,6 +133,7 @@ function Adminlogin(props) {
                     onChange={(e) => {
                       setRole(e.target.value);
                     }}
+                    required
                   >
                     <FormControlLabel
                       value="admin"
@@ -187,7 +188,6 @@ function Adminlogin(props) {
                 <Button
                   type="submit"
                   sx={{ width: "80%" }}
-                  onClick={submitAdminLogin}
                   size="large"
                   variant="outlined"
                   className="btn-admin"

@@ -39,7 +39,7 @@ export default function NavBar() {
               <li>
                 <NavLink
                   variant="text"
-                  activeclassName="active"
+                  activeclassname="active"
                   id="inactive-button"
                   to={"/home"}
                 >
@@ -49,7 +49,7 @@ export default function NavBar() {
               <li>
                 <NavLink
                   variant="text"
-                  activeclassName="active"
+                  activeclassname="active"
                   id="inactive-button"
                   to={"/referralpage"}
                 >
@@ -58,7 +58,7 @@ export default function NavBar() {
               </li>
               <li>
                 <NavLink
-                  activeclassName="active"
+                  activeclassname="active"
                   variant="text"
                   id="inactive-button"
                   to={"/studentpage"}
@@ -69,7 +69,7 @@ export default function NavBar() {
               <li>
                 <NavLink
                   variant="text"
-                  activeclassName="active"
+                  activeclassname="active"
                   id="inactive-button"
                   to={"/trainerpage"}
                 >
