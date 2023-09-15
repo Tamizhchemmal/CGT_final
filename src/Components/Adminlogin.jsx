@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 import "../Css/login.css";
 import boss from "../Assets/Images/boss.png";
@@ -10,11 +10,12 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { teal } from "@mui/material/colors";
 import Modal from "react-bootstrap/Modal";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
-import { ModalBody, ModalFooter } from "react-bootstrap";
-
-export const rolecontext = createContext();
+import { RollerShadesClosedRounded } from "@mui/icons-material";
+import { v4 as uuidv4 } from "uuid";
+import { encrypt, decrypt } from "n-krypta";
 
 function Adminlogin(props) {
   const [email, setEmail] = useState("");
@@ -25,12 +26,22 @@ function Adminlogin(props) {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("access")) {
+      navigate("/home");
+    }
+  }, []);
+
   const submitAdminLogin = (e) => {
     e.preventDefault();
+    const key = "key";
+    const userid = uuidv4();
     if (role === "admin") {
       if (email === "admin" && password === "12345") {
         setSuccess(true);
-        // alert(`${role} success`);
+        localStorage.setItem("access", true);
+        localStorage.setItem("role", role);
+        localStorage.setItem("id", userid);
         setError("");
       } else if (email !== "admin") {
         setError("Incorrect Email");
@@ -46,6 +57,9 @@ function Adminlogin(props) {
       if (email === "abc@gmail.com" && password === "12345") {
         setSuccess(true);
         setError("");
+        setSuccess(true);
+        localStorage.setItem("access", true);
+        localStorage.setItem("role", role);
       } else if (email !== "abc@gmail.com") {
         setError("Incorrect Email");
         return error;
@@ -60,6 +74,8 @@ function Adminlogin(props) {
       if (email === "abc@gmail.com" && password === "12345") {
         setSuccess(true);
         setError("");
+        localStorage.setItem("access", true);
+        localStorage.setItem("role", role);
       } else if (email !== "abc@gmail.com") {
         setError("Incorrect Email");
         return error;
@@ -75,11 +91,13 @@ function Adminlogin(props) {
 
   const handleaccess = (e) => {
     if (role === "admin") {
-      navigate("home");
+
+      navigate("/home");
     } else if (role === "trainer") {
-      navigate("trainerpage");
+      navigate("/trainerhome");
     } else if (role === "referral") {
-      navigate("referralpage");
+      navigate("/home");
+
     }
   };
 
@@ -91,7 +109,7 @@ function Adminlogin(props) {
             <img src={boss} id="logo-admin" alt="admin Logo"></img>
           </div>
           <div className="style-heading">
-            <span>Career Guidance Technologies</span>
+            <h4>Career Guidance Technologies</h4>
           </div>
 
           {/* <h2>Login</h2> */}
@@ -125,6 +143,7 @@ function Adminlogin(props) {
                 />
                 <FormControl>
                   <RadioGroup
+                    className="radio-btn"
                     row
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
@@ -133,12 +152,15 @@ function Adminlogin(props) {
                     onChange={(e) => {
                       setRole(e.target.value);
                     }}
+
                     required
+                    aria-required
                   >
                     <FormControlLabel
                       value="admin"
                       control={
                         <Radio
+                          required
                           size="small"
                           sx={{
                             color: teal[500],
@@ -154,6 +176,7 @@ function Adminlogin(props) {
                       value="trainer"
                       control={
                         <Radio
+                          required
                           size="small"
                           sx={{
                             color: teal[500],
@@ -169,6 +192,7 @@ function Adminlogin(props) {
                       value="referral"
                       control={
                         <Radio
+                          required
                           size="small"
                           sx={{
                             color: teal[500],
@@ -188,6 +212,9 @@ function Adminlogin(props) {
                 <Button
                   type="submit"
                   sx={{ width: "80%" }}
+
+                  // onClick={submitAdminLogin}
+
                   size="large"
                   variant="outlined"
                   className="btn-admin"
@@ -195,24 +222,24 @@ function Adminlogin(props) {
                 >
                   Login
                 </Button>
-                {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
-                <Modal show={success} backdrop="static" keyboard={false}>
-                  <Modal.Header>
-                    <Modal.Title>
-                      <h4 style={{ color: "green" }}>Login Successful</h4>
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <h5>You are Login as a {role}.....</h5>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant="primary" onClick={handleaccess}>
-                      Okay
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
               </div>
             </form>
+            {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
+            <Modal show={success} backdrop="static" keyboard={false}>
+              <Modal.Header>
+                <Modal.Title>
+                  <h4 style={{ color: "green" }}>Login Successful</h4>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <h5>You are Login as a {role}.....</h5>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={handleaccess}>
+                  Okay
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
       </div>

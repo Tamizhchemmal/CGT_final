@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import "../Css/Referralstyle.css";
 import { useNavigate } from "react-router-dom";
@@ -17,6 +17,10 @@ import "../Css/HomePage.css";
 import NavBar from "./NavBar";
 import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
+import "../Css/HomePage.css";
+import { rolecontext } from "../App";
+import NavBarTwo from "./NavBarTwo";
+
 
 export default function HomePage({ callApiData }) {
   const [search, setSearch] = useState("");
@@ -25,12 +29,16 @@ export default function HomePage({ callApiData }) {
   const [batchMonth, setBatchMonth] = useState("");
   const [batchNumber, setBatchNumber] = useState("");
 
+  const role = useContext(rolecontext);
+
+
   const [numofstudent, setnumofstudent] = useState("");
   const [trainername, settrainername] = useState("");
 
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
+
 
   const [batchCourseList, setBatchCourseList] = useState([
     {
@@ -193,7 +201,10 @@ export default function HomePage({ callApiData }) {
     });
     e.target.reset();
     setShow(false);
+
     // callApiData();
+=======
+
   };
 
   //Date change Automatic
@@ -251,9 +262,7 @@ export default function HomePage({ callApiData }) {
   return (
     <>
       <div className="home-page">
-        <div id="navs">
-          <NavBar />
-        </div>
+        <NavBar />
 
         <div className="home-card">
           <div className="home-crd1">
@@ -284,6 +293,7 @@ export default function HomePage({ callApiData }) {
             </div>
           </div>
         </div>
+
         <div className="batch-table">
           <div className="crd-bg">
             <div className="card-refdetails">

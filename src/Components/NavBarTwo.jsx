@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import "../Css/NavBar.css";
 import { useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
@@ -9,14 +9,11 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Button from "@mui/material/Button";
 import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBarTwo(props) {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBars, setShowbars] = useState(true);
-
-  // const role = useContext(rolecontext);
-
   const navigate = useNavigate();
 
   const HandleOpen = () => {
@@ -27,12 +24,6 @@ export default function NavBar() {
     setShowSidebar(false);
     setShowbars(true);
   };
-
-  useEffect(() => {
-    if (!localStorage.getItem("access")) {
-      navigate("/");
-    }
-  }, []);
 
   return (
     <>
@@ -45,66 +36,37 @@ export default function NavBar() {
           <div className="nav-btn">
             <ul className="btn-list">
               <li>
-                <NavLink
+                <Button
                   variant="text"
-
-                  activeclassname="active"
-    className="navbtn-icon"
-                  id="inactive-button"
-                  to={"/home"}
-
+                  className="navbtn-icon"
+                  onClick={() => {
+                    navigate("/trainerhome");
+                  }}
                 >
                   Home
-                </NavLink>
+                </Button>
               </li>
-              <li>
-                <NavLink
-                  variant="text"
 
-                  activeclassname="active"
+              <li>
+                <Button
+                  variant="text"
                   className="navbtn-icon"
-                  id="inactive-button"
-                  to={"/referralpage"}
+                  onClick={() => {
+                    navigate("/refprofile");
+                  }}
                 >
-                  Referral
-                </NavLink>
+                  Profile
+                </Button>
               </li>
-              <li>
-                <NavLink
-                  activeclassname="active"
-className="navbtn-icon"
-                  variant="text"
 
-                  id="inactive-button"
-                  to={"/studentpage"}
-
-
-                >
-                  Student
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  variant="text"
-
-                  activeclassname="active"
-className="navbtn-icon"
-                  id="inactive-button"
-                  to={"/trainerpage"}
-
-
-                >
-                  Trainer
-                </NavLink>
-              </li>
               <li>
                 <Button
                   variant="text"
                   endIcon={<LogoutIcon />}
-                  className="logout-btn"
+                  className="navbtn-icon"
                   onClick={() => {
-                    localStorage.removeItem("access");
                     localStorage.removeItem("role");
+                    localStorage.removeItem("access");
                     navigate("/");
                   }}
                 >

@@ -51,6 +51,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #batchstrt,
 #batchend {
+
   width: 35%;
   align-items: center;
   margin: 15px 0 15px 15px;
@@ -158,6 +159,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
   .home-search {
     width: 25% !important;
+
   }
   .home-count1,
   .home-count2,
@@ -195,7 +197,9 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 
   .home-search {
+
     width: 20% !important;
+
   }
   .home-count1,
   .home-count2,
@@ -204,9 +208,8 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-.mods {
-  z-index: 9999999 !important;
-}
+
+
 
 .combine-dropdwn {
   display: flex;
@@ -215,4 +218,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #batchcode {
   width: 100% !important;
+
+
+.mods {
+  z-index: 9999999 !important;
+}
+.button-access:hover {
+  background-color: aliceblue !important;
+  color: #002333 !important;
+
 }
