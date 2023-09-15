@@ -17,7 +17,6 @@ function Noaccess() {
   return (
     <>
       <div style={{ display: "flex", justifyContent: "center" }}>
-        {/* <img src={access}></img> */}
         <Image src={access} width={1000} fluid></Image>
       </div>
       <Stack

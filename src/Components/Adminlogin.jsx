@@ -14,6 +14,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
 import { RollerShadesClosedRounded } from "@mui/icons-material";
+import { v4 as uuidv4 } from "uuid";
+import { encrypt, decrypt } from "n-krypta";
 
 function Adminlogin(props) {
   const [email, setEmail] = useState("");
@@ -32,20 +34,14 @@ function Adminlogin(props) {
 
   const submitAdminLogin = (e) => {
     e.preventDefault();
-
-    // if (email == "") {
-    //   setError("Enter Email address");
-    // } else if (password == "") {
-    //   setError("Enter password");
-    // } else if (role == "") {
-    //   setError("Select role");
-    // }
-
+    const key = "key";
+    const userid = uuidv4();
     if (role === "admin") {
       if (email === "admin" && password === "12345") {
         setSuccess(true);
         localStorage.setItem("access", true);
         localStorage.setItem("role", role);
+        localStorage.setItem("id", userid);
         setError("");
       } else if (email !== "admin") {
         setError("Incorrect Email");

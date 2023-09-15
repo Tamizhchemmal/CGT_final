@@ -8,18 +8,14 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import "../Css/Referralstyle.css";
-import { Card } from "@mui/material";
 import TrainerPopUp from "./TrainerPopUp";
 import TrainerProfModal from "./TrainerProfModal";
 import {
   Container,
-  Dropdown,
-  DropdownButton,
   Modal,
   Button,
   ModalTitle,
   CloseButton,
-  Navbar,
 } from "react-bootstrap";
 import axios from "axios";
 import { FcSearch } from "react-icons/fc";

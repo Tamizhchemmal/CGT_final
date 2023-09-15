@@ -10,6 +10,7 @@ import RefProfile from "./Components/RefProfile";
 import React, { createContext, useContext, useState } from "react";
 import "./Css/HomePage.css";
 import "./Css/login.css";
+import { encrypt, decrypt } from "n-krypta";
 
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
@@ -26,65 +27,62 @@ function App() {
 
   return (
     <>
-      <rolecontext.Provider>
-        <Routes>
-          <Route path="/" element={<Adminlogin />}></Route>
-          <Route
-            path="/home"
-            element={
-              <ProductedHome>
-                <HomePage />
-              </ProductedHome>
-            }
-          ></Route>
-          <Route
-            path="/trainerhome"
-            element={
-              <ProductedHomeTrainer>
-                <HomeTrainer />
-              </ProductedHomeTrainer>
-            }
-          ></Route>
-          <Route
-            path="/trainerpage"
-            element={
-              <Productedpage>
-                <Trainerpage />
-              </Productedpage>
-            }
-          ></Route>
-          <Route
-            path="/referralpage"
-            element={
-              <Productedpage>
-                <Referralpagetwo />
-              </Productedpage>
-            }
-          ></Route>
-          <Route
-            path="/studentpage"
-            element={
-              <Productedpage>
-                <Studentpage />
-              </Productedpage>
-            }
-          ></Route>
+      <Routes>
+        <Route path="/" element={<Adminlogin />}></Route>
+        <Route
+          path="/home"
+          element={
+            <ProductedHome>
+              <HomePage />
+            </ProductedHome>
+          }
+        ></Route>
+        <Route
+          path="/trainerhome"
+          element={
+            <ProductedHomeTrainer>
+              <HomeTrainer />
+            </ProductedHomeTrainer>
+          }
+        ></Route>
+        <Route
+          path="/trainerpage"
+          element={
+            <Productedpage>
+              <Trainerpage />
+            </Productedpage>
+          }
+        ></Route>
+        <Route
+          path="/referralpage"
+          element={
+            <Productedpage>
+              <Referralpagetwo />
+            </Productedpage>
+          }
+        ></Route>
+        <Route
+          path="/studentpage"
+          element={
+            <Productedpage>
+              <Studentpage />
+            </Productedpage>
+          }
+        ></Route>
 
-          <Route path="/refprofile" element={<RefProfile />}></Route>
-          <Route path="/trainerprofile" element={<TrainerProfile />}></Route>
+        <Route path="/refprofile" element={<RefProfile />}></Route>
+        <Route path="/trainerprofile" element={<TrainerProfile />}></Route>
 
-          <Route path="/error" element={<Noaccess />}></Route>
-        </Routes>
-      </rolecontext.Provider>
+        <Route path="/error" element={<Noaccess />}></Route>
+      </Routes>
     </>
   );
 }
 export default App;
 
 const Productedpage = ({ children }) => {
-  // // const roless = useContext(rolecontext);
-  // console.log(roless);
   const roless = localStorage.getItem("role");
+  const id = localStorage.getItem("id");
   console.log(roless);
 
   if (roless == "admin") {
