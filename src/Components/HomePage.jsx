@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import "../Css/Referralstyle.css";
 import { useNavigate } from "react-router-dom";
@@ -17,17 +17,12 @@ import "../Css/HomePage.css";
 import NavBar from "./NavBar";
 import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
+import "../Css/HomePage.css";
+import { rolecontext } from "../App";
+import NavBarTwo from "./NavBarTwo";
 
 export default function HomePage() {
-  //creation
-  //  const [batchInput, setBatchinput] = useState({
-  //   batchcode: "",
-  //   batchtiming: "",
-  //   numofstudent: "",
-  //   trainername: "",
-  //   batchstartdate: "",
-  //   batchenddate: "",
-  // });
+  const role = useContext(rolecontext);
 
   const [batchcode, setbatchcode] = useState("");
 
@@ -37,6 +32,10 @@ export default function HomePage() {
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("access")) navigate("/");
+  }, []);
 
   const [batchList, setBatchList] = useState([
     {
@@ -101,9 +100,6 @@ export default function HomePage() {
   };
 
   const [errors, setErrors] = useState({});
-  // const handleChange = (e) => {
-  //   setBatchinput({ ...batchInput, [e.target.name]: e.target.value });
-  // };
 
   const submitBatch = async (e) => {
     e.preventDefault();
@@ -117,7 +113,6 @@ export default function HomePage() {
     });
     e.target.reset();
     setShow(false);
-    // console.log(batchInput);
   };
 
   //Date change Automatic
@@ -142,15 +137,12 @@ export default function HomePage() {
   const handleTimeChange = (e) => {
     const btchTiming = e.target.value;
     setSelectedBatchTime(btchTiming);
-    // setBatchinput({...batchInput,batchtiming:btchTiming});
   };
 
   return (
     <>
       <div className="home-page">
-        <div id="navs">
-          <NavBar />
-        </div>
+        <NavBar />
 
         <div className="home-card">
           <div className="home-crd1">
@@ -181,6 +173,7 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
         <div className="batch-table">
           <div className="crd-bg">
             <div className="card-refdetails">

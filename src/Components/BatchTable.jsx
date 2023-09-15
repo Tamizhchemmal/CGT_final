@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
 import { useEffect, useState } from "react";
 import { Modal, Button, ModalTitle, CloseButton } from "react-bootstrap";
+import "../Css/HomePage.css";
 
 import axios from "axios";
 

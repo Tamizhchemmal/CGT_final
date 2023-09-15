@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import "../Css/NavBar.css";
 import { useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
@@ -11,10 +11,9 @@ import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export default function NavBar() {
+export default function NavBarTwo(props) {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBars, setShowbars] = useState(true);
-  // const role = useContext(rolecontext);
   const navigate = useNavigate();
 
   const HandleOpen = () => {
@@ -25,12 +24,6 @@ export default function NavBar() {
     setShowSidebar(false);
     setShowbars(true);
   };
-
-  useEffect(() => {
-    if (!localStorage.getItem("access")) {
-      navigate("/");
-    }
-  }, []);
 
   return (
     <>
@@ -47,53 +40,33 @@ export default function NavBar() {
                   variant="text"
                   className="navbtn-icon"
                   onClick={() => {
-                    navigate("/home");
+                    navigate("/trainerhome");
                   }}
                 >
                   Home
                 </Button>
               </li>
+
               <li>
                 <Button
                   variant="text"
                   className="navbtn-icon"
                   onClick={() => {
-                    navigate("/referralpage");
+                    navigate("/refprofile");
                   }}
                 >
-                  Referral
+                  Profile
                 </Button>
               </li>
-              <li>
-                <Button
-                  variant="text"
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/studentpage");
-                  }}
-                >
-                  Student
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant="text"
-                  className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/trainerpage");
-                  }}
-                >
-                  Trainer
-                </Button>
-              </li>
+
               <li>
                 <Button
                   variant="text"
                   endIcon={<LogoutIcon />}
                   className="navbtn-icon"
                   onClick={() => {
-                    localStorage.removeItem("access");
                     localStorage.removeItem("role");
+                    localStorage.removeItem("access");
                     navigate("/");
                   }}
                 >
