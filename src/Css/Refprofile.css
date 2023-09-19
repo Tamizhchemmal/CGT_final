@@ -37,8 +37,8 @@
 }
 
 .ref-bio {
-  width: 425px;
-  height: 325px;
+  width: 475px;
+  height: 425px;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
@@ -46,8 +46,8 @@
 }
 
 .ref-wallet {
-  width: 425px;
-  height: 200px;
+  width: 475px;
+  height: 180px;
   font-family: "Open Sans", sans-serif;
   border-radius: 10px;
   margin-top: 35px;
@@ -102,11 +102,13 @@
 
 .ref-label {
   margin: 4px 0;
+  width: 100% !important;
 }
 
 .ref-details {
   display: flex;
   font-family: "Open Sans", sans-serif;
+  width: calc(100% / 2);
 }
 
 .mods {

@@ -82,10 +82,29 @@ export default function RefTable({ search }) {
 
   const handleShow = () => {};
 
+  const [paymentmodelist, setPaymentList] = useState([
+    {
+      id: 1,
+      name: "GPAY NUMBER",
+    },
+    {
+      id: 2,
+      name: "UPI",
+    },
+    {
+      id: 3,
+      name: "BANK ACCOUNT",
+    },
+  ]);
+
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [alertt, setAlertt] = useState(null);
+  const [paymentdetails, setPaymentdetails] = useState("");
+  const [reEnterDetails, setreEnterDetails] = useState("");
+  const [paymentmode, setPaymentmode] = useState("");
+  const [ifscCode, setifscCode] = useState("");
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -115,8 +134,6 @@ export default function RefTable({ search }) {
     setShow(false);
   };
 
-  const [errors, setErrors] = useState({});
-
   const [editRefShow, setEditRefShow] = useState(false);
 
   const edithandleClose = () => {
@@ -140,6 +157,10 @@ export default function RefTable({ search }) {
     confirmpassword: "",
     companyname: "",
     mobilenumber: "",
+    paymentdetails: "",
+    paymentmode: "",
+    reEnterDetails: "",
+    ifscCode: "",
   });
 
   const handlerefedit = (rowRefData) => {
@@ -160,16 +181,25 @@ export default function RefTable({ search }) {
     callApiData();
   };
 
+  const [errors, setErrors] = useState("");
+
   const submitRefEdit = async (e) => {
     e.preventDefault();
-    const refResponse = await axios.put(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" + editedRefData.id,
-      editedRefData
-    );
+    if (password !== confirmpassword) {
+      setErrors("Password should be same");
+    } else if (paymentdetails !== reEnterDetails) {
+      setErrors("Payment Details should be same");
+    } else {
+      const refResponse = await axios.put(
+        "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" +
+          editedRefData.id,
+        editedRefData
+      );
 
-    console.log(refResponse.data);
+      console.log(refResponse.data);
 
-    setEditRefShow(false);
+      setEditRefShow(false);
+    }
   };
 
   var count;
@@ -312,110 +342,188 @@ export default function RefTable({ search }) {
           <Modal.Body>
             <form onSubmit={submitRefEdit}>
               <div className="inputref-box">
-                <div className="inputref">
-                  <input
-                    type="text"
-                    id="input-name"
-                    name="name"
-                    placeholder="Fullname"
-                    autoComplete="new-password"
-                    value={editedRefData.name}
-                    onChange={(e) =>
-                      setEditedRefData({
-                        ...editedRefData,
-                        name: e.target.value,
-                      })
-                    }
-                    required
-                  ></input>
-                </div>
-                <div className="inputref">
-                  <input
-                    type="tel"
-                    id="input-tele"
-                    name="mobilenumber"
-                    placeholder="Mobile Number"
-                    pattern="[6789][0-9]{9}"
-                    autoComplete="new-password"
-                    value={editedRefData.mobilenumber}
-                    onChange={(e) =>
-                      setEditedRefData({
-                        ...editedRefData,
-                        mobilenumber: e.target.value,
-                      })
-                    }
-                    required
-                  ></input>
-                </div>
-                <div className="inputref">
-                  <input
-                    type="email"
-                    id="input-email"
-                    name="email"
-                    placeholder="Email Address"
-                    pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                    required
-                    value={editedRefData.email}
-                    onChange={(e) =>
-                      setEditedRefData({
-                        ...editedRefData,
-                        email: e.target.value,
-                      })
-                    }
-                  ></input>
-                </div>
-                <div className="inputref">
-                  <input
-                    type="text"
-                    id="input-comp"
-                    name="companyname"
-                    placeholder="Company Name"
-                    autoComplete="off"
-                    value={editedRefData.companyname}
-                    onChange={(e) =>
-                      setEditedRefData({
-                        ...editedRefData,
-                        companyname: e.target.value,
-                      })
-                    }
-                    required
-                  ></input>
-                </div>
-                <div className="inputref">
-                  <input
-                    type="Password"
-                    id="input-pwd"
-                    name="password"
-                    placeholder="Password"
-                    autoComplete="off"
-                    value={editedRefData.password}
-                    onChange={(e) =>
-                      setEditedRefData({
-                        ...editedRefData,
-                        password: e.target.value,
-                      })
-                    }
-                    required
-                  ></input>
-                </div>
-                <div className="inputref">
-                  <input
-                    type="Password"
-                    id="input-conpwd"
-                    name="confirmpassword"
-                    placeholder="Confirm Password"
-                    autoComplete="off"
-                    value={editedRefData.confirmpassword}
-                    onChange={(e) =>
-                      setEditedRefData({
-                        ...editedRefData,
-                        confirmpassword: e.target.value,
-                      })
-                    }
-                    required
-                  ></input>
+                <div className="student-grid">
+                  <div className="inputref">
+                    <input
+                      type="text"
+                      id="input-name"
+                      name="name"
+                      placeholder="Fullname"
+                      autoComplete="new-password"
+                      value={editedRefData.name}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          name: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
+                  <div className="inputref">
+                    <input
+                      type="tel"
+                      id="input-tele"
+                      name="mobilenumber"
+                      placeholder="Mobile Number"
+                      pattern="[6789][0-9]{9}"
+                      autoComplete="new-password"
+                      value={editedRefData.mobilenumber}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          mobilenumber: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
+                  <div className="inputref">
+                    <input
+                      type="email"
+                      id="input-email"
+                      name="email"
+                      placeholder="Email Address"
+                      pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                      required
+                      value={editedRefData.email}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          email: e.target.value,
+                        })
+                      }
+                    ></input>
+                  </div>
+                  <div className="inputref">
+                    <input
+                      type="text"
+                      id="input-comp"
+                      name="companyname"
+                      placeholder="Company Name"
+                      autoComplete="off"
+                      value={editedRefData.companyname}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          companyname: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
+                  <div className="inputref">
+                    <input
+                      type="Password"
+                      id="input-pwd"
+                      name="password"
+                      placeholder="Password"
+                      autoComplete="off"
+                      value={editedRefData.password}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          password: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
+                  <div className="inputref">
+                    <input
+                      type="Password"
+                      id="input-conpwd"
+                      name="confirmpassword"
+                      placeholder="Confirm Password"
+                      autoComplete="off"
+                      value={editedRefData.confirmpassword}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          confirmpassword: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
+                  <div>
+                    <select
+                      id="paymentmode"
+                      name="paymentmode"
+                      className="referaldropdown"
+                      required
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          paymentmode: e.target.value,
+                        })
+                      }
+                      value={editedRefData.paymentmode}
+                    >
+                      <option value="" disabled selected>
+                        Select Payment Mode
+                      </option>
+                      {paymentmodelist.map((paymentmode, index1) => (
+                        <option key={index1} value={paymentmode.name}>
+                          {paymentmode.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {editedRefData.paymentmode === "BANK ACCOUNT" && (
+                    <div className="inputstudent">
+                      <input
+                        type="text"
+                        name="paymentdetails"
+                        placeholder="Enter IFSC Code"
+                        autoComplete="off"
+                        value={editedRefData.ifscCode}
+                        onChange={(e) =>
+                          setEditedRefData({
+                            ...editedRefData,
+                            ifscCode: e.target.value,
+                          })
+                        }
+                        required
+                      ></input>
+                    </div>
+                  )}
+                  <div className="inputstudent">
+                    <input
+                      type="text"
+                      name="paymentdetails"
+                      placeholder="Payment Details (Ac.no/Upi id)"
+                      autoComplete="off"
+                      value={editedRefData.paymentdetails}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          paymentdetails: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
+                  <div className="inputstudent">
+                    <input
+                      type="text"
+                      name="paymentdetails"
+                      placeholder="ReEnter Payment Details"
+                      autoComplete="off"
+                      value={editedRefData.reEnterDetails}
+                      onChange={(e) =>
+                        setEditedRefData({
+                          ...editedRefData,
+                          reEnterDetails: e.target.value,
+                        })
+                      }
+                      required
+                    ></input>
+                  </div>
                 </div>
               </div>
+
               {/* {errors ? (
                 <p style={{ color: "red", textAlign: "center" }}>{errors}</p>
               ) : (

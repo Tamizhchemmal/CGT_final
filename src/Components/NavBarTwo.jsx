@@ -9,7 +9,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Button from "@mui/material/Button";
 import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 
 export default function NavBarTwo(props) {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -36,34 +36,34 @@ export default function NavBarTwo(props) {
           <div className="nav-btn">
             <ul className="btn-list">
               <li>
-                <Button
+                <NavLink
                   variant="text"
+                  activeclassname="active"
                   className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/trainerhome");
-                  }}
+                  id="inactive-button"
+                  to={"/commonhome"}
                 >
                   Home
-                </Button>
+                </NavLink>
               </li>
 
               <li>
-                <Button
+                <NavLink
                   variant="text"
+                  activeclassname="active"
                   className="navbtn-icon"
-                  onClick={() => {
-                    navigate("/refprofile");
-                  }}
+                  id="inactive-button"
+                  to={"/refprofile"}
                 >
                   Profile
-                </Button>
+                </NavLink>
               </li>
 
               <li>
                 <Button
                   variant="text"
                   endIcon={<LogoutIcon />}
-                  className="navbtn-icon"
+                  className="navbtn-icon logout-btn"
                   onClick={() => {
                     localStorage.removeItem("role");
                     localStorage.removeItem("access");

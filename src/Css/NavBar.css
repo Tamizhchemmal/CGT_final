@@ -42,19 +42,20 @@
 }
 
 .logout-btn {
-  color: #fff !important;
+  color: #002333 !important;
   background-color: #57f8aa !important;
   border-radius: 8px;
 }
 
 .active {
-  color: #fff;
+  color: #002333 !important;
   background-color: #57f8aa !important;
   border-radius: 8px;
 }
 
 #inactive-button:hover {
   background-color: #57f8aa !important;
+  color: #002333 !important;
 }
 
 @media screen and (max-width: 1024px) {

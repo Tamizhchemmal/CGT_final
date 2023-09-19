@@ -26,6 +26,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import CrmService from "../API/CrmService.js";
 
 //Table
 const columns = [
@@ -264,26 +265,52 @@ function Studentpage() {
   const submitStudent = async (e) => {
     e.preventDefault();
 
-    await axios.post(
-      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
-      {
-        name,
-        email,
-        course,
-        mobilenumber,
-        yearofpassedout,
-        startDate,
-        endDate,
-        totalfees,
-        feespaid,
-        pendingfees,
-        college,
-        degree,
-        referral,
-        paymentmode,
-      }
-    );
-    alert("Referral Created");
+    let body = {
+      email: "pudhumail@mailinator.com",
+      name: "Pudhuname",
+      createdby: 224, // Logged in User unique ID
+      company: "pudhucompany",
+      primaryphone: "232323234",
+      passedoutyear: 2020,
+      startDate: "2023-08-17",
+      endDate: "2023-11-17",
+      totalFees: "20000",
+      paidFees: "10000",
+      college: "NEC",
+      degree: "B.Tech",
+      paymentMode: "G-Pay",
+      referralId: "3", // call get referral list API and use the primary key of referral data
+
+      batchId: "4", // call get batch list API and use the primary key of batch data
+
+      trainerId: "4", // call get trainer list API and use the primary key of trainer data
+
+      courseId: "1", // call get course list API and use the primary key of course data
+    };
+    await CrmService.createStudent(body).then((response) => {
+      console.log(response);
+    });
+
+    // await axios.post(
+    //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
+    //   {
+    //     name,
+    //     email,
+    //     course,
+    //     mobilenumber,
+    //     yearofpassedout,
+    //     startDate,
+    //     endDate,
+    //     totalfees,
+    //     feespaid,
+    //     pendingfees,
+    //     college,
+    //     degree,
+    //     referral,
+    //     paymentmode,
+    //   }
+    // );
+    // alert("Referral Created");
     callApiStudentData();
     e.target.reset();
     setShow(false);

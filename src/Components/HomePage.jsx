@@ -20,7 +20,7 @@ import { FcSearch } from "react-icons/fc";
 import "../Css/HomePage.css";
 import { rolecontext } from "../App";
 import NavBarTwo from "./NavBarTwo";
-
+import CrmService from "../API/CrmService.js";
 
 export default function HomePage({ callApiData }) {
   const [search, setSearch] = useState("");
@@ -31,14 +31,12 @@ export default function HomePage({ callApiData }) {
 
   const role = useContext(rolecontext);
 
-
   const [numofstudent, setnumofstudent] = useState("");
   const [trainername, settrainername] = useState("");
 
   const [show, setShow] = useState(false);
 
   const navigate = useNavigate();
-
 
   const [batchCourseList, setBatchCourseList] = useState([
     {
@@ -191,20 +189,33 @@ export default function HomePage({ callApiData }) {
     }, 1000);
 
     e.preventDefault();
-    await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
-      batchcode,
-      selectedBatchTime,
-      numofstudent,
-      trainername,
-      startBatchDate,
-      endBatchDate,
+
+    let body = {
+      email: "test32789@mailinator.com",
+      firstname: "test",
+      lastname: "trainer",
+      usertype: 1,
+      createdby: 129,
+      userid: 0,
+      company: "cg",
+      primaryphone: "1223",
+      course: 1,
+    };
+    await CrmService.createTrainerOrReferral(body).then((response) => {
+      console.log(response);
     });
+    // await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
+    //   batchcode,
+    //   selectedBatchTime,
+    //   numofstudent,
+    //   trainername,
+    //   startBatchDate,
+    //   endBatchDate,
+    // });
     e.target.reset();
     setShow(false);
 
     // callApiData();
-=======
-
   };
 
   //Date change Automatic
@@ -230,34 +241,6 @@ export default function HomePage({ callApiData }) {
     const btchTiming = e.target.value;
     setSelectedBatchTime(btchTiming);
   };
-
-  // Batch Code generate
-
-  // const batchCodeHandleChange = (e) => {
-  //   const newValue1 = e.target.value;
-  //   setBatchList(newValue1);
-  //   console.log(newValue1);
-  //   // combineDropdownValues(newValue, batchMonth, batchNumber);
-  // };
-
-  // const batchMonthHandleChange = (e) => {
-  //   const newValue2 = e.target.value;
-  //   setBatchMonth(newValue2);
-  //   console.log(newValue2);
-  //   // combineDropdownValues(batchList, newValue, batchNumber);
-  // };
-
-  // const batchNumberHandleChange = (e) => {
-  //   const newValue3 = e.target.value;
-  //   setBatchNumber(newValue3);
-  //   console.log(newValue3);
-  //   // combineDropdownValues(batchList, batchMonth, newValue);
-  // };
-
-  // const combineDropdownValues = (value1, value2, value3) => {
-  //   const combined = `${value1}-${value2}-${value3}`;
-  //   setbatchcode(combined);
-  // };
 
   return (
     <>
@@ -353,7 +336,7 @@ export default function HomePage({ callApiData }) {
                         <div className="combine-dropdwn">
                           <div className="inputbatch">
                             <select
-                              id="batchcode"
+                              id="batchcode1"
                               // name="batchcode"
                               className="batchdropdown"
                               required
@@ -369,7 +352,7 @@ export default function HomePage({ callApiData }) {
                           </div>
                           <div className="inputbatch">
                             <select
-                              id="batchcode"
+                              id="batchcode2"
                               // name="batchcode"
                               className="batchdropdown"
                               required
@@ -385,7 +368,7 @@ export default function HomePage({ callApiData }) {
                           </div>
                           <div className="inputbatch">
                             <select
-                              id="batchcode"
+                              id="batchcode3"
                               // name="batchcode"
                               className="batchdropdown"
                               required
@@ -474,7 +457,6 @@ export default function HomePage({ callApiData }) {
                             </div>
                           </div>
                         </div>
-                        <div className="inputbatch"></div>
                       </div>
                       {errors.confirmpassword && (
                         <p style={{ color: "red", textAlign: "center" }}>

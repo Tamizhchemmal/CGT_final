@@ -22,12 +22,33 @@ function Referralpagetwo() {
   const handleClose = () => {
     setShow(false);
     setErrors("");
+    setPaymentmode("");
   };
   const handleShow = () => {
     setShow(true);
   };
 
   //creation
+
+  const [paymentdetails, setPaymentdetails] = useState("");
+  const [reEnterDetails, setreEnterDetails] = useState("");
+  const [paymentmode, setPaymentmode] = useState("");
+  const [ifscCode, setifscCode] = useState("");
+
+  const [paymentmodelist, setPaymentList] = useState([
+    {
+      id: 1,
+      name: "GPAY NUMBER",
+    },
+    {
+      id: 2,
+      name: "UPI",
+    },
+    {
+      id: 3,
+      name: "BANK ACCOUNT",
+    },
+  ]);
 
   const [name, setName] = useState("");
   const [mobilenumber, setMobilenumber] = useState("");
@@ -41,10 +62,14 @@ function Referralpagetwo() {
 
   const [errors, setErrors] = useState("");
 
+  // Payment
+
   const submitReferral = async (e) => {
     e.preventDefault();
     if (password !== confirmpassword) {
       setErrors("Password Should Be Same");
+    } else if (paymentdetails !== reEnterDetails) {
+      setErrors("Account details Should be same");
     } else {
       await axios.post("https://64a587de00c3559aa9bfdbd4.mockapi.io/refData", {
         name,
@@ -54,6 +79,10 @@ function Referralpagetwo() {
         role,
         companyname,
         mobilenumber,
+        paymentdetails,
+        paymentmode,
+        reEnterDetails,
+        ifscCode,
       });
       setErrors("");
       alert("Referral Created");
@@ -121,82 +150,141 @@ function Referralpagetwo() {
                   </ModalTitle>
                   <form onSubmit={submitReferral}>
                     <div className="inputref-box">
-                      <div className="inputref">
-                        <input
-                          type="text"
-                          id="input-name"
-                          name="name"
-                          placeholder="Fullname"
-                          autoComplete="new-password"
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                          required
-                        ></input>
-                      </div>
-                      <div className="inputref">
-                        <input
-                          type="tel"
-                          id="input-tele"
-                          name="mobilenumber"
-                          placeholder="Mobile Number"
-                          pattern="[6789][0-9]{9}"
-                          autoComplete="new-password"
-                          onChange={(e) => setMobilenumber(e.target.value)}
-                          required
-                        ></input>
-                      </div>
-                      <div className="inputref">
-                        <input
-                          type="email"
-                          id="input-email"
-                          name="email"
-                          placeholder="Email Address"
-                          pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                          required
-                          onChange={(e) => {
-                            setEmail(e.target.value);
-                          }}
-                        ></input>
-                      </div>
-                      <div className="inputref">
-                        <input
-                          type="text"
-                          id="input-comp"
-                          name="companyname"
-                          placeholder="Company Name"
-                          autoComplete="off"
-                          onChange={(e) => {
-                            setCompanyName(e.target.value);
-                          }}
-                          required
-                        ></input>
-                      </div>
-                      <div className="inputref">
-                        <input
-                          type="Password"
-                          id="input-pwd"
-                          name="password"
-                          placeholder="Password"
-                          autoComplete="off"
-                          onChange={(e) => {
-                            setPassword(e.target.value);
-                          }}
-                          required
-                        ></input>
-                      </div>
-                      <div className="inputref">
-                        <input
-                          type="Password"
-                          id="input-conpwd"
-                          name="confirmpassword"
-                          placeholder="Confirm Password"
-                          autoComplete="off"
-                          onChange={(e) => {
-                            setConfirmpassword(e.target.value);
-                          }}
-                          required
-                        ></input>
+                      <div className="student-grid">
+                        <div className="inputref">
+                          <input
+                            type="text"
+                            id="input-name"
+                            name="name"
+                            placeholder="Fullname"
+                            autoComplete="new-password"
+                            onChange={(e) => {
+                              setName(e.target.value);
+                            }}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputref">
+                          <input
+                            type="tel"
+                            id="input-tele"
+                            name="mobilenumber"
+                            placeholder="Mobile Number"
+                            pattern="[6789][0-9]{9}"
+                            autoComplete="new-password"
+                            onChange={(e) => setMobilenumber(e.target.value)}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputref">
+                          <input
+                            type="email"
+                            id="input-email"
+                            name="email"
+                            placeholder="Email Address"
+                            pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                            required
+                            onChange={(e) => {
+                              setEmail(e.target.value);
+                            }}
+                          ></input>
+                        </div>
+                        <div className="inputref">
+                          <input
+                            type="text"
+                            id="input-comp"
+                            name="companyname"
+                            placeholder="Company Name"
+                            autoComplete="off"
+                            onChange={(e) => {
+                              setCompanyName(e.target.value);
+                            }}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputref">
+                          <input
+                            type="Password"
+                            id="input-pwd"
+                            name="password"
+                            placeholder="Password"
+                            autoComplete="off"
+                            onChange={(e) => {
+                              setPassword(e.target.value);
+                            }}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputref">
+                          <input
+                            type="Password"
+                            id="input-conpwd"
+                            name="confirmpassword"
+                            placeholder="Confirm Password"
+                            autoComplete="off"
+                            onChange={(e) => {
+                              setConfirmpassword(e.target.value);
+                            }}
+                            required
+                          ></input>
+                        </div>
+
+                        <div>
+                          <select
+                            id="paymentmode"
+                            name="paymentmode"
+                            className="referaldropdown"
+                            required
+                            onChange={(event) =>
+                              setPaymentmode(event.target.value)
+                            }
+                          >
+                            <option value="" disabled selected>
+                              Select Payment Mode
+                            </option>
+                            {paymentmodelist.map((paymentmode, index1) => (
+                              <option key={index1} value={paymentmode.name}>
+                                {paymentmode.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {paymentmode === "BANK ACCOUNT" && (
+                          <div className="inputstudent">
+                            <input
+                              type="text"
+                              name="paymentdetails"
+                              placeholder="Enter IFSC Code"
+                              autoComplete="off"
+                              value={ifscCode}
+                              onChange={(e) => setifscCode(e.target.value)}
+                              required
+                            ></input>
+                          </div>
+                        )}
+                        <div className="inputstudent">
+                          <input
+                            type="text"
+                            name="paymentdetails"
+                            placeholder="Payment Details (Ac.no/Upi id)"
+                            autoComplete="off"
+                            value={paymentdetails}
+                            onChange={(e) => setPaymentdetails(e.target.value)}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputstudent">
+                          <input
+                            type="text"
+                            name="paymentdetails"
+                            placeholder="ReEnter Payment Details"
+                            autoComplete="off"
+                            value={reEnterDetails}
+                            onChange={(e) => setreEnterDetails(e.target.value)}
+                            required
+                          ></input>
+                        </div>
                       </div>
                     </div>
                     {errors ? (

@@ -16,12 +16,14 @@ import { TextField, Button } from "@mui/material";
 import { RollerShadesClosedRounded } from "@mui/icons-material";
 import { v4 as uuidv4 } from "uuid";
 import { encrypt, decrypt } from "n-krypta";
+import CrmService from "../API/CrmService.js";
 
 function Adminlogin(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [role, setRole] = useState("");
+  const [token, setToken] = useState("");
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
@@ -37,67 +39,82 @@ function Adminlogin(props) {
     const key = "key";
     const userid = uuidv4();
     if (role === "admin") {
-      if (email === "admin" && password === "12345") {
+      let body = {
+        email: "test345@mailinator.com",
+        password: "Test1234",
+        rememberMe: 0,
+      };
+      CrmService.login(body).then((response) => {
+        console.log(response.data.apitoken);
+        localStorage.setItem("apitoken", response.data.apitoken);
         setSuccess(true);
+        localStorage.setItem("isUserLoggedIn", true);
         localStorage.setItem("access", true);
         localStorage.setItem("role", role);
         localStorage.setItem("id", userid);
         setError("");
-      } else if (email !== "admin") {
-        setError("Incorrect Email");
-        return error;
-      } else {
-        setError("incorrect password");
-        setEmail("");
-        setPassword("");
+        CrmService.userLoggedIn();
+      });
 
-        return error;
-      }
-    } else if (role === "trainer") {
-      if (email === "abc@gmail.com" && password === "12345") {
-        setSuccess(true);
-        setError("");
-        setSuccess(true);
-        localStorage.setItem("access", true);
-        localStorage.setItem("role", role);
-      } else if (email !== "abc@gmail.com") {
-        setError("Incorrect Email");
-        return error;
-      } else {
-        setError("incorrect password");
-        setEmail("");
-        setPassword("");
+      //   if (email === "admin" && password === "12345") {
+      //     setSuccess(true);
+      //     localStorage.setItem("access", true);
+      //     localStorage.setItem("role", role);
+      //     localStorage.setItem("id", userid);
+      //     setError("");
+      //   } else if (email !== "admin") {
+      //     setError("Incorrect Email");
+      //     return error;
+      //   } else {
+      //     setError("incorrect password");
+      //     setEmail("");
+      //     setPassword("");
 
-        return error;
-      }
-    } else if (role === "referral") {
-      if (email === "abc@gmail.com" && password === "12345") {
-        setSuccess(true);
-        setError("");
-        localStorage.setItem("access", true);
-        localStorage.setItem("role", role);
-      } else if (email !== "abc@gmail.com") {
-        setError("Incorrect Email");
-        return error;
-      } else {
-        setError("incorrect password");
-        setEmail("");
-        setPassword("");
+      //     return error;
+      //   }
+      // } else if (role === "trainer") {
+      //   if (email === "abc@gmail.com" && password === "12345") {
+      //     setSuccess(true);
+      //     setError("");
+      //     setSuccess(true);
+      //     localStorage.setItem("access", true);
+      //     localStorage.setItem("role", role);
+      //   } else if (email !== "abc@gmail.com") {
+      //     setError("Incorrect Email");
+      //     return error;
+      //   } else {
+      //     setError("incorrect password");
+      //     setEmail("");
+      //     setPassword("");
 
-        return error;
-      }
+      //     return error;
+      //   }
+      // } else if (role === "referral") {
+      //   if (email === "abc@gmail.com" && password === "12345") {
+      //     setSuccess(true);
+      //     setError("");
+      //     localStorage.setItem("access", true);
+      //     localStorage.setItem("role", role);
+      //   } else if (email !== "abc@gmail.com") {
+      //     setError("Incorrect Email");
+      //     return error;
+      //   } else {
+      //     setError("incorrect password");
+      //     setEmail("");
+      //     setPassword("");
+
+      //     return error;
+      //   }
     }
   };
 
   const handleaccess = (e) => {
     if (role === "admin") {
-
       navigate("/home");
     } else if (role === "trainer") {
-      navigate("/trainerhome");
+      navigate("/commonhome");
     } else if (role === "referral") {
-      navigate("/home");
-
+      navigate("/commonhome");
     }
   };
 
@@ -152,7 +169,6 @@ function Adminlogin(props) {
                     onChange={(e) => {
                       setRole(e.target.value);
                     }}
-
                     required
                     aria-required
                   >
@@ -212,7 +228,6 @@ function Adminlogin(props) {
                 <Button
                   type="submit"
                   sx={{ width: "80%" }}
-
                   // onClick={submitAdminLogin}
 
                   size="large"

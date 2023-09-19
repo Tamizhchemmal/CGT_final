@@ -7,6 +7,7 @@ import Trainerpage from "./Components/Trainerpage";
 import Referralpagetwo from "./Components/Referralpagetwo";
 import TrainerProfile from "./Components/TrainerProfile";
 import RefProfile from "./Components/RefProfile";
+import CommonHomePage from "./Components/CommonHomePage";
 import React, { createContext, useContext, useState } from "react";
 import "./Css/HomePage.css";
 import "./Css/login.css";
@@ -37,10 +38,10 @@ function App() {
           }
         ></Route>
         <Route
-          path="/trainerhome"
+          path="/commonhome"
           element={
             <ProductedHomeTrainer>
-              <HomeTrainer />
+              <CommonHomePage />
             </ProductedHomeTrainer>
           }
         ></Route>
@@ -103,7 +104,7 @@ const ProductedHome = ({ children }) => {
 };
 const ProductedHomeTrainer = ({ children }) => {
   const roless = localStorage.getItem("role");
-  if (roless == "trainer") {
+  if (roless == "trainer" || roless == "referral") {
     return children;
   } else {
     return <Noaccess />;

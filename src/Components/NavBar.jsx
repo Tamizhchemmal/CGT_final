@@ -47,12 +47,10 @@ export default function NavBar() {
               <li>
                 <NavLink
                   variant="text"
-
                   activeclassname="active"
-    className="navbtn-icon"
+                  className="navbtn-icon"
                   id="inactive-button"
                   to={"/home"}
-
                 >
                   Home
                 </NavLink>
@@ -60,7 +58,6 @@ export default function NavBar() {
               <li>
                 <NavLink
                   variant="text"
-
                   activeclassname="active"
                   className="navbtn-icon"
                   id="inactive-button"
@@ -72,13 +69,10 @@ export default function NavBar() {
               <li>
                 <NavLink
                   activeclassname="active"
-className="navbtn-icon"
+                  className="navbtn-icon"
                   variant="text"
-
                   id="inactive-button"
                   to={"/studentpage"}
-
-
                 >
                   Student
                 </NavLink>
@@ -86,13 +80,10 @@ className="navbtn-icon"
               <li>
                 <NavLink
                   variant="text"
-
                   activeclassname="active"
-className="navbtn-icon"
+                  className="navbtn-icon"
                   id="inactive-button"
                   to={"/trainerpage"}
-
-
                 >
                   Trainer
                 </NavLink>

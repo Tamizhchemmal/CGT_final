@@ -16,7 +16,6 @@ import BatchPopUp from "./BatchPopUp";
 
 import "../Css/HomePage.css";
 
-
 import axios from "axios";
 
 import { Card } from "@mui/material";
@@ -36,15 +35,16 @@ const columns = [
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "trainername",
-    label: "Trainer Name",
+    id: "enddate",
+    label: "End Date",
     minWidth: 170,
     align: "center",
+
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "currenttopic",
-    label: "Current Topic",
+    id: "trainername",
+    label: "Trainer Name",
     minWidth: 170,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
@@ -408,7 +408,7 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {apiData.trainername}
+                          {apiData.endBatchDate}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -416,7 +416,7 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          HTML
+                          {apiData.trainername}
                         </TableCell>
                         <TableCell
                           align="center"

@@ -51,7 +51,6 @@ input[type="number"]::-webkit-outer-spin-button {
 
 #batchstrt,
 #batchend {
-
   width: 35%;
   align-items: center;
   margin: 15px 0 15px 15px;
@@ -159,12 +158,27 @@ input[type="number"]::-webkit-outer-spin-button {
 
   .home-search {
     width: 25% !important;
-
   }
   .home-count1,
   .home-count2,
   .home-count3 {
     font-size: 18px !important;
+  }
+
+  .commonhome-count1,
+  .commonhome-count2,
+  .commonhome-count3 {
+    font-size: 24px !important;
+  }
+
+  .commonhome-count1 h2 {
+    font-size: 30px !important;
+  }
+  .commonhome-count2 h2 {
+    font-size: 30px !important;
+  }
+  .commonhome-count3 h2 {
+    font-size: 30px !important;
   }
 }
 
@@ -197,9 +211,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 
   .home-search {
-
     width: 20% !important;
-
   }
   .home-count1,
   .home-count2,
@@ -208,17 +220,16 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-
-
-
 .combine-dropdwn {
   display: flex;
   justify-content: center;
 }
 
-#batchcode {
+#batchcode,
+#batchcode1,
+#batchcode2 {
   width: 100% !important;
-
+}
 
 .mods {
   z-index: 9999999 !important;
@@ -226,5 +237,58 @@ input[type="number"]::-webkit-outer-spin-button {
 .button-access:hover {
   background-color: aliceblue !important;
   color: #002333 !important;
+}
 
+.commonhome-card {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  height: 100vh;
+  align-items: center;
+}
+
+.commonhome-count1,
+.commonhome-count2,
+.commonhome-count3 {
+  font-size: 38px !important;
+}
+
+.commonhome-count1 h2 {
+  font-size: 42px !important;
+}
+.commonhome-count2 h2 {
+  font-size: 42px !important;
+}
+.commonhome-count3 h2 {
+  font-size: 42px !important;
+}
+
+.commonhome-crd1,
+.commonhome-crd2,
+.commonhome-crd3 {
+  height: 40%;
+  width: 40%;
+  box-sizing: border-box;
+  border: 2px solid #2f217e;
+  border-radius: 40px !important;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: rgba(147, 145, 145, 0.7) 0px 3px 15px;
+}
+
+.commonicon1,
+.commonicon2,
+.commonicon3 {
+  font-size: 128px !important;
+  margin: 5px;
+}
+
+.commonhome-crd2 {
+  border: 2px solid #57f8aa !important ;
+}
+
+.commonhome-crd3 {
+  border: 2px solid #e12323 !important;
 }
