@@ -17,10 +17,10 @@ import "../Css/HomePage.css";
 import NavBar from "./NavBar";
 import BatchTable from "./BatchTable";
 import { FcSearch } from "react-icons/fc";
-import "../Css/HomePage.css";
+
 import { rolecontext } from "../App";
-import NavBarTwo from "./NavBarTwo";
-import CrmService from "../API/CrmService.js";
+
+import CrmService from "../API/CrmService";
 
 export default function HomePage({ callApiData }) {
   const [search, setSearch] = useState("");
@@ -191,17 +191,16 @@ export default function HomePage({ callApiData }) {
     e.preventDefault();
 
     let body = {
-      email: "test32789@mailinator.com",
-      firstname: "test",
-      lastname: "trainer",
-      usertype: 1,
-      createdby: 129,
-      userid: 0,
-      company: "cg",
-      primaryphone: "1223",
-      course: 1,
+      batchId: 0,
+      batchCode: "DEVP-Feb-3",
+      trainerId: "4",
+
+      batchSelectedTime: "10:20",
+      startDate: "2023-09-11",
+      endDate: "2023-12-11",
+      createdby: 123,
     };
-    await CrmService.createTrainerOrReferral(body).then((response) => {
+    await CrmService.createBatch(body).then((response) => {
       console.log(response);
     });
     // await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {

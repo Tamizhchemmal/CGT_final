@@ -308,8 +308,6 @@ export default function BatchTable({ search }) {
 
   var count;
 
-  const Active = ({ count }) => {};
-
   const submitEdit = async (event) => {
     event.preventDefault();
 
@@ -423,9 +421,7 @@ export default function BatchTable({ search }) {
                           id="table-body"
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
-                        >
-                          <Active count={15} />
-                        </TableCell>
+                        ></TableCell>
                         <TableCell
                           align="center"
                           id="table-body"

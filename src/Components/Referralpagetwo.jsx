@@ -14,6 +14,7 @@ import axios from "axios";
 import RefTable from "./RefTable";
 import { FcSearch } from "react-icons/fc";
 import NavBar from "./NavBar";
+import CrmService from "../API/CrmService";
 
 function Referralpagetwo() {
   const [show, setShow] = useState(false);
@@ -66,6 +67,22 @@ function Referralpagetwo() {
 
   const submitReferral = async (e) => {
     e.preventDefault();
+
+    let body = {
+      email: "abc@mailinator.com",
+      firstname: "test",
+      lastname: "trainer",
+      usertype: 1, //userType Id
+      createdby: 123, // Logged in User unique ID
+      userid: 0,
+      company: "cg",
+      primaryphone: "122253",
+      course: 1, //course id
+    };
+    await CrmService.createReferralOrTrainer(body).then((response) => {
+      console.log(response);
+    });
+
     if (password !== confirmpassword) {
       setErrors("Password Should Be Same");
     } else if (paymentdetails !== reEnterDetails) {

@@ -160,8 +160,47 @@ function Studentpage() {
     },
   ]);
 
-  const [startDate, setStartDate] = useState([]);
-  const [endDate, setEndDate] = useState([]);
+  const [paymentmodelist, setPaymentList] = useState([
+    {
+      id: 1,
+      name: "GPAY NUMBER",
+    },
+    {
+      id: 2,
+      name: "UPI",
+    },
+    {
+      id: 3,
+      name: "BANK ACCOUNT",
+    },
+  ]);
+
+  const [batchCode, setBatchCode] = useState("");
+
+  const [batchList, setBatchList] = useState([
+    {
+      id: 1,
+      code: "DEV-Feb-1",
+    },
+    {
+      id: 2,
+      code: "TEST-Feb-1",
+    },
+    {
+      id: 3,
+      code: "UIUX-Feb-1",
+    },
+    {
+      id: 4,
+      code: "AWS-Feb-1",
+    },
+    {
+      id: 5,
+      code: "PYTHON-Feb-1",
+    },
+  ]);
+
+  const [paymentDate, setPaymentDate] = useState([]);
 
   const handleStudentClose = () => {
     setShow(false);
@@ -185,6 +224,17 @@ function Studentpage() {
     setPage(0);
   };
 
+  const [testApiData, setTestApiData] = useState([]);
+
+  const callTestApiData = async (e) => {
+    await CrmService.getStudent().then((response) => {
+      console.log(response.data);
+    });
+  };
+  useEffect(() => {
+    callTestApiData();
+  }, []);
+
   const [apiStudentData, setApiStudentData] = useState([]);
 
   const callApiStudentData = async (e) => {
@@ -204,7 +254,7 @@ function Studentpage() {
     course: "",
     mobilenumber: "",
     yearofpassedout: "",
-    startDate: "",
+    paymentDate: "",
     endDate: "",
     totalfees: "",
     feespaid: "",
@@ -247,20 +297,20 @@ function Studentpage() {
   // Table content End
 
   // date Change
-  const handleStartDateChange = (e) => {
-    const selectedStartDate = new Date(e.target.value);
-    const selectedEndDate = new Date(selectedStartDate);
-    selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
-    const sDate = e.target.value;
-    setStartDate(sDate);
-    const eDate = selectedEndDate.toISOString().substr(0, 10);
-    setEndDate(eDate);
+  // const handleStartDateChange = (e) => {
+  //   const selectedStartDate = new Date(e.target.value);
+  //   const selectedEndDate = new Date(selectedStartDate);
+  //   selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
+  //   const sDate = e.target.value;
+  //   setStartDate(sDate);
+  //   const eDate = selectedEndDate.toISOString().substr(0, 10);
+  //   setEndDate(eDate);
 
-    setEditedStudentData({ ...editedStudentData, startDate: e.target.value });
-    setEditedStudentData({ ...editedStudentData, endDate: e.target.value });
+  //   setEditedStudentData({ ...editedStudentData, startDate: e.target.value });
+  //   setEditedStudentData({ ...editedStudentData, endDate: e.target.value });
 
-    //Search function
-  };
+  //   //Search function
+  // };
 
   const submitStudent = async (e) => {
     e.preventDefault();
@@ -310,7 +360,7 @@ function Studentpage() {
     //     paymentmode,
     //   }
     // );
-    // alert("Referral Created");
+    alert("Student Created");
     callApiStudentData();
     e.target.reset();
     setShow(false);
@@ -515,52 +565,61 @@ function Studentpage() {
                           ></input>
                         </div>
                         <div className="inputstudent">
-                          <input
-                            type="text"
+                          <select
+                            id="paymentmode"
                             name="paymentmode"
-                            placeholder="Payment Mode"
-                            autoComplete="off"
-                            value={paymentmode}
-                            onChange={(e) => {
-                              setPaymentMode(e.target.value);
-                            }}
+                            className="referaldropdown"
                             required
-                          ></input>
+                            onChange={(e) => setPaymentMode(e.target.value)}
+                          >
+                            <option value="" disabled selected>
+                              Select Payment Mode
+                            </option>
+                            {paymentmodelist.map((paymentmode, index1) => (
+                              <option key={index1} value={paymentmode.name}>
+                                {paymentmode.name}
+                              </option>
+                            ))}
+                          </select>
                         </div>
-                        <div style={{ marginLeft: "30px" }}>
+                        <div className="paymentDate">
                           <label
                             id="strt"
                             htmlFor="startdate"
-                            className="text-muted"
+                            className="text-muted pymtdate"
                           >
-                            Start date
+                            PaymentDate
                           </label>
                           <input
                             type="date"
                             id="startdate"
                             name="startdate"
                             placeholder="Start date"
-                            value={startDate}
-                            onChange={handleStartDateChange}
+                            value={paymentDate}
+                            onChange={(e) => {
+                              setPaymentDate(e.target.value);
+                            }}
                             required
                           />
                         </div>
-                        <div style={{ marginLeft: "30px" }}>
-                          <label id="end" className="text-muted">
-                            End date
-                          </label>
-                          <input
-                            type="date"
-                            id="enddate"
-                            name="enddate"
-                            placeholder="End date"
-                            value={endDate}
-                            readOnly
-                            disabled
+                        <div>
+                          <select
+                            id="batchCode"
+                            name="batchcode"
+                            className="batchdropdown"
+                            required
+                            value={batchCode}
                             onChange={(e) => {
-                              setEndDate(e.target.value);
+                              setBatchCode(e.target.value);
                             }}
-                          />
+                          >
+                            <option value="none">Batch Code</option>
+                            {batchList.map((data, index) => (
+                              <option key={index} value={index.code}>
+                                {data.code}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                         <div>
                           <select
@@ -655,6 +714,7 @@ function Studentpage() {
                             value={editedStudentData.name}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 name: e.target.value,
                               });
                             }}
@@ -672,6 +732,7 @@ function Studentpage() {
                             value={editedStudentData.mobilenumber}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 mobilenumber: e.target.value,
                               });
                             }}
@@ -689,6 +750,7 @@ function Studentpage() {
                             value={editedStudentData.email}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 email: e.target.value,
                               });
                             }}
@@ -703,6 +765,7 @@ function Studentpage() {
                             value={editedStudentData.yearofpassedout}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 yearofpassedout: e.target.value,
                               });
                             }}
@@ -719,6 +782,7 @@ function Studentpage() {
                             value={editedStudentData.college}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 college: e.target.value,
                               });
                             }}
@@ -735,6 +799,7 @@ function Studentpage() {
                             value={editedStudentData.degree}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 degree: e.target.value,
                               });
                             }}
@@ -750,6 +815,7 @@ function Studentpage() {
                             value={editedStudentData.totalfees}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 totalfees: e.target.value,
                               });
                             }}
@@ -765,6 +831,7 @@ function Studentpage() {
                             value={editedStudentData.feespaid}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 feespaid: e.target.value,
                               });
                             }}
@@ -780,6 +847,7 @@ function Studentpage() {
                             value={editedStudentData.pendingfees}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 pendingfees: e.target.value,
                               });
                             }}
@@ -795,6 +863,7 @@ function Studentpage() {
                             value={editedStudentData.paymentmode}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 paymentmode: e.target.value,
                               });
                             }}
@@ -815,27 +884,13 @@ function Studentpage() {
                             name="startdate"
                             placeholder="Start date"
                             value={editedStudentData.startDate}
-                            onChange={handleStartDateChange}
-                            required
-                          />
-                        </div>
-                        <div style={{ marginLeft: "30px" }}>
-                          <label id="end" className="text-muted">
-                            End date
-                          </label>
-                          <input
-                            type="date"
-                            id="enddate"
-                            name="enddate"
-                            placeholder="End date"
-                            value={editedStudentData.endDate}
-                            readOnly
-                            disabled
                             onChange={(e) => {
-                              setEditedStudentData({
-                                endDate: e.target.value,
+                              setPaymentDate({
+                                ...editedStudentData,
+                                paymentDate: e.target.value,
                               });
                             }}
+                            required
                           />
                         </div>
                         <div>
@@ -847,6 +902,7 @@ function Studentpage() {
                             value={editedStudentData.referral}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 referral: e.target.value,
                               });
                             }}
@@ -868,6 +924,7 @@ function Studentpage() {
                             value={editedStudentData.course}
                             onChange={(e) => {
                               setEditedStudentData({
+                                ...editedStudentData,
                                 course: e.target.value,
                               });
                             }}

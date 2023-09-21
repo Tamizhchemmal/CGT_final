@@ -10,6 +10,8 @@ import TablePagination from "@mui/material/TablePagination";
 import "../Css/Referralstyle.css";
 import TrainerPopUp from "./TrainerPopUp";
 import TrainerProfModal from "./TrainerProfModal";
+import CrmService from "../API/CrmService";
+
 import {
   Container,
   Modal,
@@ -100,6 +102,8 @@ export default function Trainerpage() {
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
   const [paymentdetails, setPaymentdetails] = useState("");
+  const [reEnterDetails, setreEnterDetails] = useState("");
+  const [ifscCode, setifscCode] = useState("");
   const [role, setRole] = useState("trainer");
 
   // console.log(search);
@@ -193,6 +197,8 @@ export default function Trainerpage() {
     course: "",
     paymentdetails: "",
     paymentmode: "",
+    ifscCode: "",
+    reEnterDetails: "",
     companyname: "",
     mobilenumber: "",
   });
@@ -231,6 +237,21 @@ export default function Trainerpage() {
   const submitTrainer = async (e) => {
     e.preventDefault();
 
+    let body = {
+      email: "abcde@mailinator.com",
+      firstname: "test",
+      lastname: "trainer",
+      usertype: 2, //userType Id
+      createdby: 123, // Logged in User unique ID
+      userid: 0,
+      company: "cg",
+      primaryphone: "122253",
+      course: 2, //course id
+    };
+    await CrmService.createReferralOrTrainer(body).then((response) => {
+      console.log(response);
+    });
+
     if (password !== confirmpassword) {
       setErrors("Password Should Be Same");
     } else {
@@ -242,29 +263,31 @@ export default function Trainerpage() {
         course,
         paymentdetails,
         paymentmode,
+        reEnterDetails,
+        ifscCode,
         role,
         companyname,
         mobilenumber,
       });
 
-      let obj = { email, password, role };
-      fetch("http://localhost:8000/user", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(obj),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log("saved");
-        })
-        .catch((err) => {
-          console.log("error" + err.message);
-        });
+      //   let obj = { email, password, role };
+      //   fetch("http://localhost:8000/user", {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(obj),
+      //   })
+      //     .then((res) => res.json())
+      //     .then((data) => {
+      //       console.log("saved");
+      //     })
+      //     .catch((err) => {
+      //       console.log("error" + err.message);
+      //     });
 
-      setErrors("");
-      alert("trainer Created");
+      //   setErrors("");
+      //   alert("trainer Created");
 
-      e.target.reset();
+      //   e.target.reset();
     }
     setShow(false);
     e.target.reset();
@@ -394,16 +417,19 @@ export default function Trainerpage() {
                             required
                           ></input>
                         </div>
-
                         <div>
                           <select
                             id="paymentmode"
                             name="paymentmode"
                             className="referaldropdown"
                             required
-                            onChange={(e) => setPaymentmode(e.target.value)}
+                            onChange={(event) =>
+                              setPaymentmode(event.target.value)
+                            }
                           >
-                            <option value="none">Payment Mode</option>
+                            <option value="" disabled selected>
+                              Select Payment Mode
+                            </option>
                             {paymentmodelist.map((paymentmode, index1) => (
                               <option key={index1} value={paymentmode.name}>
                                 {paymentmode.name}
@@ -411,6 +437,20 @@ export default function Trainerpage() {
                             ))}
                           </select>
                         </div>
+
+                        {paymentmode === "BANK ACCOUNT" && (
+                          <div className="inputstudent">
+                            <input
+                              type="text"
+                              name="paymentdetails"
+                              placeholder="Enter IFSC Code"
+                              autoComplete="off"
+                              value={ifscCode}
+                              onChange={(e) => setifscCode(e.target.value)}
+                              required
+                            ></input>
+                          </div>
+                        )}
                         <div className="inputstudent">
                           <input
                             type="text"
@@ -419,6 +459,17 @@ export default function Trainerpage() {
                             autoComplete="off"
                             value={paymentdetails}
                             onChange={(e) => setPaymentdetails(e.target.value)}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputstudent">
+                          <input
+                            type="text"
+                            name="paymentdetails"
+                            placeholder="ReEnter Payment Details"
+                            autoComplete="off"
+                            value={reEnterDetails}
+                            onChange={(e) => setreEnterDetails(e.target.value)}
                             required
                           ></input>
                         </div>

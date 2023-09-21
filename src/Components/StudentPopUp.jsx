@@ -2,11 +2,10 @@ import React from "react";
 
 import Modal from "react-bootstrap/Modal";
 import { CloseButton } from "react-bootstrap";
-
 import "../Css/Refprofile.css";
-import TrainerPopUpDetails from "./TrainerPopUpDetails";
+import StudentPopUpDetails from "./TrainerPopUpDetails";
 
-export default function TrainerPopUp({ user, showmodal, onClosemodal }) {
+export default function StudentPopUp({ user, showmodal, onClosemodal }) {
   return (
     <>
       <Modal
@@ -20,7 +19,7 @@ export default function TrainerPopUp({ user, showmodal, onClosemodal }) {
         className="mods"
       >
         <Modal.Header style={{ backgroundColor: " #002333 ", color: "white" }}>
-          <Modal.Title style={{ color: "white" }}>Trainer Profile</Modal.Title>
+          <Modal.Title style={{ color: "white" }}>Student Profile</Modal.Title>
 
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>

@@ -1,5 +1,5 @@
 import React from "react";
-import NavBar from "./NavBar";
+import NavBarTwo from "./NavBarTwo";
 import TrainerProfModal from "./TrainerProfModal";
 
 export default function TrainerProfile() {
@@ -7,7 +7,7 @@ export default function TrainerProfile() {
     <>
       <div className="trainer-profile">
         <div id="navs">
-          <NavBar />
+          <NavBarTwo />
         </div>
         <div className="trainer-modal">
           <TrainerProfModal />

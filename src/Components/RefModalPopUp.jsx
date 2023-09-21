@@ -16,11 +16,11 @@ import TablePagination from "@mui/material/TablePagination";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
-  { id: "name", label: "Name", minWidth: 140, align: "center" },
+  { id: "name", label: "Name", minWidth: 150, align: "center" },
   {
     id: "course",
     label: "Course",
-    minWidth: 170,
+    minWidth: 150,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
@@ -28,7 +28,7 @@ const columns = [
   {
     id: "batchcode",
     label: "Batch Code",
-    minWidth: 170,
+    minWidth: 150,
     align: "center",
 
     format: (value) => value.toLocaleString("en-US"),
@@ -36,7 +36,7 @@ const columns = [
   {
     id: "feespaid",
     label: "Fees Paid",
-    minWidth: 170,
+    minWidth: 150,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
   },
@@ -86,72 +86,66 @@ export default function RefModalPopUp() {
                     </div>
                     <div className="ref-details">
                       <div className="referral-label">
-                        <Table>
-                          <TableBody>
-                            <TableRow key={apiData.id}>
-                              <div className="ref-label">Name</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* :{apiData.name} */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="ref-label">Contact No</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : {apiData.mobilenumber} */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="ref-label">Email ID</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : {apiData.email} */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="ref-label">
-                                No of Student Referred
-                              </div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : 12 */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="ref-label">Referral Type</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : Gold */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="ref-label">Amount Benefited</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : 12000 */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          </TableBody>
-                        </Table>
+                        <table>
+                          <tbody className="refmodal-table">
+                            <tr>
+                              <td>
+                                <div className="ref-label">Name</div>
+                              </td>
+                              <td>
+                                <div className="details">friend</div>
+                              </td>
+                            </tr>
+
+                            <tr>
+                              <td>
+                                <div className="ref-label">Contact No</div>
+                              </td>
+                              <td>
+                                <div className="details">
+                                  {/* : {apiData.mobilenumber} */}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="ref-label">Email ID</div>
+                              </td>
+                              <td>
+                                {" "}
+                                <div className="details">
+                                  {/* : {apiData.email} */}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="ref-label">Total Students</div>
+                              </td>
+                              <td>
+                                <div className="details">{/* : 12 */}</div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="ref-label">Referral Type</div>
+                              </td>
+                              <td>
+                                <div className="details">{/* : Gold */}</div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="ref-label">
+                                  Amount Benefited
+                                </div>
+                              </td>
+                              <td>
+                                <div className="details">{/* : 12000 */}</div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
