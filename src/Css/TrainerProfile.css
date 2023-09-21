@@ -9,21 +9,19 @@
 }
 
 .trainer-profdetails {
-  /* width: 85%;
-  height: 625px;
-  border-radius: 10px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
-  background-color: rgb(255, 255, 255);
-  margin-top: 2%; */
   display: flex;
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
 }
 
+.trainmodal-table tr div {
+  padding: 15px !important;
+  margin: 8px !important;
+}
+
 .colum {
   display: flex;
-  width: calc(100% / 2);
 }
 
 .column1 {
@@ -61,11 +59,6 @@
 
 .trainer-label {
   width: 100%;
-  margin: 0 24px;
-}
-
-.label {
-  margin: 20px 0;
 }
 
 .trainer-details {

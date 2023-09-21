@@ -85,60 +85,56 @@ export default function TrainerPopUpDetails() {
                     </div>
                     <div className="trainer-details">
                       <div className="trainer-label">
-                        <Table>
-                          <TableBody key={apiData.id}>
-                            <TableRow>
-                              <div className="label">Name</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : {apiData.name} */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="label">Email ID</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : {apiData.mobilenumber} */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="label">Contact No</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : {apiData.email} */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="label">Payment</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : 12 */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                            <TableRow>
-                              <div className="label">Domain</div>
-                              {apiData.map((apiData) => {
-                                return (
-                                  <TableCell className="details">
-                                    {/* : Gold */}
-                                  </TableCell>
-                                );
-                              })}
-                            </TableRow>
-                          </TableBody>
-                        </Table>
+                        <table>
+                          <tbody className="trainmodal-table">
+                            <tr>
+                              <td>
+                                <div className="label">Name</div>
+                              </td>
+                              <td>
+                                <div className="details">
+                                  {/* : {apiData.name} */}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="label">Email ID</div>
+                              </td>
+                              <td>
+                                <div className="details">
+                                  {/* : {apiData.mobilenumber} */}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="label">Contact No</div>
+                              </td>
+                              <td>
+                                <div className="details">
+                                  {/* : {apiData.email} */}
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="label">Payment</div>
+                              </td>
+                              <td>
+                                <div className="details">{/* : 12 */}</div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div className="label">Domain</div>
+                              </td>
+                              <td>
+                                <div className="details">{/* : Gold */}</div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>

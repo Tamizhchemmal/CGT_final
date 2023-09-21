@@ -3,6 +3,11 @@
   top: 0;
 }
 
+.trainmodal-table tr div {
+  padding: 15px !important;
+  margin: 8px !important;
+}
+
 .crd-bg1 {
   display: flex;
   justify-content: start;
@@ -21,7 +26,6 @@
 
 .colum {
   display: flex;
-  width: calc(100% / 2);
 }
 
 .column1 {
@@ -59,11 +63,6 @@
 
 .trainer-label {
   width: 100%;
-  margin: 0 24px;
-}
-
-.label {
-  margin: 15px 0;
 }
 
 .trainer-details {
