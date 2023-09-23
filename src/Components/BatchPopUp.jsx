@@ -22,7 +22,7 @@ export default function BatchPopUp({ user, showmodal, onClosemodal }) {
 
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
-        <Modal.Body style={{ width: "100vw" }}>
+        <Modal.Body style={{ width: "100%" }}>
           <BatchModalPopUp />
         </Modal.Body>
       </Modal>

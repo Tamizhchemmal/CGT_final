@@ -3,7 +3,7 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { CloseButton } from "react-bootstrap";
 import "../Css/Refprofile.css";
-import StudentPopUpDetails from "./TrainerPopUpDetails";
+import StudentPopUpDetails from "./StudentPopUpDetails";
 
 export default function StudentPopUp({ user, showmodal, onClosemodal }) {
   return (
@@ -23,8 +23,8 @@ export default function StudentPopUp({ user, showmodal, onClosemodal }) {
 
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
-        <Modal.Body style={{ width: "100vw" }}>
-          <TrainerPopUpDetails />
+        <Modal.Body style={{ width: "100%" }}>
+          <StudentPopUpDetails user={user} />
         </Modal.Body>
       </Modal>
     </>

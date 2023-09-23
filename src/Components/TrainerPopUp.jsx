@@ -24,8 +24,8 @@ export default function TrainerPopUp({ user, showmodal, onClosemodal }) {
 
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
-        <Modal.Body style={{ width: "100vw" }}>
-          <TrainerPopUpDetails />
+        <Modal.Body style={{ width: "100%" }}>
+          <TrainerPopUpDetails user={user} />
         </Modal.Body>
       </Modal>
     </>

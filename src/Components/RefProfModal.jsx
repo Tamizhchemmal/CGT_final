@@ -93,7 +93,7 @@ export default function RefProfModal() {
                                 <div className="ref-label">Name</div>
                               </td>
                               <td>
-                                <div className="details">friend</div>
+                                <div className="details">{}</div>
                               </td>
                             </tr>
 

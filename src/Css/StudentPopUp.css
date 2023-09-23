@@ -1,0 +1,12 @@
+.studentmodal-table tr div {
+  padding: 12px !important;
+}
+
+.studentmodal-table2 tr div {
+  padding: 15px !important;
+  margin: 5px;
+}
+
+#student-details {
+  margin-top: 0 !important;
+}

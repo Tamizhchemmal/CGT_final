@@ -42,7 +42,7 @@ const columns = [
   },
 ];
 
-export default function RefModalPopUp() {
+export default function RefModalPopUp({ user }) {
   const [apiData, setApiData] = useState([]);
 
   const [page, setPage] = React.useState(0);
@@ -93,7 +93,7 @@ export default function RefModalPopUp() {
                                 <div className="ref-label">Name</div>
                               </td>
                               <td>
-                                <div className="details">friend</div>
+                                <div className="details">{user.name}</div>
                               </td>
                             </tr>
 
@@ -103,7 +103,7 @@ export default function RefModalPopUp() {
                               </td>
                               <td>
                                 <div className="details">
-                                  {/* : {apiData.mobilenumber} */}
+                                  {user.mobilenumber}
                                 </div>
                               </td>
                             </tr>
@@ -112,10 +112,7 @@ export default function RefModalPopUp() {
                                 <div className="ref-label">Email ID</div>
                               </td>
                               <td>
-                                {" "}
-                                <div className="details">
-                                  {/* : {apiData.email} */}
-                                </div>
+                                <div className="details">{user.email}</div>
                               </td>
                             </tr>
                             <tr>

@@ -41,7 +41,7 @@ const columns = [
   },
 ];
 
-export default function TrainerPopUpDetails() {
+export default function TrainerPopUpDetails({ user }) {
   const [apiData, setApiData] = useState([]);
 
   const [page, setPage] = React.useState(0);
@@ -92,9 +92,7 @@ export default function TrainerPopUpDetails() {
                                 <div className="label">Name</div>
                               </td>
                               <td>
-                                <div className="details">
-                                  {/* : {apiData.name} */}
-                                </div>
+                                <div className="details">: {user.name}</div>
                               </td>
                             </tr>
                             <tr>
@@ -102,9 +100,7 @@ export default function TrainerPopUpDetails() {
                                 <div className="label">Email ID</div>
                               </td>
                               <td>
-                                <div className="details">
-                                  {/* : {apiData.mobilenumber} */}
-                                </div>
+                                <div className="details">{user.email}</div>
                               </td>
                             </tr>
                             <tr>
@@ -113,7 +109,7 @@ export default function TrainerPopUpDetails() {
                               </td>
                               <td>
                                 <div className="details">
-                                  {/* : {apiData.email} */}
+                                  {user.mobilenumber}
                                 </div>
                               </td>
                             </tr>
@@ -122,7 +118,9 @@ export default function TrainerPopUpDetails() {
                                 <div className="label">Payment</div>
                               </td>
                               <td>
-                                <div className="details">{/* : 12 */}</div>
+                                <div className="details">
+                                  {user.paymentmode}
+                                </div>
                               </td>
                             </tr>
                             <tr>
@@ -130,7 +128,7 @@ export default function TrainerPopUpDetails() {
                                 <div className="label">Domain</div>
                               </td>
                               <td>
-                                <div className="details">{/* : Gold */}</div>
+                                <div className="details">{user.course}</div>
                               </td>
                             </tr>
                           </tbody>

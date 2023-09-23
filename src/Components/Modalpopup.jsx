@@ -23,8 +23,8 @@ function Modalpopup({ user, showmodal, onClosemodal }) {
 
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
-        <Modal.Body style={{ width: "100vw" }}>
-          <RefModalPopUp />
+        <Modal.Body style={{ width: "100%" }}>
+          <RefModalPopUp user={user} />
         </Modal.Body>
       </Modal>
     </>

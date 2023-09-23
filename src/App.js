@@ -9,8 +9,7 @@ import TrainerProfile from "./Components/TrainerProfile";
 import RefProfile from "./Components/RefProfile";
 import CommonHomePage from "./Components/CommonHomePage";
 import React, { createContext, useContext, useState } from "react";
-import "./Css/HomePage.css";
-import "./Css/login.css";
+
 import { encrypt, decrypt } from "n-krypta";
 
 import Noaccess from "./Components/Noaccess";

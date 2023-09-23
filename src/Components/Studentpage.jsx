@@ -9,6 +9,7 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import "../Css/Referralstyle.css";
 import { Card } from "@mui/material";
+import StudentPopUp from "./StudentPopUp";
 import {
   Container,
   Dropdown,
@@ -236,6 +237,7 @@ function Studentpage() {
   }, []);
 
   const [apiStudentData, setApiStudentData] = useState([]);
+  const [batchData, setbatchData] = useState([]);
 
   const callApiStudentData = async (e) => {
     const studentData = await axios.get(
@@ -243,9 +245,17 @@ function Studentpage() {
     );
     setApiStudentData(studentData.data);
   };
+  const callapibatchdata = async (e) => {
+    const batchData = await axios.get(
+      "https://64b638a2df0839c97e1528f4.mockapi.io/batch"
+    );
+    console.log(batchData.data.batchcode);
+    setbatchData(batchData.data);
+  };
 
   useEffect(() => {
     callApiStudentData();
+    callapibatchdata();
   }, []);
 
   const [editedStudentData, setEditedStudentData] = useState({
@@ -282,6 +292,10 @@ function Studentpage() {
   const openStudentTable = (apiStudentData) => {
     setShowStudent(apiStudentData);
     setShowStudentModal(true);
+  };
+
+  const handleCloseModal = (e) => {
+    setShowStudentModal(false);
   };
 
   const [editStudentShow, setEditStudentShow] = useState(false);
@@ -341,25 +355,23 @@ function Studentpage() {
       console.log(response);
     });
 
-    // await axios.post(
-    //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
-    //   {
-    //     name,
-    //     email,
-    //     course,
-    //     mobilenumber,
-    //     yearofpassedout,
-    //     startDate,
-    //     endDate,
-    //     totalfees,
-    //     feespaid,
-    //     pendingfees,
-    //     college,
-    //     degree,
-    //     referral,
-    //     paymentmode,
-    //   }
-    // );
+    await axios.post(
+      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
+      {
+        name,
+        email,
+        course,
+        mobilenumber,
+        yearofpassedout,
+        totalfees,
+        feespaid,
+        pendingfees,
+        college,
+        degree,
+        referral,
+        paymentmode,
+      }
+    );
     alert("Student Created");
     callApiStudentData();
     e.target.reset();
@@ -613,10 +625,12 @@ function Studentpage() {
                               setBatchCode(e.target.value);
                             }}
                           >
-                            <option value="none">Batch Code</option>
-                            {batchList.map((data, index) => (
-                              <option key={index} value={index.code}>
-                                {data.code}
+                            <option value="none" selected>
+                              Batch Code
+                            </option>
+                            {batchData.map((data, index) => (
+                              <option key={index} value={index.id}>
+                                {data.batchcode}
                               </option>
                             ))}
                           </select>
@@ -1008,7 +1022,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.name}
                                   </TableCell>
@@ -1016,7 +1032,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.mobilenumber}
                                   </TableCell>
@@ -1024,7 +1042,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.email}
                                   </TableCell>
@@ -1032,7 +1052,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.course}
                                   </TableCell>
@@ -1040,7 +1062,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.yearofpassedout}
                                   </TableCell>
@@ -1048,7 +1072,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.startDate}
                                   </TableCell>
@@ -1056,7 +1082,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.feespaid}
                                   </TableCell>
@@ -1064,7 +1092,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.pendingfees}
                                   </TableCell>
@@ -1072,7 +1102,9 @@ function Studentpage() {
                                     align="center"
                                     id="table-body"
                                     style={{ fontSize: 16 }}
-                                    onClick={openStudentTable}
+                                    onClick={() =>
+                                      openStudentTable(apiStudentData)
+                                    }
                                   >
                                     {apiStudentData.totalfees}
                                   </TableCell>
@@ -1178,6 +1210,14 @@ function Studentpage() {
           </div>
         </div>
       </div>
+      {showStudent && (
+        <StudentPopUp
+          id={apiStudentData.id}
+          user={showStudent}
+          showmodal={showStudentModal}
+          onClosemodal={handleCloseModal}
+        />
+      )}
     </>
   );
 }

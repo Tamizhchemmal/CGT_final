@@ -170,7 +170,7 @@ export default function HomePage({ callApiData }) {
     },
   ]);
 
-  const handleClose = () => {
+  const handleClose = (e) => {
     setShow(false);
     setErrors("");
   };
@@ -184,33 +184,33 @@ export default function HomePage({ callApiData }) {
     const batchcode = `${batchCourse}-${batchMonth}-${batchNumber}`;
     setTimeout(() => {
       setBatchcode(batchcode);
-      console.log(batchcode);
-      console.log("Batch code", batchcode);
+      // console.log(batchcode);
+      // console.log("Batch code", batchcode);
     }, 1000);
 
     e.preventDefault();
 
-    let body = {
-      batchId: 0,
-      batchCode: "DEVP-Feb-3",
-      trainerId: "4",
+    // let body = {
+    //   batchId: 0,
+    //   batchCode: "DEVP-Feb-3",
+    //   trainerId: "4",
 
-      batchSelectedTime: "10:20",
-      startDate: "2023-09-11",
-      endDate: "2023-12-11",
-      createdby: 123,
-    };
-    await CrmService.createBatch(body).then((response) => {
-      console.log(response);
-    });
-    // await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
-    //   batchcode,
-    //   selectedBatchTime,
-    //   numofstudent,
-    //   trainername,
-    //   startBatchDate,
-    //   endBatchDate,
+    //   batchSelectedTime: "10:20",
+    //   startDate: "2023-09-11",
+    //   endDate: "2023-12-11",
+    //   createdby: 123,
+    // };
+    // await CrmService.createBatch(body).then((response) => {
+    //   console.log(response);
     // });
+    await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
+      batchcode,
+      selectedBatchTime,
+      numofstudent,
+      trainername,
+      startBatchDate,
+      endBatchDate,
+    });
     e.target.reset();
     setShow(false);
 

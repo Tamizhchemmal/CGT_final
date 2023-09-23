@@ -1,11 +1,10 @@
 import axios from "axios";
 
+let baseURL = `https://cd12-2405-201-e002-409b-824d-d730-5e66-8548.ngrok-free.app/`;
+
 class CrmService {
   login(body) {
-    return axios.post(
-      `https://92d4-2405-201-e002-409b-2622-ea7c-ee0d-c2e4.ngrok-free.app/api/crm/login`,
-      body
-    );
+    return axios.post(`${baseURL}api/crm/login`, body);
   }
 
   userLoggedIn() {
@@ -16,30 +15,19 @@ class CrmService {
   }
 
   createBatch(body) {
-    return axios.post(
-      `https://92d4-2405-201-e002-409b-2622-ea7c-ee0d-c2e4.ngrok-free.app/api/crm/batch/create`,
-      body
-    );
+    return axios.post(`${baseURL}api/crm/batch/create`, body);
   }
 
   createReferralOrTrainer(body) {
-    return axios.post(
-      `https://92d4-2405-201-e002-409b-2622-ea7c-ee0d-c2e4.ngrok-free.app/api/crm/user/add`,
-      body
-    );
+    return axios.post(`${baseURL}api/crm/user/add`, body);
   }
 
   getStudent() {
-    return axios.get(
-      `https://92d4-2405-201-e002-409b-2622-ea7c-ee0d-c2e4.ngrok-free.app/api/crm/course/list`
-    );
+    return axios.get(`${baseURL}api/crm/course/list`);
   }
 
   createStudent(body) {
-    return axios.post(
-      `https://92d4-2405-201-e002-409b-2622-ea7c-ee0d-c2e4.ngrok-free.app/api/crm/students/add`,
-      body
-    );
+    return axios.post(`${baseURL}api/crm/students/add`, body);
   }
 
   setupAxiosInterceptors() {

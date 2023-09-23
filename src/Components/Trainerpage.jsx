@@ -947,6 +947,7 @@ export default function Trainerpage() {
       </div>
       {showTrain && (
         <TrainerPopUp
+          id={apiTrainerData.id}
           user={showTrain}
           showmodal={showTrainModal}
           onClosemodal={handleTrainCloseModal}
