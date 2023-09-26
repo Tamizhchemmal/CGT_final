@@ -69,7 +69,7 @@ const columns = [
 
 // const rows = [];
 
-export default function RefTable({ search }) {
+export default function RefTable({ search, referralCount }) {
   const [name, setName] = useState("");
   const [mobilenumber, setMobilenumber] = useState("");
 
@@ -278,7 +278,8 @@ export default function RefTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => opnetable(apiData)}
                         >
-                          12
+                          {/* 12 */}
+                          {referralCount}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -286,7 +287,7 @@ export default function RefTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => opnetable(apiData)}
                         >
-                          <Type count={15} />
+                          {/* <Type count={15} /> */}
                         </TableCell>
                         <TableCell
                           align="center"

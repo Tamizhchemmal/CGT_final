@@ -14,8 +14,6 @@ import { Modal, Button, ModalTitle, CloseButton } from "react-bootstrap";
 
 import BatchPopUp from "./BatchPopUp";
 
-import "../Css/HomePage.css";
-
 import axios from "axios";
 
 import { Card } from "@mui/material";
@@ -299,6 +297,20 @@ export default function BatchTable({ search }) {
     //Search function
   };
 
+  // batch active/not
+
+  const [isActive, setisActive] = useState(false);
+
+  const isDateWithRange = (startDate, endDate) => {
+    const currentDate = new Date();
+    let strtDate = new Date(startDate);
+    let edDate = new Date(endDate);
+
+    console.log(startDate, endDate);
+
+    return currentDate >= strtDate && currentDate <= edDate;
+  };
+
   const [selectedBatchTime, setSelectedBatchTime] = useState("");
 
   const handleTimeChange = (e) => {
@@ -421,7 +433,16 @@ export default function BatchTable({ search }) {
                           id="table-body"
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
-                        ></TableCell>
+                        >
+                          {isDateWithRange(
+                            apiData.startBatchDate,
+                            apiData.endBatchDate
+                          ) ? (
+                            <div className="isActive">Active</div>
+                          ) : (
+                            <div className="isNotActive">Inactive</div>
+                          )}
+                        </TableCell>
                         <TableCell
                           align="center"
                           id="table-body"

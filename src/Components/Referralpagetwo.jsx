@@ -68,20 +68,20 @@ function Referralpagetwo() {
   const submitReferral = async (e) => {
     e.preventDefault();
 
-    let body = {
-      email: "abc@mailinator.com",
-      firstname: "test",
-      lastname: "trainer",
-      usertype: 1, //userType Id
-      createdby: 123, // Logged in User unique ID
-      userid: 0,
-      company: "cg",
-      primaryphone: "122253",
-      course: 1, //course id
-    };
-    await CrmService.createReferralOrTrainer(body).then((response) => {
-      console.log(response);
-    });
+    // let body = {
+    //   email: "abc@mailinator.com",
+    //   firstname: "test",
+    //   lastname: "trainer",
+    //   usertype: 1, //userType Id
+    //   createdby: 123, // Logged in User unique ID
+    //   userid: 0,
+    //   company: "cg",
+    //   primaryphone: "122253",
+    //   course: 1, //course id
+    // };
+    // await CrmService.createReferralOrTrainer(body).then((response) => {
+    //   console.log(response);
+    // });
 
     if (password !== confirmpassword) {
       setErrors("Password Should Be Same");
@@ -219,6 +219,63 @@ function Referralpagetwo() {
                             required
                           ></input>
                         </div>
+
+                        <div className="inputref">
+                          <select
+                            id="paymentmode"
+                            name="paymentmode"
+                            className="referaldropdown"
+                            required
+                            onChange={(event) =>
+                              setPaymentmode(event.target.value)
+                            }
+                          >
+                            <option value="" disabled selected>
+                              Select Payment Mode
+                            </option>
+                            {paymentmodelist.map((paymentmode, index1) => (
+                              <option key={index1} value={paymentmode.name}>
+                                {paymentmode.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {paymentmode === "BANK ACCOUNT" && (
+                          <div className="inputref">
+                            <input
+                              type="text"
+                              name="paymentdetails"
+                              placeholder="Enter IFSC Code"
+                              autoComplete="off"
+                              value={ifscCode}
+                              onChange={(e) => setifscCode(e.target.value)}
+                              required
+                            ></input>
+                          </div>
+                        )}
+                        <div className="inputref">
+                          <input
+                            type="text"
+                            name="paymentdetails"
+                            placeholder="Payment Details (Ac.no/Upi id)"
+                            autoComplete="off"
+                            value={paymentdetails}
+                            onChange={(e) => setPaymentdetails(e.target.value)}
+                            required
+                          ></input>
+                        </div>
+                        <div className="inputref">
+                          <input
+                            type="text"
+                            name="paymentdetails"
+                            placeholder="ReEnter Payment Details"
+                            autoComplete="off"
+                            value={reEnterDetails}
+                            onChange={(e) => setreEnterDetails(e.target.value)}
+                            required
+                          ></input>
+                        </div>
                         <div className="inputref">
                           <input
                             type="Password"
@@ -242,63 +299,6 @@ function Referralpagetwo() {
                             onChange={(e) => {
                               setConfirmpassword(e.target.value);
                             }}
-                            required
-                          ></input>
-                        </div>
-
-                        <div>
-                          <select
-                            id="paymentmode"
-                            name="paymentmode"
-                            className="referaldropdown"
-                            required
-                            onChange={(event) =>
-                              setPaymentmode(event.target.value)
-                            }
-                          >
-                            <option value="" disabled selected>
-                              Select Payment Mode
-                            </option>
-                            {paymentmodelist.map((paymentmode, index1) => (
-                              <option key={index1} value={paymentmode.name}>
-                                {paymentmode.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-
-                        {paymentmode === "BANK ACCOUNT" && (
-                          <div className="inputstudent">
-                            <input
-                              type="text"
-                              name="paymentdetails"
-                              placeholder="Enter IFSC Code"
-                              autoComplete="off"
-                              value={ifscCode}
-                              onChange={(e) => setifscCode(e.target.value)}
-                              required
-                            ></input>
-                          </div>
-                        )}
-                        <div className="inputstudent">
-                          <input
-                            type="text"
-                            name="paymentdetails"
-                            placeholder="Payment Details (Ac.no/Upi id)"
-                            autoComplete="off"
-                            value={paymentdetails}
-                            onChange={(e) => setPaymentdetails(e.target.value)}
-                            required
-                          ></input>
-                        </div>
-                        <div className="inputstudent">
-                          <input
-                            type="text"
-                            name="paymentdetails"
-                            placeholder="ReEnter Payment Details"
-                            autoComplete="off"
-                            value={reEnterDetails}
-                            onChange={(e) => setreEnterDetails(e.target.value)}
                             required
                           ></input>
                         </div>

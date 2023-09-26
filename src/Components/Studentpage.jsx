@@ -64,8 +64,8 @@ const columns = [
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "startdate",
-    label: "Start Date",
+    id: "paymentdate",
+    label: "Payment Date",
     minWidth: 170,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
@@ -178,29 +178,6 @@ function Studentpage() {
 
   const [batchCode, setBatchCode] = useState("");
 
-  const [batchList, setBatchList] = useState([
-    {
-      id: 1,
-      code: "DEV-Feb-1",
-    },
-    {
-      id: 2,
-      code: "TEST-Feb-1",
-    },
-    {
-      id: 3,
-      code: "UIUX-Feb-1",
-    },
-    {
-      id: 4,
-      code: "AWS-Feb-1",
-    },
-    {
-      id: 5,
-      code: "PYTHON-Feb-1",
-    },
-  ]);
-
   const [paymentDate, setPaymentDate] = useState([]);
 
   const handleStudentClose = () => {
@@ -245,17 +222,29 @@ function Studentpage() {
     );
     setApiStudentData(studentData.data);
   };
+
+  // batch data for dropdown
   const callapibatchdata = async (e) => {
     const batchData = await axios.get(
       "https://64b638a2df0839c97e1528f4.mockapi.io/batch"
     );
-    console.log(batchData.data.batchcode);
     setbatchData(batchData.data);
+  };
+
+  const [referralData, setreferralData] = useState([]);
+  // Referral data dropdown
+
+  const callapireferraldata = async (e) => {
+    const referralData = await axios.get(
+      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
+    );
+    setreferralData(referralData.data);
   };
 
   useEffect(() => {
     callApiStudentData();
     callapibatchdata();
+    callapireferraldata();
   }, []);
 
   const [editedStudentData, setEditedStudentData] = useState({
@@ -284,7 +273,7 @@ function Studentpage() {
     callApiStudentData();
   };
 
-  const edithandleClose = () => {
+  const edithandleClose = (e) => {
     setEditStudentShow(false);
     setErrors("");
   };
@@ -307,24 +296,6 @@ function Studentpage() {
     });
     console.log(rowStudentData);
   };
-
-  // Table content End
-
-  // date Change
-  // const handleStartDateChange = (e) => {
-  //   const selectedStartDate = new Date(e.target.value);
-  //   const selectedEndDate = new Date(selectedStartDate);
-  //   selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
-  //   const sDate = e.target.value;
-  //   setStartDate(sDate);
-  //   const eDate = selectedEndDate.toISOString().substr(0, 10);
-  //   setEndDate(eDate);
-
-  //   setEditedStudentData({ ...editedStudentData, startDate: e.target.value });
-  //   setEditedStudentData({ ...editedStudentData, endDate: e.target.value });
-
-  //   //Search function
-  // };
 
   const submitStudent = async (e) => {
     e.preventDefault();
@@ -370,11 +341,14 @@ function Studentpage() {
         degree,
         referral,
         paymentmode,
+        batchCode,
+        paymentDate,
       }
     );
+
     alert("Student Created");
-    callApiStudentData();
     e.target.reset();
+    // callApiStudentData();
     setShow(false);
   };
 
@@ -625,11 +599,11 @@ function Studentpage() {
                               setBatchCode(e.target.value);
                             }}
                           >
-                            <option value="none" selected>
+                            <option value="" disabled selected>
                               Batch Code
                             </option>
                             {batchData.map((data, index) => (
-                              <option key={index} value={index.id}>
+                              <option key={index} value={data.id}>
                                 {data.batchcode}
                               </option>
                             ))}
@@ -646,9 +620,11 @@ function Studentpage() {
                               setReferral(e.target.value);
                             }}
                           >
-                            <option value="none">Referral name</option>
-                            {refList.map((data, index) => (
-                              <option key={index} value={index.name}>
+                            <option value="" disabled selected>
+                              Referral name
+                            </option>
+                            {referralData.map((data, index) => (
+                              <option key={index} value={data.id}>
                                 {data.name}
                               </option>
                             ))}
@@ -660,11 +636,14 @@ function Studentpage() {
                             name="course"
                             className="referaldropdown"
                             required
+                            isSearchable={true}
                             onChange={(e) => {
                               setCourse(e.target.value);
                             }}
                           >
-                            <option value="none">Course</option>
+                            <option value="" disabled selected>
+                              Course
+                            </option>
                             {courseList.map((courseData, index1) => (
                               <option key={index1} value={courseData.name}>
                                 {courseData.course}
@@ -681,7 +660,7 @@ function Studentpage() {
                       <Button
                         variant="secondary"
                         id="btn-createrefmodal"
-                        onClick={edithandleClose}
+                        onClick={handleStudentClose}
                       >
                         Close
                       </Button>
@@ -1076,7 +1055,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.startDate}
+                                    {apiStudentData.paymentDate}
                                   </TableCell>
                                   <TableCell
                                     align="center"

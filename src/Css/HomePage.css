@@ -9,6 +9,18 @@ input[type="number"]::-webkit-outer-spin-button {
   top: 0;
 }
 
+.isActive {
+  border: 3px solid #57f8aa;
+  padding: 5px;
+  border-radius: 12px;
+}
+
+.isNotActive {
+  border: 3px solid #e12323;
+  padding: 5px;
+  border-radius: 12px;
+}
+
 .home-card {
   display: flex;
   justify-content: center;
