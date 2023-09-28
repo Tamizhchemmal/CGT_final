@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseURL = `https://4d29-2405-201-e002-409b-2c2b-32ff-940d-644.ngrok-free.app/`;
+let baseURL = ``;
 
 class CrmService {
   login(body) {
@@ -32,11 +32,10 @@ class CrmService {
 
   setupAxiosInterceptors() {
     let token = localStorage.getItem("apitoken");
-    let content = "application/json";
 
     axios.interceptors.request.use((config) => {
       config.headers.apitoken = token;
-      config.headers.contentType = content;
+      console.log(config.headers);
       return config;
     });
   }

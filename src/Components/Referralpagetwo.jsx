@@ -68,44 +68,44 @@ function Referralpagetwo() {
   const submitReferral = async (e) => {
     e.preventDefault();
 
-    // let body = {
-    //   email: "abc@mailinator.com",
-    //   firstname: "test",
-    //   lastname: "trainer",
-    //   usertype: 1, //userType Id
-    //   createdby: 123, // Logged in User unique ID
-    //   userid: 0,
-    //   company: "cg",
-    //   primaryphone: "122253",
-    //   course: 1, //course id
-    // };
-    // await CrmService.createReferralOrTrainer(body).then((response) => {
-    //   console.log(response);
-    // });
+    let body = {
+      email: "abc@mailinator.com",
+      firstname: "test",
+      lastname: "trainer",
+      usertype: 1, //userType Id
+      createdby: 123, // Logged in User unique ID
+      userid: 0,
+      company: "cg",
+      primaryphone: "122253",
+      course: 1, //course id
+    };
+    await CrmService.createReferralOrTrainer(body).then((response) => {
+      console.log(response);
+    });
 
-    if (password !== confirmpassword) {
-      setErrors("Password Should Be Same");
-    } else if (paymentdetails !== reEnterDetails) {
-      setErrors("Account details Should be same");
-    } else {
-      await axios.post("https://64a587de00c3559aa9bfdbd4.mockapi.io/refData", {
-        name,
-        email,
-        password,
-        confirmpassword,
-        role,
-        companyname,
-        mobilenumber,
-        paymentdetails,
-        paymentmode,
-        reEnterDetails,
-        ifscCode,
-      });
-      setErrors("");
-      alert("Referral Created");
-      e.target.reset();
-      setShow(false);
-    }
+    // if (password !== confirmpassword) {
+    //   setErrors("Password Should Be Same");
+    // } else if (paymentdetails !== reEnterDetails) {
+    //   setErrors("Account details Should be same");
+    // } else {
+    //   await axios.post("https://64a587de00c3559aa9bfdbd4.mockapi.io/refData", {
+    //     name,
+    //     email,
+    //     password,
+    //     confirmpassword,
+    //     role,
+    //     companyname,
+    //     mobilenumber,
+    //     paymentdetails,
+    //     paymentmode,
+    //     reEnterDetails,
+    //     ifscCode,
+    //   });
+    setErrors("");
+    alert("Referral Created");
+    e.target.reset();
+    setShow(false);
+    // }
   };
   return (
     <>
@@ -222,7 +222,7 @@ function Referralpagetwo() {
 
                         <div className="inputref">
                           <select
-                            id="paymentmode"
+                            id="payment-mode"
                             name="paymentmode"
                             className="referaldropdown"
                             required

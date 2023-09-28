@@ -40,8 +40,9 @@ function Adminlogin(props) {
     const userid = uuidv4();
     if (role === "admin") {
       let body = {
-        email: "test345@mailinator.com",
+        email: "admin@mailinator.com",
         password: "Test1234",
+
         rememberMe: 0,
       };
       CrmService.login(body).then((response) => {
@@ -240,21 +241,6 @@ function Adminlogin(props) {
               </div>
             </form>
             {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
-            <Modal show={success} backdrop="static" keyboard={false}>
-              <Modal.Header>
-                <Modal.Title>
-                  <h4 style={{ color: "green" }}>Login Successful</h4>
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                <h5>You are Login as a {role}.....</h5>
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="primary" onClick={handleaccess}>
-                  Okay
-                </Button>
-              </Modal.Footer>
-            </Modal>
           </div>
         </div>
       </div>

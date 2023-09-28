@@ -161,6 +161,17 @@
   }
 }
 
+@media screen and (max-width: 553px) {
+  .nav-logo {
+    font-size: 14px;
+  }
+
+  .nav-logo > div::first-letter {
+    color: #57f8aa;
+    font-size: 16px;
+  }
+}
+
 /* .dropdwn {
     display: flex;
     right: 10px;

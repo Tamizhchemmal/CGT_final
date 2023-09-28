@@ -218,6 +218,7 @@ export default function BatchTable({ search }) {
   const [apiData, setApiData] = useState([]);
   const [editShow, setEditShow] = useState(false);
   const [showBatch, setShowBatch] = useState([]);
+  const [deletePopUp, setdeletePopUp] = useState(false);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -237,9 +238,20 @@ export default function BatchTable({ search }) {
     );
     setApiData(batchData.data);
   };
+  // trainer dropdown
+
+  const [trainerData, settrainerData] = useState([]);
+
+  const callapitrainerdata = async (e) => {
+    const trainerData = await axios.get(
+      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
+    );
+    settrainerData(trainerData.data);
+  };
 
   useEffect(() => {
     callApiData();
+    callapitrainerdata();
   }, []);
 
   const openBatchTable = (apiData) => {
@@ -251,13 +263,20 @@ export default function BatchTable({ search }) {
     setShowBatchModal(false);
   };
 
+  const [deleteKey, setdeleteKey] = useState(null);
   // Delete Batch
-  const deletebatch = async (id) => {
+  const deletebatch = (id) => {
+    setdeletePopUp(true);
+    setdeleteKey(id);
+  };
+
+  const confirmDelete = async () => {
     await axios.delete(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + id
+      "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + deleteKey
     );
-    alert("Batch deleted");
     callApiData();
+    setdeleteKey(null);
+    setdeletePopUp(false);
   };
 
   const [editedData, setEditedData] = useState({
@@ -305,8 +324,6 @@ export default function BatchTable({ search }) {
     const currentDate = new Date();
     let strtDate = new Date(startDate);
     let edDate = new Date(endDate);
-
-    console.log(startDate, endDate);
 
     return currentDate >= strtDate && currentDate <= edDate;
   };
@@ -390,8 +407,8 @@ export default function BatchTable({ search }) {
                   .filter((apiData) => {
                     return search.toLowerCase() === ""
                       ? apiData
-                      : apiData.name.toLowerCase().includes(search) ||
-                          apiData.name.includes(search);
+                      : apiData.trainername.toLowerCase().includes(search) ||
+                          apiData.batchcode.toLowerCase().includes(search);
                   })
                   .map((apiData) => {
                     return (
@@ -454,7 +471,9 @@ export default function BatchTable({ search }) {
                           />
                           <MdDelete
                             id="dlt-icon"
-                            onClick={() => deletebatch(apiData.id)}
+                            onClick={() => {
+                              deletebatch(apiData.id);
+                            }}
                           />
                         </TableCell>
                       </TableRow>
@@ -672,6 +691,34 @@ export default function BatchTable({ search }) {
           onClosemodal={handleBatchCloseModal}
         />
       )}
+      {/* Modal for want to delete */}
+      <Modal
+        show={deletePopUp}
+        backdrop="static"
+        keyboard={false}
+        className="mods"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <h4 style={{ color: "green" }}>Delete</h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are You sure want to delete ? </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={confirmDelete}>
+            Okay
+          </Button>
+          <Button
+            variant="secondary"
+            id="btn-createrefmodal"
+            onClick={() => setdeletePopUp(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

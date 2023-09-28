@@ -6,13 +6,19 @@ input::-webkit-inner-spin-button {
 }
 .card-refdetails {
   width: 80%;
-  height: 100vh;
+  height: auto;
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
   margin-top: 5%;
+  padding: 2%;
   font-family: "Poppins", sans-serif;
 }
+
+#payment-mode {
+  width: 80% !important;
+}
+
 .crd-bg {
   display: flex;
   justify-content: start;

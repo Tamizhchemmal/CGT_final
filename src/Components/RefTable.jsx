@@ -171,14 +171,21 @@ export default function RefTable({ search, referralCount }) {
     });
   };
 
-  // Delete referral
-  const deleteref = async (id) => {
-    await axios.delete(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" + id
-    );
-    alert("referral deleted");
+  const [deleteKey, setdeleteKey] = useState(null);
+  const [deletePopUp, setdeletePopUp] = useState(false);
+  // Delete Referral
+  const deleteref = (id) => {
+    setdeletePopUp(true);
+    setdeleteKey(id);
+  };
 
+  const confirmDelete = async () => {
+    await axios.delete(
+      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" + deleteKey
+    );
     callApiData();
+    setdeleteKey(null);
+    setdeletePopUp(false);
   };
 
   const [errors, setErrors] = useState("");
@@ -555,6 +562,34 @@ export default function RefTable({ search, referralCount }) {
           onClosemodal={handleCloseModal}
         />
       )}
+      {/* Modal for want to delete */}
+      <Modal
+        show={deletePopUp}
+        backdrop="static"
+        keyboard={false}
+        className="mods"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <h4 style={{ color: "green" }}>Delete</h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are You sure want to delete ? </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={confirmDelete}>
+            Okay
+          </Button>
+          <Button
+            variant="secondary"
+            id="btn-createrefmodal"
+            onClick={() => setdeletePopUp(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

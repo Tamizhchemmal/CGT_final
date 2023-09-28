@@ -264,13 +264,22 @@ function Studentpage() {
     paymentmode: "",
   });
 
-  const deletestudentData = async (id) => {
-    await axios.delete(
-      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData/" + id
-    );
-    alert("Student deleted");
+  // delete student
+  const [deleteKey, setdeleteKey] = useState(null);
+  const [deletePopUp, setdeletePopUp] = useState(false);
 
+  const deletestudentData = (id) => {
+    setdeletePopUp(true);
+    setdeleteKey(id);
+  };
+
+  const confirmDelete = async () => {
+    await axios.delete(
+      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData/" + deleteKey
+    );
     callApiStudentData();
+    setdeleteKey(null);
+    setdeletePopUp(false);
   };
 
   const edithandleClose = (e) => {
@@ -603,7 +612,7 @@ function Studentpage() {
                               Batch Code
                             </option>
                             {batchData.map((data, index) => (
-                              <option key={index} value={data.id}>
+                              <option key={index.id} value={data.batchcode}>
                                 {data.batchcode}
                               </option>
                             ))}
@@ -1045,7 +1054,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.yearofpassedout}
+                                    {apiStudentData.batchCode}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1197,6 +1206,34 @@ function Studentpage() {
           onClosemodal={handleCloseModal}
         />
       )}
+      {/* Modal for want to delete */}
+      <Modal
+        show={deletePopUp}
+        backdrop="static"
+        keyboard={false}
+        className="mods"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <h4 style={{ color: "green" }}>Delete</h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are You sure want to delete ? </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={confirmDelete}>
+            Okay
+          </Button>
+          <Button
+            variant="secondary"
+            id="btn-createrefmodal"
+            onClick={() => setdeletePopUp(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }

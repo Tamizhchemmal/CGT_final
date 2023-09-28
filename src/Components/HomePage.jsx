@@ -143,33 +143,6 @@ export default function HomePage({ callApiData }) {
     },
   ]);
 
-  const [trainerList, setTrainerList] = useState([
-    {
-      id: 1,
-      name: "Tamzih",
-    },
-    {
-      id: 2,
-      name: "Vignesh",
-    },
-    {
-      id: 3,
-      name: "Patrick",
-    },
-    {
-      id: 4,
-      name: "Swarna",
-    },
-    {
-      id: 5,
-      name: "Karthik Raja",
-    },
-    {
-      id: 6,
-      name: "Priya Saravanan",
-    },
-  ]);
-
   const handleClose = (e) => {
     setShow(false);
     setErrors("");
@@ -178,14 +151,27 @@ export default function HomePage({ callApiData }) {
     setShow(true);
   };
 
+  // trainer dropdown
+
+  const [trainerData, settrainerData] = useState([]);
+
+  const callapitrainerdata = async (e) => {
+    const trainerData = await axios.get(
+      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
+    );
+    settrainerData(trainerData.data);
+  };
+
+  useEffect(() => {
+    callapitrainerdata();
+  }, []);
+
   const [errors, setErrors] = useState({});
 
   const submitBatch = async (e) => {
     const batchcode = `${batchCourse}-${batchMonth}-${batchNumber}`;
     setTimeout(() => {
       setBatchcode(batchcode);
-      // console.log(batchcode);
-      // console.log("Batch code", batchcode);
     }, 1000);
 
     e.preventDefault();
@@ -341,7 +327,9 @@ export default function HomePage({ callApiData }) {
                               required
                               onChange={(e) => setBatchCourse(e.target.value)}
                             >
-                              <option value="null">Batch Code</option>
+                              <option value="" selected disabled>
+                                Batch Code
+                              </option>
                               {batchCourseList.map((data) => (
                                 <option key={data.id} value={data.course}>
                                   {data.course}
@@ -357,7 +345,9 @@ export default function HomePage({ callApiData }) {
                               required
                               onChange={(e) => setBatchMonth(e.target.value)}
                             >
-                              <option value="null">Batch Month</option>
+                              <option value="" selected disabled>
+                                Batch Month
+                              </option>
                               {batchMonthList.map((data1) => (
                                 <option key={data1.id} value={data1.month}>
                                   {data1.month}
@@ -373,7 +363,9 @@ export default function HomePage({ callApiData }) {
                               required
                               onChange={(e) => setBatchNumber(e.target.value)}
                             >
-                              <option value="null">Batch Number</option>
+                              <option value=" " selected disabled>
+                                Batch Number
+                              </option>
                               {batchNumberList.map((data2) => (
                                 <option key={data2.id} value={data2.number}>
                                   {data2.number}
@@ -407,11 +399,14 @@ export default function HomePage({ callApiData }) {
                             name="trainername"
                             className="trainerdropdown"
                             required
+                            value={trainername}
                             onChange={(e) => settrainername(e.target.value)}
                           >
-                            <option value="null">Trainers Name</option>
-                            {trainerList.map((data, index) => (
-                              <option key={index} value={index.name}>
+                            <option value="" selected disabled>
+                              Trainers Name
+                            </option>
+                            {trainerData.map((data, index) => (
+                              <option key={index} value={data.id}>
                                 {data.name}
                               </option>
                             ))}
