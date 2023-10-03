@@ -16,8 +16,7 @@
 }
 
 .trainmodal-table tr div {
-  padding: 15px !important;
-  margin: 8px !important;
+  padding: 8px !important;
 }
 
 .colum {
@@ -35,8 +34,8 @@
 }
 
 .trainer-bio {
-  width: 425px;
-  height: 525px;
+  width: 120%;
+  height: auto;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;

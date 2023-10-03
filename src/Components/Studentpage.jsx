@@ -57,8 +57,8 @@ const columns = [
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "yearofpassedout",
-    label: "Passed Out Year",
+    id: "batch",
+    label: "Batch Code",
     minWidth: 170,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
@@ -138,28 +138,7 @@ function Studentpage() {
     },
   ]);
 
-  const [courseList, setCourseList] = useState([
-    {
-      id: 1,
-      course: "Front End Dvelopement",
-    },
-    {
-      id: 2,
-      course: "Testing",
-    },
-    {
-      id: 3,
-      course: "Aws",
-    },
-    {
-      id: 4,
-      course: "UI&UX design",
-    },
-    {
-      id: 5,
-      course: "Python",
-    },
-  ]);
+  const [courseList, setCourseList] = useState([]);
 
   const [paymentmodelist, setPaymentList] = useState([
     {
@@ -204,31 +183,39 @@ function Studentpage() {
 
   const [testApiData, setTestApiData] = useState([]);
 
-  const callTestApiData = async (e) => {
-    await CrmService.getStudent().then((response) => {
-      console.log(response.data);
-    });
-  };
-  useEffect(() => {
-    callTestApiData();
-  }, []);
+  // const callTestApiData = async (e) => {
+  //   await CrmService.getStudent().then((response) => {
+  //     console.log(response.data);
+  //   });
+  // };
+  // useEffect(() => {
+  //   // callTestApiData();
+  // }, []);
 
   const [apiStudentData, setApiStudentData] = useState([]);
   const [batchData, setbatchData] = useState([]);
 
   const callApiStudentData = async (e) => {
-    const studentData = await axios.get(
-      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData"
-    );
-    setApiStudentData(studentData.data);
+    // const studentData = await axios.get(
+    //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData"
+    // );
+    // setApiStudentData(studentData.data);
+
+    await CrmService.getStudentList().then((response) => {
+      console.log(response.data);
+      setApiStudentData(response.data);
+    });
   };
 
   // batch data for dropdown
   const callapibatchdata = async (e) => {
-    const batchData = await axios.get(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/batch"
-    );
-    setbatchData(batchData.data);
+    await CrmService.getbatch().then((response) => {
+      setbatchData(response.data);
+    });
+
+    await CrmService.getCourse().then((response) => {
+      setCourseList(response.data);
+    });
   };
 
   const [referralData, setreferralData] = useState([]);
@@ -306,30 +293,41 @@ function Studentpage() {
     console.log(rowStudentData);
   };
 
+  // get batch name in Table
+  const getbatchname = (id) => {
+    const batch = batchData.find((batch) => batch.BATCH_ID == id);
+    return batch ? batch.BATCH_CODE : "unknown";
+  };
+
+  // get Course name in Table
+  const getcoursename = (id) => {
+    const course = courseList.find((course) => course.COURSE_ID == id);
+    return course ? course.COURSE_NAME : "unknown";
+  };
   const submitStudent = async (e) => {
     e.preventDefault();
 
     let body = {
-      email: "pudhumail@mailinator.com",
-      name: "Pudhuname",
+      email: email,
+      name: name,
       createdby: 224, // Logged in User unique ID
-      company: "pudhucompany",
-      primaryphone: "232323234",
-      passedoutyear: 2020,
-      startDate: "2023-08-17",
-      endDate: "2023-11-17",
-      totalFees: "20000",
-      paidFees: "10000",
-      college: "NEC",
-      degree: "B.Tech",
-      paymentMode: "G-Pay",
+      company: "",
+      primaryphone: mobilenumber,
+      passedoutyear: yearofpassedout,
+      startDate: paymentDate,
+      endDate: paymentDate,
+      totalFees: totalfees,
+      paidFees: feespaid,
+      college: college,
+      degree: degree,
+      paymentMode: "1",
       referralId: "3", // call get referral list API and use the primary key of referral data
 
-      batchId: "4", // call get batch list API and use the primary key of batch data
+      batchId: batchCode, // call get batch list API and use the primary key of batch data
 
       trainerId: "4", // call get trainer list API and use the primary key of trainer data
 
-      courseId: "1", // call get course list API and use the primary key of course data
+      courseId: course, // call get course list API and use the primary key of course data
     };
     await CrmService.createStudent(body).then((response) => {
       console.log(response);
@@ -612,8 +610,8 @@ function Studentpage() {
                               Batch Code
                             </option>
                             {batchData.map((data, index) => (
-                              <option key={index.id} value={data.batchcode}>
-                                {data.batchcode}
+                              <option key={index.id} value={data.BATCH_ID}>
+                                {data.BATCH_CODE}
                               </option>
                             ))}
                           </select>
@@ -645,7 +643,7 @@ function Studentpage() {
                             name="course"
                             className="referaldropdown"
                             required
-                            isSearchable={true}
+                            value={course}
                             onChange={(e) => {
                               setCourse(e.target.value);
                             }}
@@ -654,8 +652,8 @@ function Studentpage() {
                               Course
                             </option>
                             {courseList.map((courseData, index1) => (
-                              <option key={index1} value={courseData.name}>
-                                {courseData.course}
+                              <option key={index1} value={courseData.COURSE_ID}>
+                                {courseData.COURSE_NAME}
                               </option>
                             ))}
                           </select>
@@ -987,22 +985,22 @@ function Studentpage() {
                               page * rowsPerPage,
                               page * rowsPerPage + rowsPerPage
                             )
-                            .filter((apiStudentData) => {
-                              return search.toLowerCase() === ""
-                                ? apiStudentData
-                                : apiStudentData.name
-                                    .toLowerCase()
-                                    .includes(search) ||
-                                    apiStudentData.name.includes(search) ||
-                                    apiStudentData.course
-                                      .toLowerCase()
-                                      .includes(search) ||
-                                    apiStudentData.course.includes(search);
-                            })
+                            // .filter((apiStudentData) => {
+                            //   return search.toLowerCase() === ""
+                            //     ? apiStudentData
+                            //     : apiStudentData.name
+                            //         .toLowerCase()
+                            //         .includes(search) ||
+                            //         apiStudentData.name.includes(search) ||
+                            //         apiStudentData.course
+                            //           .toLowerCase()
+                            //           .includes(search) ||
+                            //         apiStudentData.course.includes(search);
+                            // })
                             .map((apiStudentData) => {
                               return (
                                 <TableRow
-                                  key={apiStudentData.id}
+                                  key={apiStudentData.STUDENT_ID}
                                   hover
                                   role="checkbox"
                                 >
@@ -1014,7 +1012,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.name}
+                                    {apiStudentData.STUDENT_NAME}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1024,7 +1022,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.mobilenumber}
+                                    {apiStudentData.STUDENT_PHONE}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1034,7 +1032,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.email}
+                                    {apiStudentData.STUDENT_EMAIL}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1044,7 +1042,9 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.course}
+                                    {getcoursename(
+                                      apiStudentData.STUDENT_COURSE_ID
+                                    )}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1054,7 +1054,9 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.batchCode}
+                                    {getbatchname(
+                                      apiStudentData.STUDENT_BATCH_ID
+                                    )}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1064,7 +1066,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.paymentDate}
+                                    {apiStudentData.STUDENT_STARTED_DATE}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1074,7 +1076,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.feespaid}
+                                    {apiStudentData.STUDENT_FEES_PAID}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1084,7 +1086,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.pendingfees}
+                                    {apiStudentData.STUDENT_PENDING_FEES}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1094,7 +1096,7 @@ function Studentpage() {
                                       openStudentTable(apiStudentData)
                                     }
                                   >
-                                    {apiStudentData.totalfees}
+                                    {apiStudentData.STUDENT_TOTAL_FEES}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1110,7 +1112,9 @@ function Studentpage() {
                                     <MdDelete
                                       id="dlt-icon"
                                       onClick={() =>
-                                        deletestudentData(apiStudentData.id)
+                                        deletestudentData(
+                                          apiStudentData.STUDENT_ID
+                                        )
                                       }
                                     />
                                   </TableCell>

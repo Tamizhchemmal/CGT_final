@@ -40,22 +40,30 @@ function Adminlogin(props) {
     const userid = uuidv4();
     if (role === "admin") {
       let body = {
-        email: "admin@mailinator.com",
-        password: "Test1234",
+        email: email,
+        password: password,
 
         rememberMe: 0,
       };
-      CrmService.login(body).then((response) => {
-        console.log(response.data.apitoken);
-        localStorage.setItem("apitoken", response.data.apitoken);
-        setSuccess(true);
-        localStorage.setItem("isUserLoggedIn", true);
-        localStorage.setItem("access", true);
-        localStorage.setItem("role", role);
-        localStorage.setItem("id", userid);
-        setError("");
-        CrmService.userLoggedIn();
-      });
+      CrmService.login(body)
+        .then((response) => {
+          console.log(response);
+          console.log(response.data.apitoken);
+
+          localStorage.setItem("apitoken", response.data.apitoken);
+          setSuccess(true);
+          localStorage.setItem("isUserLoggedIn", true);
+          localStorage.setItem("access", true);
+          localStorage.setItem("role", role);
+          localStorage.setItem("id", userid);
+          setError("");
+          CrmService.userLoggedIn();
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.response.data.errmessage);
+          setError(error.response.data.errmessage);
+        });
 
       //   if (email === "admin" && password === "12345") {
       //     setSuccess(true);
@@ -224,7 +232,7 @@ function Adminlogin(props) {
                   </RadioGroup>
                 </FormControl>
 
-                {error && <div>{error}</div>}
+                {error && <div style={{ color: "red" }}>{error}</div>}
 
                 <Button
                   type="submit"
@@ -241,6 +249,21 @@ function Adminlogin(props) {
               </div>
             </form>
             {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
+            <Modal show={success} backdrop="static" keyboard={false}>
+              <Modal.Header>
+                <Modal.Title>
+                  <h4 style={{ color: "green" }}>Login Successful</h4>
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <h5>You are Login as a {role}.....</h5>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" onClick={handleaccess}>
+                  Okay
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </div>
         </div>
       </div>

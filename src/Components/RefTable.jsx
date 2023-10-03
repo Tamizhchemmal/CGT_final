@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CrmService from "../API/CrmService";
 import axios from "axios";
 import {
   Container,
@@ -116,6 +117,18 @@ export default function RefTable({ search, referralCount }) {
 
   const [apiData, setApiData] = useState([]);
 
+  // Test api
+  const callTestApiData = async (e) => {
+    await CrmService.getReferalList()
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    // .catch((err) => console.log(r));
+  };
+
   const callApiData = async (e) => {
     const refData = await axios.get(
       "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
@@ -125,6 +138,7 @@ export default function RefTable({ search, referralCount }) {
 
   useEffect(() => {
     callApiData();
+    callTestApiData();
   }, []);
 
   const [show, setShow] = useState(false);

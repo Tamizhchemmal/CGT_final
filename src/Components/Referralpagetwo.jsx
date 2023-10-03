@@ -69,19 +69,38 @@ function Referralpagetwo() {
     e.preventDefault();
 
     let body = {
-      email: "abc@mailinator.com",
-      firstname: "test",
-      lastname: "trainer",
-      usertype: 1, //userType Id
+      email: email,
+      firstname: name,
+      lastname: "",
+      usertype: 2, //userType Id
       createdby: 123, // Logged in User unique ID
       userid: 0,
-      company: "cg",
-      primaryphone: "122253",
-      course: 1, //course id
+      company: companyname,
+      primaryphone: mobilenumber,
+      course: "", //course id
+      paymentmode: "2", // payment mode ID
+      paymentdetails: paymentdetails, // Account no. or Gpay no.
+      ifsccode: ifscCode, // ifsc code if bank selected or else give empty
+      password: password, // raw password now, will encryt later
     };
-    await CrmService.createReferralOrTrainer(body).then((response) => {
-      console.log(response);
-    });
+    await CrmService.createReferralOrTrainer(body)
+      .then((response) => {
+        console.log(response.data);
+
+        if (response.data.errmessage) {
+          setErrors(response.data.errmessage);
+        } else {
+          setErrors("");
+          alert("Referral Created");
+          e.target.reset();
+          setShow(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err.data.errmessages);
+
+        // setErrors(response.message);
+      });
 
     // if (password !== confirmpassword) {
     //   setErrors("Password Should Be Same");
@@ -101,10 +120,7 @@ function Referralpagetwo() {
     //     reEnterDetails,
     //     ifscCode,
     //   });
-    setErrors("");
-    alert("Referral Created");
-    e.target.reset();
-    setShow(false);
+
     // }
   };
   return (

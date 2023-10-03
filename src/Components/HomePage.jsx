@@ -162,8 +162,24 @@ export default function HomePage({ callApiData }) {
     settrainerData(trainerData.data);
   };
 
+  // Test api
+  const [testtrainerData, setTesttrainerData] = useState([]);
+
+  const callTestTrainerApiData = async (e) => {
+    await CrmService.getTrainerList()
+      .then((response) => {
+        setTesttrainerData(response.data);
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    // .catch((err) => console.log(r));
+  };
+
   useEffect(() => {
     callapitrainerdata();
+    callTestTrainerApiData();
   }, []);
 
   const [errors, setErrors] = useState({});
@@ -176,27 +192,31 @@ export default function HomePage({ callApiData }) {
 
     e.preventDefault();
 
-    // let body = {
-    //   batchId: 0,
-    //   batchCode: "DEVP-Feb-3",
-    //   trainerId: "4",
+    let body = {
+      batchId: 0,
+      batchCode: batchcode,
+      trainerId: trainername,
 
-    //   batchSelectedTime: "10:20",
-    //   startDate: "2023-09-11",
-    //   endDate: "2023-12-11",
-    //   createdby: 123,
-    // };
-    // await CrmService.createBatch(body).then((response) => {
-    //   console.log(response);
+      batchSelectedTime: selectedBatchTime,
+      startDate: startBatchDate,
+      endDate: endBatchDate,
+      createdby: 123,
+    };
+    await CrmService.createBatch(body)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+    // await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
+    //   batchcode,
+    //   selectedBatchTime,
+    //   numofstudent,
+    //   trainername,
+    //   startBatchDate,
+    //   endBatchDate,
     // });
-    await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
-      batchcode,
-      selectedBatchTime,
-      numofstudent,
-      trainername,
-      startBatchDate,
-      endBatchDate,
-    });
     e.target.reset();
     setShow(false);
 
@@ -405,9 +425,9 @@ export default function HomePage({ callApiData }) {
                             <option value="" selected disabled>
                               Trainers Name
                             </option>
-                            {trainerData.map((data, index) => (
+                            {testtrainerData.map((data, index) => (
                               <option key={index} value={data.id}>
-                                {data.name}
+                                {data.email}
                               </option>
                             ))}
                           </select>

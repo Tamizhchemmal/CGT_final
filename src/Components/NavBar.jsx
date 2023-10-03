@@ -96,6 +96,7 @@ export default function NavBar() {
                   onClick={() => {
                     localStorage.removeItem("access");
                     localStorage.removeItem("role");
+                    localStorage.removeItem("apitoken");
                     navigate("/");
                   }}
                 >

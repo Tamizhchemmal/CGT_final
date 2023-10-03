@@ -4,8 +4,7 @@
 }
 
 .trainmodal-table tr div {
-  padding: 15px !important;
-  margin: 8px !important;
+  padding: 8px !important;
 }
 
 .crd-bg1 {
@@ -20,12 +19,10 @@
   font-family: "Poppins", sans-serif;
 }
 
-.details {
-  width: 150px !important;
-}
-
 .colum {
   display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .column1 {
@@ -39,12 +36,13 @@
 }
 
 .trainer-bio1 {
-  width: 425px;
-  height: 475px;
+  width: 100%;
+  height: auto;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
   background-color: rgb(255, 255, 255);
+  padding: 2%;
 }
 
 .profile {

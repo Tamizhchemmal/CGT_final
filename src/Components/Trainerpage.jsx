@@ -168,19 +168,35 @@ export default function Trainerpage() {
   };
 
   const [apiTrainerData, setApiTrainerData] = useState([]);
+  const [apitestTrainerData, settestApiTrainerData] = useState([]);
 
   const callTrainerApiData = async () => {
     const trainerData = await axios.get(
       "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
     );
 
-    console.log(trainerData.data);
     setApiTrainerData(trainerData.data);
+  };
+  // Test api
+  const callTestApiData = async (e) => {
+    await CrmService.getTrainerList()
+      .then((response) => {
+        // console.log(response.data);
+        settestApiTrainerData(response.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setErrors(err.message);
+      });
+    // .catch((err) => console.log(r));
   };
 
   useEffect(() => {
     callTrainerApiData();
+    callTestApiData();
   }, []);
+
+  const [testShow, setTestShow] = useState(false);
 
   const [editTrainShow, setEditTrainShow] = useState(false);
 
@@ -189,19 +205,37 @@ export default function Trainerpage() {
     setErrors("");
   };
 
+  const testhandleClose = () => {
+    setTestShow(false);
+    setErrors("");
+  };
+
   const [editedTrainData, setEditedTrainData] = useState({
-    name: "",
     email: "",
-    password: "",
-    confirmpassword: "",
-    course: "",
-    paymentdetails: "",
-    paymentmode: "",
-    ifscCode: "",
-    reEnterDetails: "",
-    companyname: "",
-    mobilenumber: "",
+    firstname: "",
+    lastname: "",
+    usertype: 1, //userType Id
+    createdby: 1234, // Logged in User unique ID
+    userid: "",
+    company: "",
+    primaryphone: "",
+    course: "", //course id
+    role: role,
   });
+
+  const [editEmail, seteditEmail] = useState("");
+
+  // name: "",
+  //   email: "",
+  //   password: "",
+  //   confirmpassword: "",
+  //   course: "",
+  //   paymentdetails: "",
+  //   paymentmode: "",
+  //   ifscCode: "",
+  //   reEnterDetails: "",
+  //   companyname: "",
+  //   mobilenumber: "",
 
   const handletrainedit = (rowTrainData) => {
     setEditTrainShow(true);
@@ -209,6 +243,46 @@ export default function Trainerpage() {
       ...rowTrainData,
     });
     console.log(rowTrainData);
+  };
+
+  // var editTestData = {
+  //   email: "",
+  // };
+
+  const [selectedtraindata, setselectedtraindata] = useState({});
+  const [updatedtraindata, setupdatedtraindata] = useState({});
+  // testdata
+  const handletraintestedit = (rowTrainData) => {
+    setTestShow(true);
+    setselectedtraindata(rowTrainData);
+    setupdatedtraindata({ ...rowTrainData });
+  };
+
+  const testhandlechange = (e) => {
+    const { name, value } = e.target;
+    setupdatedtraindata({
+      ...updatedtraindata,
+      [name]: value,
+    });
+  };
+
+  const submitTraintestEdit = async (e) => {
+    e.preventDefault();
+    let editBody = {
+      email: updatedtraindata.email,
+      firstname: "test",
+      lastname: "trainer",
+      usertype: 1, //userType Id
+      createdby: 123, // Logged in User unique ID
+      userid: selectedtraindata.id, // user id
+      company: "cg",
+      primaryphone: "1223",
+      course: 1, //course id
+    };
+    await CrmService.editTrainer(editBody).then((response) => {
+      console.log(response);
+    });
+    setTestShow(false);
   };
 
   // delete trainer
@@ -247,58 +321,68 @@ export default function Trainerpage() {
     e.preventDefault();
 
     let body = {
-      email: "abcde@mailinator.com",
-      firstname: "test",
+      email: email,
+      firstname: name,
       lastname: "trainer",
-      usertype: 2, //userType Id
-      createdby: 123, // Logged in User unique ID
+      usertype: 1, //userType Id
+      createdby: 1234, // Logged in User unique ID
       userid: 0,
-      company: "cg",
-      primaryphone: "122253",
+      company: companyname,
+      primaryphone: mobilenumber,
       course: 2, //course id
+      role: role,
     };
-    await CrmService.createReferralOrTrainer(body).then((response) => {
-      console.log(response);
-    });
-
-    if (password !== confirmpassword) {
-      setErrors("Password Should Be Same");
-    } else {
-      await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/trainers", {
-        name,
-        email,
-        password,
-        confirmpassword,
-        course,
-        paymentdetails,
-        paymentmode,
-        reEnterDetails,
-        ifscCode,
-        role,
-        companyname,
-        mobilenumber,
+    await CrmService.createReferralOrTrainer(body)
+      .then((response) => {
+        console.log(response);
+        if (response.data.errmessage) {
+          setErrors(response.data.errmessage);
+        } else {
+          setErrors("Created");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
 
-      //   let obj = { email, password, role };
-      //   fetch("http://localhost:8000/user", {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify(obj),
-      //   })
-      //     .then((res) => res.json())
-      //     .then((data) => {
-      //       console.log("saved");
-      //     })
-      //     .catch((err) => {
-      //       console.log("error" + err.message);
-      //     });
+    // if (password !== confirmpassword) {
+    //   setErrors("Password Should Be Same");
+    // } else {
+    //   await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/trainers", {
+    //     name,
+    //     email,
+    //     password,
+    //     confirmpassword,
+    //     course,
+    //     paymentdetails,
+    //     paymentmode,
+    //     reEnterDetails,
+    //     ifscCode,
+    //     role,
+    //     companyname,
+    //     mobilenumber,
+    //   });
 
-      //   setErrors("");
-      //   alert("trainer Created");
+    //   //   let obj = { email, password, role };
+    //   //   fetch("http://localhost:8000/user", {
+    //   //     method: "POST",
+    //   //     headers: { "Content-Type": "application/json" },
+    //   //     body: JSON.stringify(obj),
+    //   //   })
+    //   //     .then((res) => res.json())
+    //   //     .then((data) => {
+    //   //       console.log("saved");
+    //   //     })
+    //   //     .catch((err) => {
+    //   //       console.log("error" + err.message);
+    //   //     });
 
-      //   e.target.reset();
-    }
-    setShow(false);
+    //   //   setErrors("");
+    //   //   alert("trainer Created");
+
+    //   //   e.target.reset();
+    // }
+    // setShow(false);
     e.target.reset();
     callTrainerApiData();
   };
@@ -573,7 +657,7 @@ export default function Trainerpage() {
                   <ModalTitle style={{ textAlign: "center" }}>
                     Update AN TRAINER
                   </ModalTitle>
-                  <form onSubmit={submitTrainEdit}>
+                  <form onSubmit={submitTraintestEdit}>
                     <div className="inputref-box">
                       <div className="student-grid">
                         <div className="inputstudent">
@@ -619,13 +703,8 @@ export default function Trainerpage() {
                             placeholder="Email Address"
                             pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                             required
-                            value={editedTrainData.email}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                email: e.target.value,
-                              })
-                            }
+                            // value={editTestData.email}
+                            // onChange={(e) => seteditEmail(e.target.value)}
                           ></input>
                         </div>
 
@@ -752,6 +831,65 @@ export default function Trainerpage() {
                         variant="secondary"
                         id="btn-createrefmodal"
                         onClick={edithandleClose}
+                      >
+                        Close
+                      </Button>
+                    </Modal.Footer>
+                  </form>
+                </Modal.Body>
+              </Modal>
+
+              {/* Test Edit */}
+
+              <Modal
+                // data={apiTrainerData}
+                show={testShow}
+                onHide={testhandleClose}
+                className="mods"
+                backdrop="static"
+                keyboard={false}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+              >
+                <Modal.Header
+                  style={{ backgroundColor: " #002333 ", color: "white" }}
+                >
+                  <Modal.Title style={{ color: "white" }}>
+                    Update Trainer
+                  </Modal.Title>
+
+                  <CloseButton variant="white" onClick={testhandleClose} />
+                </Modal.Header>
+                <Modal.Body>
+                  <ModalTitle style={{ textAlign: "center" }}>
+                    Update AN TRAINER
+                  </ModalTitle>
+                  <form onSubmit={submitTraintestEdit}>
+                    <div className="inputref-box">
+                      <div className="student-grid">
+                        <div className="inputstudent">
+                          <input
+                            type="email"
+                            id="input-email"
+                            name="email"
+                            placeholder="Email Address"
+                            pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
+                            required
+                            value={updatedtraindata.email}
+                            onChange={testhandlechange}
+                          ></input>
+                        </div>
+                      </div>
+                    </div>
+                    <Modal.Footer>
+                      <button type="submit" id="btn-createrefmodal">
+                        Update
+                      </button>
+                      <Button
+                        variant="secondary"
+                        id="btn-createrefmodal"
+                        onClick={testhandleClose}
                       >
                         Close
                       </Button>
@@ -895,6 +1033,146 @@ export default function Trainerpage() {
                                       id="dlt-icon"
                                       onClick={() =>
                                         deleteTrainerData(apiTrainerData.id)
+                                      }
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                    <TablePagination
+                      rowsPerPageOptions={[10, 25, 100]}
+                      component="div"
+                      count={apiTrainerData.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onPageChange={handleChangePage}
+                      onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                  </Paper>
+                  {/* model profile */}
+                  <Modal
+                    show={tableshow}
+                    onHide={handleTrainClose}
+                    backdrop="static"
+                    keyboard={false}
+                    size="lg"
+                    aria-labelledby="contained-modal-title-vcenter"
+                    centered
+                  >
+                    <Modal.Header
+                      style={{ backgroundColor: " #002333 ", color: "white" }}
+                    >
+                      <Modal.Title style={{ color: "white" }}>
+                        Trainer Profile
+                      </Modal.Title>
+
+                      <CloseButton variant="white" onClick={handleTrainClose} />
+                    </Modal.Header>
+                    <Modal.Body>
+                      <div>
+                        <TrainerProfModal />
+                      </div>
+                      <hr></hr>
+                      <Modal.Footer>
+                        <Button variant="secondary" onClick={handleTrainClose}>
+                          Close
+                        </Button>
+                        <button type="submit" id="btn-createrefmodal">
+                          Create
+                        </button>
+                      </Modal.Footer>
+                    </Modal.Body>
+                  </Modal>
+                </div>
+              </div>
+              <hr></hr>
+              {/* Test api table
+               */}
+
+              <div id="reftable">
+                <div className="tableData">
+                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                    <TableContainer sx={{ maxHeight: 540 }}>
+                      <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                          <TableRow sx={{ backgroundColor: "lightblue" }}>
+                            {columns.map((column) => (
+                              <TableCell
+                                key={column.id}
+                                align={column.align}
+                                style={{
+                                  minWidth: column.minWidth,
+                                  backgroundColor: " #002333",
+                                  color: "#ffffff",
+                                  fontSize: "18px",
+                                }}
+                              >
+                                {column.label}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {apitestTrainerData
+                            .slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                            // .filter((apiTrainerData) => {
+                            //   return search.toLowerCase() === ""
+                            //     ? apiTrainerData
+                            //     : apiTrainerData.name
+                            //         .toLowerCase()
+                            //         .includes(search) ||
+                            //         apiTrainerData.name.includes(search) ||
+                            //         apiTrainerData.course
+                            //           .toLowerCase()
+                            //           .includes(search) ||
+                            //         apiTrainerData.course.includes(search);
+                            // })
+                            .map((apitestTrainerData) => {
+                              return (
+                                <TableRow
+                                  key={apitestTrainerData.id}
+                                  hover
+                                  role="checkbox"
+                                >
+                                  <TableCell
+                                    align="center"
+                                    id="table-body"
+                                    style={{ fontSize: 16 }}
+                                    onClick={() =>
+                                      opneTraintable(apiTrainerData)
+                                    }
+                                  >
+                                    {apitestTrainerData.email}
+                                  </TableCell>
+                                  <TableCell
+                                    align="center"
+                                    id="table-body"
+                                    style={{ fontSize: 16 }}
+                                    onClick={() =>
+                                      opneTraintable(apiTrainerData)
+                                    }
+                                  ></TableCell>
+                                  <TableCell
+                                    align="center"
+                                    id="table-body"
+                                    style={{ fontSize: 16 }}
+                                  >
+                                    <BiSolidMessageSquareEdit
+                                      id="edit-icon"
+                                      onClick={() =>
+                                        handletraintestedit(apitestTrainerData)
+                                      }
+                                    />
+                                    <MdDelete
+                                      id="dlt-icon"
+                                      onClick={() =>
+                                        deleteTrainerData(apitestTrainerData.id)
                                       }
                                     />
                                   </TableCell>

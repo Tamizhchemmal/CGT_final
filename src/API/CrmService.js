@@ -1,6 +1,6 @@
 import axios from "axios";
 
-let baseURL = ``;
+let baseURL = `http://127.0.0.1:8000/`;
 
 class CrmService {
   login(body) {
@@ -22,12 +22,30 @@ class CrmService {
     return axios.post(`${baseURL}api/crm/user/add`, body);
   }
 
-  getStudent() {
+  editTrainer(body) {
+    return axios.post(`${baseURL}api/crm/user/add`, body);
+  }
+
+  getbatch() {
+    return axios.get(`${baseURL}api/crm/batch/list`);
+  }
+
+  getCourse() {
     return axios.get(`${baseURL}api/crm/course/list`);
+  }
+  getReferalList() {
+    return axios.get(`${baseURL}api/crm/user/getReferralLists`);
+  }
+  getTrainerList() {
+    return axios.get(`${baseURL}api/crm/user/getTrainerLists`);
   }
 
   createStudent(body) {
     return axios.post(`${baseURL}api/crm/students/add`, body);
+  }
+
+  getStudentList() {
+    return axios.get(`${baseURL}api/crm/students/list`);
   }
 
   setupAxiosInterceptors() {
@@ -35,7 +53,7 @@ class CrmService {
 
     axios.interceptors.request.use((config) => {
       config.headers.apitoken = token;
-      console.log(config.headers);
+      // console.log(config.headers);
       return config;
     });
   }

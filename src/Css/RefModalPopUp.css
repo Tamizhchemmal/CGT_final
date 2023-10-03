@@ -3,7 +3,7 @@
   top: 0;
 }
 
-.crd-bg1 {
+/* .crd-bg1 {
   display: flex;
   justify-content: center;
 }
@@ -13,10 +13,12 @@
   justify-content: center;
   align-items: center;
   font-family: "Poppins", sans-serif;
-}
+} */
 
 .colum {
   display: flex;
+  width: 100%;
+  justify-content: space-around;
 }
 
 .column1 {
@@ -34,8 +36,8 @@
 }
 
 .ref-bio1 {
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 3px 25px;
@@ -43,8 +45,8 @@
 }
 
 .ref-wallet1 {
-  width: 400px;
-  height: 150px;
+  width: 100%;
+  height: 25%;
   font-family: "Open Sans", sans-serif;
   border-radius: 10px;
   margin-top: 35px;
@@ -107,4 +109,11 @@
 
 .mods {
   z-index: 9999999;
+}
+
+@media screen and (max-width: 992px) {
+  .colum {
+    display: flex !important;
+    flex-direction: column !important;
+  }
 }
