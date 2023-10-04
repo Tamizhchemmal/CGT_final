@@ -20,6 +20,7 @@ import { Card } from "@mui/material";
 
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+import CrmService from "../API/CrmService";
 
 const columns = [
   { id: "batchcode", label: "Batch Code", minWidth: 100, align: "center" },
@@ -233,25 +234,27 @@ export default function BatchTable({ search }) {
   };
 
   const callApiData = async (e) => {
-    const batchData = await axios.get(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/batch"
-    );
-    setApiData(batchData.data);
+    // const batchData = await axios.get(
+    //   "https://64b638a2df0839c97e1528f4.mockapi.io/batch"
+    // );
+    await CrmService.getbatch().then((response) => {
+      console.log(response);
+      setApiData(response.data);
+    });
   };
   // trainer dropdown
 
-  const [trainerData, settrainerData] = useState([]);
+  // const [trainerData, settrainerData] = useState([]);
 
-  const callapitrainerdata = async (e) => {
-    const trainerData = await axios.get(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
-    );
-    settrainerData(trainerData.data);
-  };
+  // const callapitrainerdata = async (e) => {
+  //   const trainerData = await axios.get(
+  //     "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
+  //   );
+  //   settrainerData(trainerData.data);
+  // };
 
   useEffect(() => {
     callApiData();
-    callapitrainerdata();
   }, []);
 
   const openBatchTable = (apiData) => {
@@ -268,12 +271,18 @@ export default function BatchTable({ search }) {
   const deletebatch = (id) => {
     setdeletePopUp(true);
     setdeleteKey(id);
+    console.log(id);
   };
 
   const confirmDelete = async () => {
-    await axios.delete(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + deleteKey
-    );
+    let body = {
+      batchid: deleteKey,
+      modifiedby: "123", // Logged in User unique ID
+    };
+
+    await CrmService.deleteBatch(body).then((response) => {
+      console.log(response);
+    });
     callApiData();
     setdeleteKey(null);
     setdeletePopUp(false);
@@ -377,6 +386,16 @@ export default function BatchTable({ search }) {
     setbatchcode(combined);
   };
 
+  // gettrainer name
+  const gettrainername = (trainerinfo) => {
+    const arr = trainerinfo;
+    if (arr["UI_FIRST_NAME"] === undefined) {
+      return `typeof ${arr["UI_FIRST_NAME"]}`;
+    } else {
+      return arr["UI_FIRST_NAME"];
+    }
+  };
+
   return (
     <>
       <div className="tableData">
@@ -404,22 +423,22 @@ export default function BatchTable({ search }) {
               <TableBody>
                 {apiData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((apiData) => {
-                    return search.toLowerCase() === ""
-                      ? apiData
-                      : apiData.trainername.toLowerCase().includes(search) ||
-                          apiData.batchcode.toLowerCase().includes(search);
-                  })
+                  // .filter((apiData) => {
+                  //   return search.toLowerCase() === ""
+                  //     ? apiData
+                  //     : apiData.trainername.toLowerCase().includes(search) ||
+                  //         apiData.batchcode.toLowerCase().includes(search);
+                  // })
                   .map((apiData) => {
                     return (
-                      <TableRow key={apiData.id} hover role="checkbox">
+                      <TableRow key={apiData.BATCH_ID} hover role="checkbox">
                         <TableCell
                           align="center"
                           id="table-body"
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {apiData.batchcode}
+                          {apiData.BATCH_CODE}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -427,7 +446,7 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {apiData.startBatchDate}
+                          {apiData.BATCH_STARTED_DATE}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -435,7 +454,7 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {apiData.endBatchDate}
+                          {apiData.BATCH_END_DATE}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -443,7 +462,10 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {apiData.trainername}
+                          {gettrainername(apiData.trainerinfo)}
+                          {/* {apiData.trainerinfo.UI_ID === null
+                            ? `NA`
+                            : apiData.trainerinfo.UI_ID} */}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -452,8 +474,8 @@ export default function BatchTable({ search }) {
                           onClick={() => openBatchTable(apiData)}
                         >
                           {isDateWithRange(
-                            apiData.startBatchDate,
-                            apiData.endBatchDate
+                            apiData.BATCH_STARTED_DATE,
+                            apiData.BATCH_END_DATE
                           ) ? (
                             <div className="isActive">Active</div>
                           ) : (
@@ -472,7 +494,7 @@ export default function BatchTable({ search }) {
                           <MdDelete
                             id="dlt-icon"
                             onClick={() => {
-                              deletebatch(apiData.id);
+                              deletebatch(apiData.BATCH_ID);
                             }}
                           />
                         </TableCell>

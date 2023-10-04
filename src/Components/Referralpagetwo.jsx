@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../Css/Referralstyle.css";
 import {
@@ -15,6 +15,7 @@ import RefTable from "./RefTable";
 import { FcSearch } from "react-icons/fc";
 import NavBar from "./NavBar";
 import CrmService from "../API/CrmService";
+import { Mode } from "@mui/icons-material";
 
 function Referralpagetwo() {
   const [show, setShow] = useState(false);
@@ -36,20 +37,7 @@ function Referralpagetwo() {
   const [paymentmode, setPaymentmode] = useState("");
   const [ifscCode, setifscCode] = useState("");
 
-  const [paymentmodelist, setPaymentList] = useState([
-    {
-      id: 1,
-      name: "GPAY NUMBER",
-    },
-    {
-      id: 2,
-      name: "UPI",
-    },
-    {
-      id: 3,
-      name: "BANK ACCOUNT",
-    },
-  ]);
+  const [paymentmodelist, setPaymentList] = useState([]);
 
   const [name, setName] = useState("");
   const [mobilenumber, setMobilenumber] = useState("");
@@ -62,12 +50,26 @@ function Referralpagetwo() {
   const [role, setRole] = useState("referral");
 
   const [errors, setErrors] = useState("");
+  const callapiPayment = async (e) => {
+    CrmService.userLoggedIn();
+    await CrmService.getPaymentmode()
+      .then((response) => {
+        // console.log(response.data);
+        setPaymentList(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
+  useEffect(() => {
+    callapiPayment();
+  }, []);
   // Payment
 
   const submitReferral = async (e) => {
     e.preventDefault();
-
+    CrmService.userLoggedIn();
     let body = {
       email: email,
       firstname: name,
@@ -78,51 +80,38 @@ function Referralpagetwo() {
       company: companyname,
       primaryphone: mobilenumber,
       course: "", //course id
-      paymentmode: "2", // payment mode ID
+      paymentmode: paymentmode, // payment mode ID
       paymentdetails: paymentdetails, // Account no. or Gpay no.
       ifsccode: ifscCode, // ifsc code if bank selected or else give empty
       password: password, // raw password now, will encryt later
     };
-    await CrmService.createReferralOrTrainer(body)
-      .then((response) => {
-        console.log(response.data);
 
-        if (response.data.errmessage) {
-          setErrors(response.data.errmessage);
-        } else {
-          setErrors("");
-          alert("Referral Created");
-          e.target.reset();
-          setShow(false);
-        }
-      })
-      .catch((err) => {
-        console.log(err.data.errmessages);
+    if (password !== confirmpassword) {
+      setErrors("Password Should Be Same");
+    } else if (paymentdetails !== reEnterDetails) {
+      setErrors("Account details Should be same");
+    } else {
+      await CrmService.createReferralOrTrainer(body)
+        .then((response) => {
+          console.log(response.data);
 
-        // setErrors(response.message);
-      });
+          if (response.data.errmessage) {
+            setErrors(response.data.errmessage);
+          } else {
+            setErrors("");
+            alert("Referral Created");
+            e.target.reset();
+            setShow(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err.data.errmessages);
 
-    // if (password !== confirmpassword) {
-    //   setErrors("Password Should Be Same");
-    // } else if (paymentdetails !== reEnterDetails) {
-    //   setErrors("Account details Should be same");
-    // } else {
-    //   await axios.post("https://64a587de00c3559aa9bfdbd4.mockapi.io/refData", {
-    //     name,
-    //     email,
-    //     password,
-    //     confirmpassword,
-    //     role,
-    //     companyname,
-    //     mobilenumber,
-    //     paymentdetails,
-    //     paymentmode,
-    //     reEnterDetails,
-    //     ifscCode,
-    //   });
-
-    // }
+          // setErrors(response.message);
+        });
+    }
   };
+
   return (
     <>
       <div>
@@ -242,6 +231,7 @@ function Referralpagetwo() {
                             name="paymentmode"
                             className="referaldropdown"
                             required
+                            value={paymentmode}
                             onChange={(event) =>
                               setPaymentmode(event.target.value)
                             }
@@ -249,15 +239,18 @@ function Referralpagetwo() {
                             <option value="" disabled selected>
                               Select Payment Mode
                             </option>
-                            {paymentmodelist.map((paymentmode, index1) => (
-                              <option key={index1} value={paymentmode.name}>
-                                {paymentmode.name}
+                            {paymentmodelist.map((paymentmode) => (
+                              <option
+                                key={paymentmode.PAYM_ID}
+                                value={paymentmode.PAYM_ID}
+                              >
+                                {paymentmode.PAYM_NAME}
                               </option>
                             ))}
                           </select>
                         </div>
 
-                        {paymentmode === "BANK ACCOUNT" && (
+                        {paymentmode == "3" && (
                           <div className="inputref">
                             <input
                               type="text"

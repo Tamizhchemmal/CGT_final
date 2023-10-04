@@ -5,6 +5,7 @@ import "../Css/Refprofile.css";
 import BatchModalPopUp from "./BatchModalPopUp";
 
 export default function BatchPopUp({ user, showmodal, onClosemodal }) {
+  console.log(user);
   return (
     <>
       <Modal
@@ -23,7 +24,7 @@ export default function BatchPopUp({ user, showmodal, onClosemodal }) {
           <CloseButton variant="white" onClick={onClosemodal} />
         </Modal.Header>
         <Modal.Body style={{ width: "100%" }}>
-          <BatchModalPopUp />
+          <BatchModalPopUp user={user} />
         </Modal.Body>
       </Modal>
     </>

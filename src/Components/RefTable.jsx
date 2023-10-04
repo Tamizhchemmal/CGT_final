@@ -118,27 +118,42 @@ export default function RefTable({ search, referralCount }) {
   const [apiData, setApiData] = useState([]);
 
   // Test api
-  const callTestApiData = async (e) => {
-    await CrmService.getReferalList()
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-    // .catch((err) => console.log(r));
-  };
+  // const callTestApiData = async (e) => {
+  //   await CrmService.getReferalList()
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     });
+  //   // .catch((err) => console.log(r));
+  // };
 
   const callApiData = async (e) => {
-    const refData = await axios.get(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
-    );
-    setApiData(refData.data);
+    // const refData = await axios.get(
+    //   "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
+    // );
+
+    await CrmService.getReferalList()
+      .then((response) => {
+        console.log(response);
+        setApiData(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    //     .then((response) => {
+    //       console.log(response.data);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err.message);
+    //     });
+    //   // .catch((err) => console.log(r));
+    // };
   };
 
   useEffect(() => {
     callApiData();
-    callTestApiData();
   }, []);
 
   const [show, setShow] = useState(false);
@@ -188,15 +203,24 @@ export default function RefTable({ search, referralCount }) {
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
   // Delete Referral
-  const deleteref = (id) => {
+  const deleteref = (data) => {
     setdeletePopUp(true);
-    setdeleteKey(id);
+    setdeleteKey(data.uuid);
   };
 
   const confirmDelete = async () => {
-    await axios.delete(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" + deleteKey
-    );
+    let body = {
+      userid: deleteKey, // user UUID
+      modifiedby: "123", // Logged in User unique ID
+    };
+
+    await CrmService.deleteReferral(body)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     callApiData();
     setdeleteKey(null);
     setdeletePopUp(false);
@@ -260,12 +284,12 @@ export default function RefTable({ search, referralCount }) {
               <TableBody>
                 {apiData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((apiData) => {
-                    return search.toLowerCase() === ""
-                      ? apiData
-                      : apiData.name.toLowerCase().includes(search) ||
-                          apiData.name.includes(search);
-                  })
+                  // .filter((apiData) => {
+                  //   return search.toLowerCase() === ""
+                  //     ? apiData
+                  //     : apiData.name.toLowerCase().includes(search) ||
+                  //         apiData.name.includes(search);
+                  // })
                   .map((apiData) => {
                     return (
                       <TableRow key={apiData.id} hover role="checkbox">
@@ -300,7 +324,7 @@ export default function RefTable({ search, referralCount }) {
                           onClick={() => opnetable(apiData)}
                         >
                           {/* 12 */}
-                          {referralCount}
+                          {apiData.referralStudents.length}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -321,7 +345,7 @@ export default function RefTable({ search, referralCount }) {
                           />
                           <MdDelete
                             id="dlt-icon"
-                            onClick={() => deleteref(apiData.id)}
+                            onClick={() => deleteref(apiData)}
                           />
                         </TableCell>
                       </TableRow>

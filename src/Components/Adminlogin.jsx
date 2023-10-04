@@ -51,6 +51,7 @@ function Adminlogin(props) {
           console.log(response.data.apitoken);
 
           localStorage.setItem("apitoken", response.data.apitoken);
+
           setSuccess(true);
           localStorage.setItem("isUserLoggedIn", true);
           localStorage.setItem("access", true);
@@ -62,7 +63,11 @@ function Adminlogin(props) {
         .catch((error) => {
           console.log(error);
           console.log(error.response.data.errmessage);
-          setError(error.response.data.errmessage);
+          if (error.response.data.errmessage) {
+            setError(error.response.data.errmessage);
+          } else if (error.response.data.message) {
+            setError(error.response.data.message);
+          }
         });
 
       //   if (email === "admin" && password === "12345") {

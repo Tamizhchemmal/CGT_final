@@ -140,20 +140,7 @@ function Studentpage() {
 
   const [courseList, setCourseList] = useState([]);
 
-  const [paymentmodelist, setPaymentList] = useState([
-    {
-      id: 1,
-      name: "GPAY NUMBER",
-    },
-    {
-      id: 2,
-      name: "UPI",
-    },
-    {
-      id: 3,
-      name: "BANK ACCOUNT",
-    },
-  ]);
+  const [paymentmodelist, setPaymentList] = useState([]);
 
   const [batchCode, setBatchCode] = useState("");
 
@@ -181,7 +168,17 @@ function Studentpage() {
     setPage(0);
   };
 
-  const [testApiData, setTestApiData] = useState([]);
+  const callapiPayment = async (e) => {
+    CrmService.userLoggedIn();
+    await CrmService.getPaymentmode()
+      .then((response) => {
+        // console.log(response.data);
+        setPaymentList(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   // const callTestApiData = async (e) => {
   //   await CrmService.getStudent().then((response) => {
@@ -222,16 +219,20 @@ function Studentpage() {
   // Referral data dropdown
 
   const callapireferraldata = async (e) => {
-    const referralData = await axios.get(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
-    );
-    setreferralData(referralData.data);
+    await CrmService.getReferalList()
+      .then((response) => {
+        setreferralData(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   useEffect(() => {
     callApiStudentData();
     callapibatchdata();
     callapireferraldata();
+    callapiPayment();
   }, []);
 
   const [editedStudentData, setEditedStudentData] = useState({
@@ -255,15 +256,20 @@ function Studentpage() {
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
 
-  const deletestudentData = (id) => {
+  const deletestudentData = (data) => {
     setdeletePopUp(true);
-    setdeleteKey(id);
+    setdeleteKey(data.STUDENT_ID);
   };
 
   const confirmDelete = async () => {
-    await axios.delete(
-      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData/" + deleteKey
-    );
+    let body = {
+      studentid: deleteKey,
+      modifiedby: "123", // Logged in User unique ID
+    };
+
+    await CrmService.deleteStudent(body).then((response) => {
+      console.log(response);
+    });
     callApiStudentData();
     setdeleteKey(null);
     setdeletePopUp(false);
@@ -320,8 +326,8 @@ function Studentpage() {
       paidFees: feespaid,
       college: college,
       degree: degree,
-      paymentMode: "1",
-      referralId: "3", // call get referral list API and use the primary key of referral data
+      paymentMode: paymentmode,
+      referralId: referral, // call get referral list API and use the primary key of referral data
 
       batchId: batchCode, // call get batch list API and use the primary key of batch data
 
@@ -333,25 +339,25 @@ function Studentpage() {
       console.log(response);
     });
 
-    await axios.post(
-      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
-      {
-        name,
-        email,
-        course,
-        mobilenumber,
-        yearofpassedout,
-        totalfees,
-        feespaid,
-        pendingfees,
-        college,
-        degree,
-        referral,
-        paymentmode,
-        batchCode,
-        paymentDate,
-      }
-    );
+    // await axios.post(
+    //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
+    //   {
+    //     name,
+    //     email,
+    //     course,
+    //     mobilenumber,
+    //     yearofpassedout,
+    //     totalfees,
+    //     feespaid,
+    //     pendingfees,
+    //     college,
+    //     degree,
+    //     referral,
+    //     paymentmode,
+    //     batchCode,
+    //     paymentDate,
+    //   }
+    // );
 
     alert("Student Created");
     e.target.reset();
@@ -563,14 +569,18 @@ function Studentpage() {
                             name="paymentmode"
                             className="referaldropdown"
                             required
+                            value={paymentmode}
                             onChange={(e) => setPaymentMode(e.target.value)}
                           >
                             <option value="" disabled selected>
                               Select Payment Mode
                             </option>
-                            {paymentmodelist.map((paymentmode, index1) => (
-                              <option key={index1} value={paymentmode.name}>
-                                {paymentmode.name}
+                            {paymentmodelist.map((paymentmode) => (
+                              <option
+                                key={paymentmode.PAYM_ID}
+                                value={paymentmode.PAYM_ID}
+                              >
+                                {paymentmode.PAYM_NAME}
                               </option>
                             ))}
                           </select>
@@ -630,8 +640,8 @@ function Studentpage() {
                             <option value="" disabled selected>
                               Referral name
                             </option>
-                            {referralData.map((data, index) => (
-                              <option key={index} value={data.id}>
+                            {referralData.map((data) => (
+                              <option key={data.id} value={data.id}>
                                 {data.name}
                               </option>
                             ))}
@@ -1112,9 +1122,7 @@ function Studentpage() {
                                     <MdDelete
                                       id="dlt-icon"
                                       onClick={() =>
-                                        deletestudentData(
-                                          apiStudentData.STUDENT_ID
-                                        )
+                                        deletestudentData(apiStudentData)
                                       }
                                     />
                                   </TableCell>

@@ -179,6 +179,7 @@ export default function Trainerpage() {
   };
   // Test api
   const callTestApiData = async (e) => {
+    CrmService.userLoggedIn();
     await CrmService.getTrainerList()
       .then((response) => {
         // console.log(response.data);

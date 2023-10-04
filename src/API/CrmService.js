@@ -13,7 +13,7 @@ class CrmService {
       this.setupAxiosInterceptors();
     }
   }
-
+  //Create ApI
   createBatch(body) {
     return axios.post(`${baseURL}api/crm/batch/create`, body);
   }
@@ -46,6 +46,22 @@ class CrmService {
 
   getStudentList() {
     return axios.get(`${baseURL}api/crm/students/list`);
+  }
+
+  getPaymentmode() {
+    return axios.get(`${baseURL}api/crm/paymentmethod/list`);
+  }
+
+  // Delete Data
+
+  deleteBatch(body) {
+    return axios.post(`${baseURL}api/crm/batch/changeStatus`, body);
+  }
+  deleteReferral(body) {
+    return axios.post(`${baseURL}api/crm/user/changeStatus`, body);
+  }
+  deleteStudent(body) {
+    return axios.post(`${baseURL}api/crm/student/changeStatus`, body);
   }
 
   setupAxiosInterceptors() {

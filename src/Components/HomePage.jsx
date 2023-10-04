@@ -403,7 +403,7 @@ export default function HomePage({ callApiData }) {
                             onChange={handleTimeChange}
                           />
                         </div>
-                        <div className="inputbatch">
+                        {/* <div className="inputbatch">
                           <input
                             type="number"
                             name="numofstudent"
@@ -412,7 +412,7 @@ export default function HomePage({ callApiData }) {
                             value={numofstudent}
                             onChange={(e) => setnumofstudent(e.target.value)}
                           />
-                        </div>
+                        </div> */}
                         <div className="inputbatch">
                           <select
                             id="trainername"
@@ -427,7 +427,7 @@ export default function HomePage({ callApiData }) {
                             </option>
                             {testtrainerData.map((data, index) => (
                               <option key={index} value={data.id}>
-                                {data.email}
+                                {data.name}
                               </option>
                             ))}
                           </select>
