@@ -118,10 +118,10 @@ export default function TrainerPopUpDetails({ user }) {
                       </tr>
                       <tr>
                         <td>
-                          <div className="label">Domain</div>
+                          <div className="label">Payment Details</div>
                         </td>
                         <td>
-                          <div className="details">{user.course}</div>
+                          <div className="details">{user.paymentdetails}</div>
                         </td>
                       </tr>
                     </tbody>
@@ -130,8 +130,8 @@ export default function TrainerPopUpDetails({ user }) {
               </div>
             </div>
           </div>
-          <div>
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+          {/* <div> */}
+          {/* <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 540 }}>
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
@@ -164,8 +164,8 @@ export default function TrainerPopUpDetails({ user }) {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-            </Paper>
-          </div>
+            </Paper> */}
+          {/* </div> */}
         </div>
       </Container>
     </>

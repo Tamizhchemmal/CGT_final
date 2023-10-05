@@ -134,16 +134,6 @@ export default function RefProfModal() {
                                 <div className="details">{/* : Gold */}</div>
                               </td>
                             </tr>
-                            <tr>
-                              <td>
-                                <div className="ref-label">
-                                  Amount Benefited
-                                </div>
-                              </td>
-                              <td>
-                                <div className="details">{/* : 12000 */}</div>
-                              </td>
-                            </tr>
                           </tbody>
                         </table>
                       </div>

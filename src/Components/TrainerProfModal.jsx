@@ -128,7 +128,7 @@ export default function TrainerProfModal() {
                             </tr>
                             <tr>
                               <td>
-                                <div className="label">Domain</div>
+                                <div className="label"></div>
                               </td>
                               <td>
                                 <div className="details">{/* : Gold */}</div>

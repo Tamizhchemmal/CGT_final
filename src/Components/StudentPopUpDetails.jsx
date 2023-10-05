@@ -4,6 +4,7 @@ import { Container } from "react-bootstrap";
 import "../Css/StudentPopUp.css";
 
 export default function StudentPopUpDetails({ user }) {
+  console.log(user);
   return (
     <div className="trainerProfileModel">
       <div className="crd-bg1">
@@ -28,7 +29,7 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Fullname</div>
                             </td>
                             <td>
-                              <div className="details">{user.name}</div>
+                              <div className="details">{user.STUDENT_NAME}</div>
                             </td>
                           </tr>
                           <tr>
@@ -36,7 +37,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Mobile No.</div>
                             </td>
                             <td>
-                              <div className="details">{user.mobilenumber}</div>
+                              <div className="details">
+                                {user.STUDENT_PHONE}
+                              </div>
                             </td>
                           </tr>
                           <tr>
@@ -44,7 +47,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Email ID</div>
                             </td>
                             <td>
-                              <div className="details">{user.email}</div>
+                              <div className="details">
+                                {user.STUDENT_EMAIL}
+                              </div>
                             </td>
                           </tr>
                           <tr>
@@ -53,7 +58,7 @@ export default function StudentPopUpDetails({ user }) {
                             </td>
                             <td>
                               <div className="details">
-                                {user.yearofpassedout}
+                                {user.STUDENT_PASSED_YEAR}
                               </div>
                             </td>
                           </tr>
@@ -62,7 +67,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">College Name</div>
                             </td>
                             <td>
-                              <div className="details">{user.college}</div>
+                              <div className="details">
+                                {user.STUDENT_COLLEGE}
+                              </div>
                             </td>
                           </tr>
                           <tr>
@@ -70,7 +77,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Degree</div>
                             </td>
                             <td>
-                              <div className="details">{user.degree}</div>
+                              <div className="details">
+                                {user.STUDENT_DEGREE}
+                              </div>
                             </td>
                           </tr>
                           <tr>
@@ -78,7 +87,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Course Name</div>
                             </td>
                             <td>
-                              <div className="details">{user.course}</div>
+                              <div className="details">
+                                {user.course.COURSE_NAME}
+                              </div>
                             </td>
                           </tr>
                         </tbody>
@@ -103,34 +114,33 @@ export default function StudentPopUpDetails({ user }) {
                           </tr>
                           <tr>
                             <td>
-                              <div className="label">Mobile No.</div>
+                              <div className="label">Total Fees</div>
                             </td>
                             <td>
-                              <div className="details"></div>
+                              <div className="details">
+                                {user.STUDENT_TOTAL_FEES}
+                              </div>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <td>
+                              <div className="label">Fees Paid</div>
+                            </td>
+                            <td>
+                              <div className="details">
+                                {user.STUDENT_FEES_PAID}
+                              </div>
                             </td>
                           </tr>
                           <tr>
                             <td>
-                              <div className="label">Email ID</div>
+                              <div className="label">Pending Fees</div>
                             </td>
                             <td>
-                              <div className="details"></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="label">Year Of Passedout</div>
-                            </td>
-                            <td>
-                              <div className="details"></div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <div className="label">College Name</div>
-                            </td>
-                            <td>
-                              <div className="details"></div>
+                              <div className="details">
+                                {user.STUDENT_PENDING_FEES}
+                              </div>
                             </td>
                           </tr>
                           <tr>

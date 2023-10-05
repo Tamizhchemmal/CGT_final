@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import CrmService from "../API/CrmService.js";
+import { log } from "util";
 
 //Table
 const columns = [
@@ -235,22 +236,22 @@ function Studentpage() {
     callapiPayment();
   }, []);
 
-  const [editedStudentData, setEditedStudentData] = useState({
-    name: "",
-    email: "",
-    course: "",
-    mobilenumber: "",
-    yearofpassedout: "",
-    paymentDate: "",
-    endDate: "",
-    totalfees: "",
-    feespaid: "",
-    pendingfees: "",
-    college: "",
-    degree: "",
-    referral: "",
-    paymentmode: "",
-  });
+  // const [editedStudentData, setEditedStudentData] = useState({
+  //   name: "",
+  //   email: "",
+  //   course: "",
+  //   mobilenumber: "",
+  //   yearofpassedout: "",
+  //   paymentDate: "",
+  //   endDate: "",
+  //   totalfees: "",
+  //   feespaid: "",
+  //   pendingfees: "",
+  //   college: "",
+  //   degree: "",
+  //   referral: "",
+  //   paymentmode: "",
+  // });
 
   // delete student
   const [deleteKey, setdeleteKey] = useState(null);
@@ -288,17 +289,25 @@ function Studentpage() {
   const handleCloseModal = (e) => {
     setShowStudentModal(false);
   };
+  const [selectedstudentdata, setselectedstudentdata] = useState({});
+  const [updatedstudentdata, setupdatedstudentdata] = useState({});
 
   const [editStudentShow, setEditStudentShow] = useState(false);
 
   const handlestudentedit = (rowStudentData) => {
     setEditStudentShow(true);
-    setEditedStudentData({
-      ...rowStudentData,
-    });
+    setselectedstudentdata(rowStudentData);
+    setupdatedstudentdata({ ...rowStudentData });
     console.log(rowStudentData);
   };
-
+  const testhandlechange = (e) => {
+    const { value } = e.target;
+    setupdatedstudentdata({
+      ...updatedstudentdata,
+      [name]: value,
+    });
+    console.log(updatedstudentdata);
+  };
   // get batch name in Table
   const getbatchname = (id) => {
     const batch = batchData.find((batch) => batch.BATCH_ID == id);
@@ -369,13 +378,35 @@ function Studentpage() {
 
   const submitStudentEdit = async (e) => {
     e.preventDefault();
-    const studentResponse = await axios.put(
-      "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData/" +
-        editedStudentData.id,
-      editedStudentData
-    );
+    let body = {
+      studentid: selectedstudentdata.STUDENT_ID,
+      email: updatedstudentdata.STUDENT_EMAIL,
+      name: updatedstudentdata.STUDENT_NAME,
+      modifiedby: 123, // Logged in User unique ID
+      company: "",
+      primaryphone: updatedstudentdata.STUDENT_PHONE,
+      passedoutyear: updatedstudentdata.STUDENT_PASSED_YEAR,
+      startDate: selectedstudentdata.STUDENT_STARTED_DATE,
+      endDate: selectedstudentdata.STUDENT_END_DATE,
+      totalFees: updatedstudentdata.STUDENT_TOTAL_FEES,
+      paidFees: updatedstudentdata.STUDENT_FEES_PAID,
+      college: updatedstudentdata.STUDENT_COLLEGE,
+      degree: updatedstudentdata.STUDENT_DEGREE,
+      paymentMode: updatedstudentdata.STUDENT_PAYMENT_MODE,
+      referralId: updatedstudentdata.STUDENT_REFERRAL_ID,
+      batchId: updatedstudentdata.STUDENT_BATCH_ID,
+      trainerId: selectedstudentdata.STUDENT_TRAINER_ID,
+      courseId: updatedstudentdata.STUDENT_COURSE_ID,
+    };
 
-    console.log(studentResponse.data);
+    await CrmService.editstudent(body)
+      .then((response) => {
+        console.log(response);
+        alert("Updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     setEditStudentShow(false);
     callApiStudentData();
@@ -662,7 +693,10 @@ function Studentpage() {
                               Course
                             </option>
                             {courseList.map((courseData, index1) => (
-                              <option key={index1} value={courseData.COURSE_ID}>
+                              <option
+                                key={courseData.COURSE_ID}
+                                value={courseData.COURSE_ID}
+                              >
                                 {courseData.COURSE_NAME}
                               </option>
                             ))}
@@ -688,7 +722,6 @@ function Studentpage() {
 
               {/* Edit */}
               <Modal
-                data={apiStudentData}
                 className="mods"
                 show={editStudentShow}
                 onHide={edithandleClose}
@@ -721,11 +754,11 @@ function Studentpage() {
                             name="name"
                             placeholder="Fullname"
                             autoComplete="new-password"
-                            value={editedStudentData.name}
+                            value={updatedstudentdata.STUDENT_NAME}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                name: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_NAME: e.target.value,
                               });
                             }}
                             required
@@ -739,11 +772,11 @@ function Studentpage() {
                             placeholder="Mobile Number"
                             pattern="[6789][0-9]{9}"
                             autoComplete="new-password"
-                            value={editedStudentData.mobilenumber}
+                            value={updatedstudentdata.STUDENT_PHONE}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                mobilenumber: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_PHONE: e.target.value,
                               });
                             }}
                             required
@@ -757,11 +790,11 @@ function Studentpage() {
                             placeholder="Email Address"
                             pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                             required
-                            value={editedStudentData.email}
+                            value={updatedstudentdata.STUDENT_EMAIL}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                email: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_PHONE: e.target.value,
                               });
                             }}
                           ></input>
@@ -772,11 +805,11 @@ function Studentpage() {
                             name="yearofpassedout"
                             placeholder="Year Of PassedOut"
                             autoComplete="off"
-                            value={editedStudentData.yearofpassedout}
+                            value={updatedstudentdata.STUDENT_PASSED_YEAR}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                yearofpassedout: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_PASSED_YEAR: e.target.value,
                               });
                             }}
                             required
@@ -789,11 +822,11 @@ function Studentpage() {
                             name="college"
                             placeholder="College"
                             autoComplete="new-password"
-                            value={editedStudentData.college}
+                            value={updatedstudentdata.STUDENT_COLLEGE}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                college: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_PASSED_YEAR: e.target.value,
                               });
                             }}
                             required
@@ -806,13 +839,8 @@ function Studentpage() {
                             name="degree"
                             placeholder="Degree"
                             autoComplete="new-password"
-                            value={editedStudentData.degree}
-                            onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                degree: e.target.value,
-                              });
-                            }}
+                            value={updatedstudentdata.STUDENT_DEGREE}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -822,13 +850,8 @@ function Studentpage() {
                             name="totalfees"
                             placeholder="Total fees"
                             autoComplete="off"
-                            value={editedStudentData.totalfees}
-                            onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                totalfees: e.target.value,
-                              });
-                            }}
+                            value={updatedstudentdata.STUDENT_TOTAL_FEES}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -838,13 +861,8 @@ function Studentpage() {
                             name="feespaid"
                             placeholder="Fees Paid"
                             autoComplete="off"
-                            value={editedStudentData.feespaid}
-                            onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                feespaid: e.target.value,
-                              });
-                            }}
+                            value={updatedstudentdata.STUDENT_FEES_PAID}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -854,33 +872,28 @@ function Studentpage() {
                             name="pendingfees"
                             placeholder="Pending Fees"
                             autoComplete="off"
-                            value={editedStudentData.pendingfees}
-                            onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                pendingfees: e.target.value,
-                              });
-                            }}
+                            value={updatedstudentdata.STUDENT_PENDING_FEES}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
-                        <div className="inputstudent">
+                        {/* <div className="inputstudent">
                           <input
                             type="text"
                             name="paymentmode"
                             placeholder="Payment Mode"
                             autoComplete="off"
-                            value={editedStudentData.paymentmode}
+                            value={updatedstudentdata.STUDENT_PAYMENT_MODE}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                paymentmode: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_PAYMENT_MODE: e.target.value,
                               });
                             }}
                             required
                           ></input>
-                        </div>
-                        <div style={{ marginLeft: "30px" }}>
+                        </div> */}
+                        {/* <div style={{ marginLeft: "30px" }}>
                           <label
                             id="strt"
                             htmlFor="startdate"
@@ -902,24 +915,24 @@ function Studentpage() {
                             }}
                             required
                           />
-                        </div>
+                        </div> */}
                         <div>
                           <select
                             id="referralName"
                             name="referralname"
                             className="referaldropdown"
                             required
-                            value={editedStudentData.referral}
+                            value={updatedstudentdata.STUDENT_REFERRAL_ID}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                referral: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_REFERRAL_ID: e.target.value,
                               });
                             }}
                           >
                             <option value="none">Referral name</option>
-                            {refList.map((data, index) => (
-                              <option key={index} value={index.name}>
+                            {referralData.map((data) => (
+                              <option key={data.id} value={data.id}>
                                 {data.name}
                               </option>
                             ))}
@@ -931,18 +944,21 @@ function Studentpage() {
                             name="course"
                             className="referaldropdown"
                             required
-                            value={editedStudentData.course}
+                            value={updatedstudentdata.STUDENT_COURSE_ID}
                             onChange={(e) => {
-                              setEditedStudentData({
-                                ...editedStudentData,
-                                course: e.target.value,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_COURSE_ID: e.target.value,
                               });
                             }}
                           >
                             <option value="none">Course</option>
-                            {courseList.map((courseData, index1) => (
-                              <option key={index1} value={courseData.name}>
-                                {courseData.course}
+                            {courseList.map((courseData) => (
+                              <option
+                                key={courseData.COURSE_ID}
+                                value={courseData.COURSE_ID}
+                              >
+                                {courseData.COURSE_NAME}
                               </option>
                             ))}
                           </select>

@@ -107,43 +107,29 @@ export default function Trainerpage() {
   const [role, setRole] = useState("trainer");
 
   // console.log(search);
-  const [courseList, setCourseList] = useState([
-    {
-      id: 1,
-      course: "Front End Dvelopement",
-    },
-    {
-      id: 2,
-      course: "Testing",
-    },
-    {
-      id: 3,
-      course: "Aws",
-    },
-    {
-      id: 4,
-      course: "UI&UX design",
-    },
-    {
-      id: 5,
-      course: "Python",
-    },
-  ]);
+  const [courseList, setCourseList] = useState([]);
 
-  const [paymentmodelist, setPaymentList] = useState([
-    {
-      id: 1,
-      name: "GPAY NUMBER",
-    },
-    {
-      id: 2,
-      name: "UPI",
-    },
-    {
-      id: 3,
-      name: "BANK ACCOUNT",
-    },
-  ]);
+  const [paymentmodelist, setPaymentList] = useState([]);
+
+  const callapiPayment = async (e) => {
+    CrmService.userLoggedIn();
+    await CrmService.getPaymentmode()
+      .then((response) => {
+        // console.log(response.data);
+        setPaymentList(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    await CrmService.getCourse().then((response) => {
+      setCourseList(response.data);
+    });
+  };
+  const getcoursename = (id) => {
+    const course = courseList.find((course) => course.courseName == id);
+    return course ? course.COURSE_NAME : "unknown";
+  };
 
   const handleTrainClose = () => {
     setShow(false);
@@ -167,22 +153,22 @@ export default function Trainerpage() {
     setPage(0);
   };
 
-  const [apiTrainerData, setApiTrainerData] = useState([]);
+  // const [apiTrainerData, setApiTrainerData] = useState([]);
   const [apitestTrainerData, settestApiTrainerData] = useState([]);
 
-  const callTrainerApiData = async () => {
-    const trainerData = await axios.get(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
-    );
+  // const callTrainerApiData = async () => {
+  //   const trainerData = await axios.get(
+  //     "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
+  //   );
 
-    setApiTrainerData(trainerData.data);
-  };
+  //   setApiTrainerData(trainerData.data);
+  // };
   // Test api
   const callTestApiData = async (e) => {
     CrmService.userLoggedIn();
     await CrmService.getTrainerList()
       .then((response) => {
-        // console.log(response.data);
+        console.log(response.data);
         settestApiTrainerData(response.data);
       })
       .catch((err) => {
@@ -193,8 +179,9 @@ export default function Trainerpage() {
   };
 
   useEffect(() => {
-    callTrainerApiData();
+    // callTrainerApiData();
     callTestApiData();
+    callapiPayment();
   }, []);
 
   const [testShow, setTestShow] = useState(false);
@@ -211,20 +198,18 @@ export default function Trainerpage() {
     setErrors("");
   };
 
-  const [editedTrainData, setEditedTrainData] = useState({
-    email: "",
-    firstname: "",
-    lastname: "",
-    usertype: 1, //userType Id
-    createdby: 1234, // Logged in User unique ID
-    userid: "",
-    company: "",
-    primaryphone: "",
-    course: "", //course id
-    role: role,
-  });
-
-  const [editEmail, seteditEmail] = useState("");
+  // const [editedTrainData, setEditedTrainData] = useState({
+  //   email: "",
+  //   firstname: "",
+  //   lastname: "",
+  //   usertype: 1, //userType Id
+  //   createdby: 1234, // Logged in User unique ID
+  //   userid: "",
+  //   company: "",
+  //   primaryphone: "",
+  //   course: "", //course id
+  //   role: role,
+  // });
 
   // name: "",
   //   email: "",
@@ -240,9 +225,9 @@ export default function Trainerpage() {
 
   const handletrainedit = (rowTrainData) => {
     setEditTrainShow(true);
-    setEditedTrainData({
-      ...rowTrainData,
-    });
+    setselectedtraindata(rowTrainData);
+    setupdatedtraindata({ ...rowTrainData });
+
     console.log(rowTrainData);
   };
 
@@ -269,20 +254,38 @@ export default function Trainerpage() {
 
   const submitTraintestEdit = async (e) => {
     e.preventDefault();
+    // const amnntt = updatedtraindata.paymentmode;
+    // const amount = (amnntt) => {
+    //   if (typeof updatedtraindata.paymentmode == "string") {
+    //     return selectedtraindata.paymentmode;
+    //   } else {
+    //     return updatedtraindata.paymentmode;
+    //   }
+    // };
     let editBody = {
       email: updatedtraindata.email,
-      firstname: "test",
-      lastname: "trainer",
+      firstname: updatedtraindata.name,
+      lastname: "",
       usertype: 1, //userType Id
       createdby: 123, // Logged in User unique ID
-      userid: selectedtraindata.id, // user id
-      company: "cg",
-      primaryphone: "1223",
-      course: 1, //course id
+      userid: selectedtraindata.id,
+      company: updatedtraindata.companyname,
+      primaryphone: updatedtraindata.mobilenumber,
+      course: updatedtraindata.course, //course id
+      // payment mode ID
+      paymentmode: updatedtraindata.paymentmode,
+      paymentdetails: updatedtraindata.paymentdetails, // Account no. or Gpay no.
+      ifsccode: ifscCode, // ifsc code if bank selected or else give empty
+      password: updatedtraindata.password,
     };
-    await CrmService.editTrainer(editBody).then((response) => {
-      console.log(response);
-    });
+    await CrmService.editTrainer(editBody)
+      .then((response) => {
+        console.log(response);
+        alert("Updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     setTestShow(false);
   };
 
@@ -290,16 +293,24 @@ export default function Trainerpage() {
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
 
-  const deleteTrainerData = (id) => {
+  const deleteTrainerData = (data) => {
     setdeletePopUp(true);
-    setdeleteKey(id);
+    setdeleteKey(data.uuid);
   };
 
   const confirmDelete = async () => {
-    await axios.delete(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers/" + deleteKey
-    );
-    callTrainerApiData();
+    let body = {
+      userid: deleteKey, // user UUID
+      modifiedby: "123", // Logged in User unique ID
+    };
+    await CrmService.deleteReferral(body)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    callTestApiData();
     setdeleteKey(null);
     setdeletePopUp(false);
   };
@@ -324,82 +335,43 @@ export default function Trainerpage() {
     let body = {
       email: email,
       firstname: name,
-      lastname: "trainer",
+      lastname: "",
       usertype: 1, //userType Id
-      createdby: 1234, // Logged in User unique ID
+      createdby: 123, // Logged in User unique ID
       userid: 0,
       company: companyname,
       primaryphone: mobilenumber,
-      course: 2, //course id
-      role: role,
+      course: course, //course id
+      paymentmode: paymentmode, // payment mode ID
+      paymentdetails: paymentdetails, // Account no. or Gpay no.
+      ifsccode: ifscCode, // ifsc code if bank selected or else give empty
+      password: password,
     };
-    await CrmService.createReferralOrTrainer(body)
-      .then((response) => {
-        console.log(response);
-        if (response.data.errmessage) {
-          setErrors(response.data.errmessage);
-        } else {
-          setErrors("Created");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log(body);
+    if (password !== confirmpassword) {
+      setErrors("Password Should Be Same");
+    } else {
+      await CrmService.createReferralOrTrainer(body)
+        .then((response) => {
+          console.log(response.data);
 
-    // if (password !== confirmpassword) {
-    //   setErrors("Password Should Be Same");
-    // } else {
-    //   await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/trainers", {
-    //     name,
-    //     email,
-    //     password,
-    //     confirmpassword,
-    //     course,
-    //     paymentdetails,
-    //     paymentmode,
-    //     reEnterDetails,
-    //     ifscCode,
-    //     role,
-    //     companyname,
-    //     mobilenumber,
-    //   });
+          if (response.data.errmessage) {
+            setErrors(response.data.errmessage);
+          } else {
+            setErrors("");
+            alert("Trainer Created");
+            e.target.reset();
+            setShow(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err.data.errmessages);
 
-    //   //   let obj = { email, password, role };
-    //   //   fetch("http://localhost:8000/user", {
-    //   //     method: "POST",
-    //   //     headers: { "Content-Type": "application/json" },
-    //   //     body: JSON.stringify(obj),
-    //   //   })
-    //   //     .then((res) => res.json())
-    //   //     .then((data) => {
-    //   //       console.log("saved");
-    //   //     })
-    //   //     .catch((err) => {
-    //   //       console.log("error" + err.message);
-    //   //     });
+          // setErrors(response.message);
+        });
+    }
 
-    //   //   setErrors("");
-    //   //   alert("trainer Created");
-
-    //   //   e.target.reset();
-    // }
-    // setShow(false);
-    e.target.reset();
-    callTrainerApiData();
-  };
-
-  //Edit Submit
-  const submitTrainEdit = async (e) => {
-    e.preventDefault();
-    const trainResponse = await axios.put(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers" +
-        editedTrainData.id,
-      editedTrainData
-    );
-
-    console.log(trainResponse.data);
-
-    setEditTrainShow(false);
+    // callTestApiData();
   };
 
   return (
@@ -433,7 +405,6 @@ export default function Trainerpage() {
                   </button>
                 </div>
               </div>
-
               {/* /modal popup for Trainer Creation */}
               <Modal
                 show={show}
@@ -517,6 +488,7 @@ export default function Trainerpage() {
                             name="paymentmode"
                             className="referaldropdown"
                             required
+                            value={paymentmode}
                             onChange={(event) =>
                               setPaymentmode(event.target.value)
                             }
@@ -524,15 +496,18 @@ export default function Trainerpage() {
                             <option value="" disabled selected>
                               Select Payment Mode
                             </option>
-                            {paymentmodelist.map((paymentmode, index1) => (
-                              <option key={index1} value={paymentmode.name}>
-                                {paymentmode.name}
+                            {paymentmodelist.map((paymentmode) => (
+                              <option
+                                key={paymentmode.PAYM_ID}
+                                value={paymentmode.PAYM_ID}
+                              >
+                                {paymentmode.PAYM_NAME}
                               </option>
                             ))}
                           </select>
                         </div>
 
-                        {paymentmode === "BANK ACCOUNT" && (
+                        {paymentmode === "3" && (
                           <div className="inputstudent">
                             <input
                               type="text"
@@ -574,12 +549,16 @@ export default function Trainerpage() {
                             name="course"
                             className="referaldropdown"
                             required
+                            value={course}
                             onChange={(e) => setCourse(e.target.value)}
                           >
                             <option value="none">Course</option>
                             {courseList.map((courseData, index1) => (
-                              <option key={index1} value={courseData.name}>
-                                {courseData.course}
+                              <option
+                                key={courseData.COURSE_ID}
+                                value={courseData.COURSE_ID}
+                              >
+                                {courseData.COURSE_NAME}
                               </option>
                             ))}
                           </select>
@@ -632,10 +611,8 @@ export default function Trainerpage() {
                   </form>
                 </Modal.Body>
               </Modal>
-
               {/* Edit */}
               <Modal
-                data={apiTrainerData}
                 show={editTrainShow}
                 onHide={edithandleClose}
                 className="mods"
@@ -668,13 +645,8 @@ export default function Trainerpage() {
                             name="name"
                             placeholder="Fullname"
                             autoComplete="new-password"
-                            value={editedTrainData.name}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                name: e.target.value,
-                              })
-                            }
+                            value={updatedtraindata.name}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -686,13 +658,8 @@ export default function Trainerpage() {
                             placeholder="Mobile Number"
                             pattern="[6789][0-9]{9}"
                             autoComplete="new-password"
-                            value={editedTrainData.mobilenumber}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                mobilenumber: e.target.value,
-                              })
-                            }
+                            value={updatedtraindata.mobilenumber}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -704,8 +671,8 @@ export default function Trainerpage() {
                             placeholder="Email Address"
                             pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                             required
-                            // value={editTestData.email}
-                            // onChange={(e) => seteditEmail(e.target.value)}
+                            value={updatedtraindata.email}
+                            onChange={testhandlechange}
                           ></input>
                         </div>
 
@@ -716,13 +683,8 @@ export default function Trainerpage() {
                             name="companyname"
                             placeholder="Company Name"
                             autoComplete="new-password"
-                            value={editedTrainData.companyname}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                companyname: e.target.value,
-                              })
-                            }
+                            value={updatedtraindata.companyname}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -733,18 +695,16 @@ export default function Trainerpage() {
                             name="paymentmode"
                             className="referaldropdown"
                             required
-                            value={editedTrainData.paymentmode}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                paymentmode: e.target.value,
-                              })
-                            }
+                            value={updatedtraindata.paymentmode}
+                            onChange={testhandlechange}
                           >
-                            <option value="none">Payment Mode</option>
+                            <option selected>Payment Mode</option>
                             {paymentmodelist.map((paymentmode, index1) => (
-                              <option key={index1} value={paymentmode.name}>
-                                {paymentmode.name}
+                              <option
+                                key={paymentmode.PAYM_ID}
+                                value={paymentmode.PAYM_ID}
+                              >
+                                {paymentmode.PAYM_NAME}
                               </option>
                             ))}
                           </select>
@@ -755,13 +715,8 @@ export default function Trainerpage() {
                             name="paymentdetails"
                             placeholder="Payment Details (Ac.no/Upi id)"
                             autoComplete="off"
-                            value={editedTrainData.paymentdetails}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                paymentdetails: e.target.value,
-                              })
-                            }
+                            value={updatedtraindata.paymentdetails}
+                            onChange={testhandlechange}
                             required
                           ></input>
                         </div>
@@ -772,13 +727,8 @@ export default function Trainerpage() {
                             name="course"
                             className="referaldropdown"
                             required
-                            value={editedTrainData.course}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                course: e.target.value,
-                              })
-                            }
+                            value={updatedtraindata.course}
+                            onChange={testhandlechange}
                           >
                             <option value="none">Course</option>
                             {courseList.map((courseData, index1) => (
@@ -788,14 +738,14 @@ export default function Trainerpage() {
                             ))}
                           </select>
                         </div>
-                        <div className="inputtrainer">
+                        {/* <div className="inputtrainer">
                           <input
                             type="Password"
                             id="input-pwd"
                             name="password"
                             placeholder="Password"
                             autoComplete="off"
-                            value={editedTrainData.password}
+                            value={updatedtraindata.password}
                             onChange={(e) =>
                               setEditedTrainData({
                                 ...editedTrainData,
@@ -804,8 +754,8 @@ export default function Trainerpage() {
                             }
                             required
                           ></input>
-                        </div>
-                        <div className="inputtrainer">
+                        </div> */}
+                        {/* <div className="inputtrainer">
                           <input
                             type="Password"
                             id="input-conpwd"
@@ -821,7 +771,7 @@ export default function Trainerpage() {
                             }
                             required
                           ></input>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                     <Modal.Footer>
@@ -839,9 +789,8 @@ export default function Trainerpage() {
                   </form>
                 </Modal.Body>
               </Modal>
-
               {/* Test Edit */}
-
+              {/* 
               <Modal
                 // data={apiTrainerData}
                 show={testShow}
@@ -871,6 +820,28 @@ export default function Trainerpage() {
                       <div className="student-grid">
                         <div className="inputstudent">
                           <input
+                            type="text"
+                            id="input-name"
+                            name="name"
+                            placeholder="Fullname"
+                            autoComplete="new-password"
+                            value={updatedtraindata.name}
+                            onChange={testhandlechange}
+                            required
+                          ></input>
+
+                          <input
+                            type="tel"
+                            id="input-tele"
+                            name="mobilenumber"
+                            placeholder="Mobile Number"
+                            pattern="[6789][0-9]{9}"
+                            autoComplete="new-password"
+                            value={updatedtraindata.mobilenumber}
+                            onChange={testhandlechange}
+                            required
+                          ></input>
+                          <input
                             type="email"
                             id="input-email"
                             name="email"
@@ -897,8 +868,7 @@ export default function Trainerpage() {
                     </Modal.Footer>
                   </form>
                 </Modal.Body>
-              </Modal>
-
+              </Modal> */}
               {/* Table for Trainer */}
               <div id="reftable">
                 <div className="tableData">
@@ -924,23 +894,23 @@ export default function Trainerpage() {
                           </TableRow>
                         </TableHead>
                         <TableBody>
-                          {apiTrainerData
+                          {apitestTrainerData
                             .slice(
                               page * rowsPerPage,
                               page * rowsPerPage + rowsPerPage
                             )
-                            .filter((apiTrainerData) => {
-                              return search.toLowerCase() === ""
-                                ? apiTrainerData
-                                : apiTrainerData.name
-                                    .toLowerCase()
-                                    .includes(search) ||
-                                    apiTrainerData.name.includes(search) ||
-                                    apiTrainerData.course
-                                      .toLowerCase()
-                                      .includes(search) ||
-                                    apiTrainerData.course.includes(search);
-                            })
+                            // .filter((apiTrainerData) => {
+                            //   return search.toLowerCase() === ""
+                            //     ? apiTrainerData
+                            //     : apiTrainerData.name
+                            //         .toLowerCase()
+                            //         .includes(search) ||
+                            //         apiTrainerData.name.includes(search) ||
+                            //         apiTrainerData.course
+                            //           .toLowerCase()
+                            //           .includes(search) ||
+                            //         apiTrainerData.course.includes(search);
+                            // })
                             .map((apiTrainerData) => {
                               return (
                                 <TableRow
@@ -986,7 +956,9 @@ export default function Trainerpage() {
                                       opneTraintable(apiTrainerData)
                                     }
                                   >
-                                    {apiTrainerData.course}
+                                    {getcoursename(
+                                      apiTrainerData.STUDENT_COURSE_ID
+                                    )}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1033,7 +1005,7 @@ export default function Trainerpage() {
                                     <MdDelete
                                       id="dlt-icon"
                                       onClick={() =>
-                                        deleteTrainerData(apiTrainerData.id)
+                                        deleteTrainerData(apiTrainerData)
                                       }
                                     />
                                   </TableCell>
@@ -1046,7 +1018,7 @@ export default function Trainerpage() {
                     <TablePagination
                       rowsPerPageOptions={[10, 25, 100]}
                       component="div"
-                      count={apiTrainerData.length}
+                      count={apitestTrainerData.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}
@@ -1092,8 +1064,7 @@ export default function Trainerpage() {
               <hr></hr>
               {/* Test api table
                */}
-
-              <div id="reftable">
+              {/* <div id="reftable">
                 <div className="tableData">
                   <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer sx={{ maxHeight: 540 }}>
@@ -1146,7 +1117,7 @@ export default function Trainerpage() {
                                     id="table-body"
                                     style={{ fontSize: 16 }}
                                     onClick={() =>
-                                      opneTraintable(apiTrainerData)
+                                      opneTraintable(apitestTrainerData)
                                     }
                                   >
                                     {apitestTrainerData.email}
@@ -1156,7 +1127,7 @@ export default function Trainerpage() {
                                     id="table-body"
                                     style={{ fontSize: 16 }}
                                     onClick={() =>
-                                      opneTraintable(apiTrainerData)
+                                      opneTraintable(apitestTrainerData)
                                     }
                                   ></TableCell>
                                   <TableCell
@@ -1186,7 +1157,7 @@ export default function Trainerpage() {
                     <TablePagination
                       rowsPerPageOptions={[10, 25, 100]}
                       component="div"
-                      count={apiTrainerData.length}
+                      count={apitestTrainerData.length}
                       rowsPerPage={rowsPerPage}
                       page={page}
                       onPageChange={handleChangePage}
@@ -1194,7 +1165,7 @@ export default function Trainerpage() {
                     />
                   </Paper>
                   {/* model profile */}
-                  <Modal
+              {/* <Modal
                     show={tableshow}
                     onHide={handleTrainClose}
                     backdrop="static"
@@ -1226,16 +1197,16 @@ export default function Trainerpage() {
                         </button>
                       </Modal.Footer>
                     </Modal.Body>
-                  </Modal>
-                </div>
-              </div>
+                  </Modal> */}
+              {/* </div>
+              </div> */}{" "}
             </Container>
           </div>
         </div>
       </div>
       {showTrain && (
         <TrainerPopUp
-          id={apiTrainerData.id}
+          id={apitestTrainerData.id}
           user={showTrain}
           showmodal={showTrainModal}
           onClosemodal={handleTrainCloseModal}

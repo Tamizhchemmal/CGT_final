@@ -17,17 +17,10 @@ import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined
 
 const columns = [
   { id: "name", label: "Name", minWidth: 150, align: "center" },
-  {
-    id: "course",
-    label: "Course",
-    minWidth: 150,
-    align: "center",
 
-    format: (value) => value.toLocaleString("en-US"),
-  },
   {
-    id: "batchcode",
-    label: "Batch Code",
+    id: "totalfees",
+    label: "Total Fees",
     minWidth: 150,
     align: "center",
 
@@ -43,8 +36,11 @@ const columns = [
 ];
 
 export default function RefModalPopUp({ user }) {
-  const [apiData, setApiData] = useState([]);
-
+  // const [apiData, setApiData] = useState([]);
+  // console.log()
+  const arr = user.referralStudents ?? [];
+  const apiData = [...arr];
+  console.log("apiData", apiData);
   const [page, setPage] = React.useState(0);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -57,16 +53,16 @@ export default function RefModalPopUp({ user }) {
     setPage(0);
   };
 
-  const callApiData = async (e) => {
-    const refData = await axios.get(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
-    );
-    setApiData(refData.data);
-  };
+  // const callApiData = async (e) => {
+  //   const refData = await axios.get(
+  //     "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
+  //   );
+  //   setApiData(refData.data);
+  // };
 
-  useEffect(() => {
-    callApiData();
-  }, []);
+  // useEffect(() => {
+  //   callApiData();
+  // }, []);
 
   return (
     <>
@@ -181,19 +177,38 @@ export default function RefModalPopUp({ user }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    <TableRow>
-                      <TableCell>Patrick</TableCell>
-                      <TableCell>Patrick</TableCell>
-                      <TableCell>Patrick</TableCell>
-                      <TableCell>Patrick</TableCell>
-                    </TableRow>
+                    {apiData.map((data) => (
+                      <TableRow key={data.STUDENT_ID} hover role="checkbox">
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          {data.STUDENT_NAME}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          {data.STUDENT_TOTAL_FEES}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          {data.STUDENT_FEES_PAID}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
               </TableContainer>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={apiData.length}
+                count={arr.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

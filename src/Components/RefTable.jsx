@@ -178,28 +178,35 @@ export default function RefTable({ search, referralCount }) {
   const handleCloseModal = (e) => {
     setShowModal(false);
   };
-
-  const [editedRefData, setEditedRefData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmpassword: "",
-    companyname: "",
-    mobilenumber: "",
-    paymentdetails: "",
-    paymentmode: "",
-    reEnterDetails: "",
-    ifscCode: "",
-  });
+  const [selectedrefdata, setselectedrefdata] = useState({});
+  const [updatedrefdata, setupdatedrefdata] = useState({});
+  // const [editedRefData, setEditedRefData] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   confirmpassword: "",
+  //   companyname: "",
+  //   mobilenumber: "",
+  //   paymentdetails: "",
+  //   paymentmode: "",
+  //   reEnterDetails: "",
+  //   ifscCode: "",
+  // });
 
   const handlerefedit = (rowRefData) => {
     console.log(rowRefData);
     setEditRefShow(true);
-    setEditedRefData({
-      ...rowRefData,
-    });
+    setselectedrefdata(rowRefData);
+    setupdatedrefdata({ ...rowRefData });
   };
 
+  const testhandlechange = (e) => {
+    const { name, value } = e.target;
+    setupdatedrefdata({
+      ...updatedrefdata,
+      [name]: value,
+    });
+  };
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
   // Delete Referral
@@ -230,21 +237,46 @@ export default function RefTable({ search, referralCount }) {
 
   const submitRefEdit = async (e) => {
     e.preventDefault();
-    if (password !== confirmpassword) {
-      setErrors("Password should be same");
-    } else if (paymentdetails !== reEnterDetails) {
-      setErrors("Payment Details should be same");
-    } else {
-      const refResponse = await axios.put(
-        "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" +
-          editedRefData.id,
-        editedRefData
-      );
+    let editBody = {
+      email: updatedrefdata.email,
+      firstname: updatedrefdata.name,
+      lastname: "",
+      usertype: 1, //userType Id
+      createdby: 123, // Logged in User unique ID
+      userid: selectedrefdata.id,
+      company: updatedrefdata.companyname,
+      primaryphone: updatedrefdata.mobilenumber,
+      course: selectedrefdata.course, //course id
+      // payment mode ID
+      paymentdetails: selectedrefdata.paymentdetails, // Account no. or Gpay no.
+      ifsccode: selectedrefdata.ifscCode, // ifsc code if bank selected or else give empty
+      password: selectedrefdata.password,
+    };
+    await CrmService.editTrainer(editBody)
+      .then((response) => {
+        console.log(response);
+        alert("Updated");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setEditRefShow(false);
 
-      console.log(refResponse.data);
+    // if (password !== confirmpassword) {
+    //   setErrors("Password should be same");
+    // } else if (paymentdetails !== reEnterDetails) {
+    //   setErrors("Payment Details should be same");
+    // } else {
+    //   // const refResponse = await axios.put(
+    //   //   "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" +
+    //   //     editedRefData.id,
+    //   //   editedRefData
+    //   // );
 
-      setEditRefShow(false);
-    }
+    //   console.log(refResponse.data);
+
+    //
+    // }
   };
 
   var count;
@@ -366,7 +398,6 @@ export default function RefTable({ search, referralCount }) {
         </Paper>
         {/* Edit */}
         <Modal
-          data={apiData}
           className="mods"
           show={editRefShow}
           onHide={edithandleClose}
@@ -396,13 +427,8 @@ export default function RefTable({ search, referralCount }) {
                       name="name"
                       placeholder="Fullname"
                       autoComplete="new-password"
-                      value={editedRefData.name}
-                      onChange={(e) =>
-                        setEditedRefData({
-                          ...editedRefData,
-                          name: e.target.value,
-                        })
-                      }
+                      value={updatedrefdata.name}
+                      onChange={testhandlechange}
                       required
                     ></input>
                   </div>
@@ -414,13 +440,8 @@ export default function RefTable({ search, referralCount }) {
                       placeholder="Mobile Number"
                       pattern="[6789][0-9]{9}"
                       autoComplete="new-password"
-                      value={editedRefData.mobilenumber}
-                      onChange={(e) =>
-                        setEditedRefData({
-                          ...editedRefData,
-                          mobilenumber: e.target.value,
-                        })
-                      }
+                      value={updatedrefdata.mobilenumber}
+                      onChange={testhandlechange}
                       required
                     ></input>
                   </div>
@@ -432,13 +453,8 @@ export default function RefTable({ search, referralCount }) {
                       placeholder="Email Address"
                       pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                       required
-                      value={editedRefData.email}
-                      onChange={(e) =>
-                        setEditedRefData({
-                          ...editedRefData,
-                          email: e.target.value,
-                        })
-                      }
+                      value={updatedrefdata.email}
+                      onChange={testhandlechange}
                     ></input>
                   </div>
                   <div className="inputref">
@@ -448,24 +464,19 @@ export default function RefTable({ search, referralCount }) {
                       name="companyname"
                       placeholder="Company Name"
                       autoComplete="off"
-                      value={editedRefData.companyname}
-                      onChange={(e) =>
-                        setEditedRefData({
-                          ...editedRefData,
-                          companyname: e.target.value,
-                        })
-                      }
+                      value={updatedrefdata.companyname}
+                      onChange={testhandlechange}
                       required
                     ></input>
                   </div>
-                  <div className="inputref">
+                  {/* <div className="inputref">
                     <input
                       type="Password"
                       id="input-pwd"
                       name="password"
                       placeholder="Password"
                       autoComplete="off"
-                      value={editedRefData.password}
+                      value={updatedrefdata.password}
                       onChange={(e) =>
                         setEditedRefData({
                           ...editedRefData,
@@ -482,7 +493,7 @@ export default function RefTable({ search, referralCount }) {
                       name="confirmpassword"
                       placeholder="Confirm Password"
                       autoComplete="off"
-                      value={editedRefData.confirmpassword}
+                      value={updatedrefdata.confirmpassword}
                       onChange={(e) =>
                         setEditedRefData({
                           ...editedRefData,
@@ -491,20 +502,20 @@ export default function RefTable({ search, referralCount }) {
                       }
                       required
                     ></input>
-                  </div>
-                  <div>
+                  </div> */}
+                  {/* <div>
                     <select
                       id="paymentmode"
                       name="paymentmode"
                       className="referaldropdown"
                       required
+                      value={updatedrefdata.paymentmode}
                       onChange={(e) =>
                         setEditedRefData({
                           ...editedRefData,
                           paymentmode: e.target.value,
                         })
                       }
-                      value={editedRefData.paymentmode}
                     >
                       <option value="" disabled selected>
                         Select Payment Mode
@@ -515,16 +526,15 @@ export default function RefTable({ search, referralCount }) {
                         </option>
                       ))}
                     </select>
-                  </div>
-
-                  {editedRefData.paymentmode === "BANK ACCOUNT" && (
+                  </div> */}
+                  {/* {selectedrefdata.paymentmode === "3" && (
                     <div className="inputstudent">
                       <input
                         type="text"
                         name="paymentdetails"
                         placeholder="Enter IFSC Code"
                         autoComplete="off"
-                        value={editedRefData.ifscCode}
+                        value={updatedrefdata.ifscCode}
                         onChange={(e) =>
                           setEditedRefData({
                             ...editedRefData,
@@ -533,15 +543,15 @@ export default function RefTable({ search, referralCount }) {
                         }
                         required
                       ></input>
-                    </div>
-                  )}
-                  <div className="inputstudent">
+                    </div> */}
+                  {/* )} */}
+                  {/* <div className="inputstudent">
                     <input
                       type="text"
                       name="paymentdetails"
                       placeholder="Payment Details (Ac.no/Upi id)"
                       autoComplete="off"
-                      value={editedRefData.paymentdetails}
+                      value={updatedrefdata.paymentdetails}
                       onChange={(e) =>
                         setEditedRefData({
                           ...editedRefData,
@@ -550,14 +560,14 @@ export default function RefTable({ search, referralCount }) {
                       }
                       required
                     ></input>
-                  </div>
-                  <div className="inputstudent">
+                  </div> */}
+                  {/* <div className="inputstudent">
                     <input
                       type="text"
                       name="paymentdetails"
                       placeholder="ReEnter Payment Details"
                       autoComplete="off"
-                      value={editedRefData.reEnterDetails}
+                      value={updatedrefdata.reEnterDetails}
                       onChange={(e) =>
                         setEditedRefData({
                           ...editedRefData,
@@ -566,7 +576,7 @@ export default function RefTable({ search, referralCount }) {
                       }
                       required
                     ></input>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

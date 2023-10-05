@@ -14,6 +14,12 @@ class CrmService {
     }
   }
   //Create ApI
+  createStudent(body) {
+    return axios.post(`${baseURL}api/crm/students/add`, body);
+  }
+  editTrainer(body) {
+    return axios.post(`${baseURL}api/crm/user/add`, body);
+  }
   createBatch(body) {
     return axios.post(`${baseURL}api/crm/batch/create`, body);
   }
@@ -22,10 +28,9 @@ class CrmService {
     return axios.post(`${baseURL}api/crm/user/add`, body);
   }
 
-  editTrainer(body) {
-    return axios.post(`${baseURL}api/crm/user/add`, body);
+  editstudent(body) {
+    return axios.post(`${baseURL}api/crm/students/update`, body);
   }
-
   getbatch() {
     return axios.get(`${baseURL}api/crm/batch/list`);
   }
@@ -38,10 +43,6 @@ class CrmService {
   }
   getTrainerList() {
     return axios.get(`${baseURL}api/crm/user/getTrainerLists`);
-  }
-
-  createStudent(body) {
-    return axios.post(`${baseURL}api/crm/students/add`, body);
   }
 
   getStudentList() {
