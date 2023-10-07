@@ -181,7 +181,8 @@ input::-webkit-inner-spin-button {
   background-color: white;
 }
 #edit-icon,
-#dlt-icon {
+#dlt-icon,
+#pay-icon {
   font-size: 25px;
   margin: 0 10px;
   cursor: pointer;
@@ -274,4 +275,18 @@ input::-webkit-inner-spin-button {
   display: flex;
   align-items: center;
   padding: 15px;
+}
+
+.input-field {
+  display: flex;
+  justify-content: space-around;
+  background-color: aliceblue;
+  border-radius: 10px;
+  padding: 25px 5px;
+  margin: 30px 20px;
+}
+
+.butn {
+  display: flex;
+  justify-content: center;
 }

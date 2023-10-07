@@ -11,10 +11,13 @@ import { AppBar } from "@mui/material";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useNavigate, NavLink } from "react-router-dom";
 
-export default function NavBarTwo(props) {
+export default function NavBarTwo() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showBars, setShowbars] = useState(true);
+  // const [role, setRole] = useState("");
   const navigate = useNavigate();
+
+  let userType = localStorage.getItem("userType");
 
   const HandleOpen = () => {
     setShowSidebar(true);
@@ -53,7 +56,13 @@ export default function NavBarTwo(props) {
                   activeclassname="active"
                   className="navbtn-icon"
                   id="inactive-button"
-                  to={"/refprofile"}
+                  to={
+                    userType == 2
+                      ? "/refprofile"
+                      : userType == 1
+                      ? "/trainerprofile"
+                      : "/"
+                  }
                 >
                   Profile
                 </NavLink>

@@ -25,7 +25,7 @@ import { FcSearch } from "react-icons/fc";
 import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BiSolidMessageSquareEdit } from "react-icons/bi";
+import { BiSolidMessageSquareEdit, BiDollar } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import CrmService from "../API/CrmService.js";
 import { log } from "util";
@@ -102,6 +102,19 @@ const columns = [
 ];
 //table
 
+// payement table
+const payment = [
+  { id: "paymentmode", label: "Payment Mode", minWidth: 170, align: "center" },
+  { id: "paymentdate", label: "Payment Date", minWidth: 170, align: "center" },
+  { id: "amount", label: "Amount", minWidth: 170, align: "center" },
+  {
+    id: "transitionId",
+    label: "Transition ID",
+    minWidth: 170,
+    align: "center",
+  },
+];
+
 function Studentpage() {
   const [search, setSearch] = useState("");
   const [show, setShow] = useState(false);
@@ -145,7 +158,13 @@ function Studentpage() {
 
   const [batchCode, setBatchCode] = useState("");
 
+  // const [paymentDate, setPaymentDate] = useState([]);
+
+  // payment
+  const [payShow, setpayShow] = useState(false);
   const [paymentDate, setPaymentDate] = useState([]);
+  const [studentamount, setstudentamount] = useState("");
+  const [transitionID, settransitionID] = useState("");
 
   const handleStudentClose = () => {
     setShow(false);
@@ -276,6 +295,15 @@ function Studentpage() {
     setdeletePopUp(false);
   };
 
+  // Pay
+  const handlepay = (id) => {
+    setpayShow(true);
+  };
+
+  const payhandleClose = () => {
+    setpayShow(false);
+  };
+
   const edithandleClose = (e) => {
     setEditStudentShow(false);
     setErrors("");
@@ -340,7 +368,7 @@ function Studentpage() {
 
       batchId: batchCode, // call get batch list API and use the primary key of batch data
 
-      trainerId: "4", // call get trainer list API and use the primary key of trainer data
+      trainerId: "", // call get trainer list API and use the primary key of trainer data
 
       courseId: course, // call get course list API and use the primary key of course data
     };
@@ -395,7 +423,7 @@ function Studentpage() {
       paymentMode: updatedstudentdata.STUDENT_PAYMENT_MODE,
       referralId: updatedstudentdata.STUDENT_REFERRAL_ID,
       batchId: updatedstudentdata.STUDENT_BATCH_ID,
-      trainerId: selectedstudentdata.STUDENT_TRAINER_ID,
+      trainerId: updatedstudentdata.STUDENT_TRAINER_ID,
       courseId: updatedstudentdata.STUDENT_COURSE_ID,
     };
 
@@ -411,6 +439,9 @@ function Studentpage() {
     setEditStudentShow(false);
     callApiStudentData();
   };
+
+  // submit payment details
+  const submitStudentPay = () => {};
 
   return (
     <>
@@ -650,8 +681,8 @@ function Studentpage() {
                             <option value="" disabled selected>
                               Batch Code
                             </option>
-                            {batchData.map((data, index) => (
-                              <option key={index.id} value={data.BATCH_ID}>
+                            {batchData.map((data) => (
+                              <option key={data.BATCH_ID} value={data.BATCH_ID}>
                                 {data.BATCH_CODE}
                               </option>
                             ))}
@@ -692,7 +723,7 @@ function Studentpage() {
                             <option value="" disabled selected>
                               Course
                             </option>
-                            {courseList.map((courseData, index1) => (
+                            {courseList.map((courseData) => (
                               <option
                                 key={courseData.COURSE_ID}
                                 value={courseData.COURSE_ID}
@@ -840,7 +871,12 @@ function Studentpage() {
                             placeholder="Degree"
                             autoComplete="new-password"
                             value={updatedstudentdata.STUDENT_DEGREE}
-                            onChange={testhandlechange}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_DEGREE: e.target.value,
+                              });
+                            }}
                             required
                           ></input>
                         </div>
@@ -851,7 +887,12 @@ function Studentpage() {
                             placeholder="Total fees"
                             autoComplete="off"
                             value={updatedstudentdata.STUDENT_TOTAL_FEES}
-                            onChange={testhandlechange}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_TOTAL_FEES: e.target.value,
+                              });
+                            }}
                             required
                           ></input>
                         </div>
@@ -862,7 +903,12 @@ function Studentpage() {
                             placeholder="Fees Paid"
                             autoComplete="off"
                             value={updatedstudentdata.STUDENT_FEES_PAID}
-                            onChange={testhandlechange}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_FEES_PAID: e.target.value,
+                              });
+                            }}
                             required
                           ></input>
                         </div>
@@ -873,11 +919,16 @@ function Studentpage() {
                             placeholder="Pending Fees"
                             autoComplete="off"
                             value={updatedstudentdata.STUDENT_PENDING_FEES}
-                            onChange={testhandlechange}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_PENDING_FEES: e.target.value,
+                              });
+                            }}
                             required
                           ></input>
                         </div>
-                        {/* <div className="inputstudent">
+                        <div className="inputstudent">
                           <input
                             type="text"
                             name="paymentmode"
@@ -892,24 +943,24 @@ function Studentpage() {
                             }}
                             required
                           ></input>
-                        </div> */}
+                        </div>
                         {/* <div style={{ marginLeft: "30px" }}>
                           <label
                             id="strt"
                             htmlFor="startdate"
                             className="text-muted"
                           >
-                            Start date
+                            Pay Date
                           </label>
                           <input
                             type="date"
                             id="startdate"
-                            name="startdate"
+                            name="PaymentDate"
                             placeholder="Start date"
-                            value={editedStudentData.startDate}
+                            value={updatedstudentdata.paymentDate}
                             onChange={(e) => {
-                              setPaymentDate({
-                                ...editedStudentData,
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
                                 paymentDate: e.target.value,
                               });
                             }}
@@ -959,6 +1010,30 @@ function Studentpage() {
                                 value={courseData.COURSE_ID}
                               >
                                 {courseData.COURSE_NAME}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <select
+                            id="batchCode"
+                            name="batchcode"
+                            className="batchdropdown"
+                            required
+                            value={updatedstudentdata.STUDENT_BATCH_ID}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_BATCH_ID: e.target.value,
+                              });
+                            }}
+                          >
+                            <option value="" disabled selected>
+                              Batch Code
+                            </option>
+                            {batchData.map((data) => (
+                              <option key={data.BATCH_ID} value={data.BATCH_ID}>
+                                {data.BATCH_CODE}
                               </option>
                             ))}
                           </select>
@@ -1141,6 +1216,10 @@ function Studentpage() {
                                         deletestudentData(apiStudentData)
                                       }
                                     />
+                                    <BiDollar
+                                      id="pay-icon"
+                                      onClick={() => handlepay(apiStudentData)}
+                                    />
                                   </TableCell>
                                 </TableRow>
                               );
@@ -1261,6 +1340,224 @@ function Studentpage() {
             Close
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      {/* Modal for Payment */}
+      <Modal
+        data={apiStudentData}
+        show={payShow}
+        onHide={payhandleClose}
+        className="mods"
+        backdrop="static"
+        keyboard={false}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header style={{ backgroundColor: " #002333 ", color: "white" }}>
+          <Modal.Title style={{ color: "white" }}> Payment Details</Modal.Title>
+
+          <CloseButton variant="white" onClick={payhandleClose} />
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={submitStudentPay}>
+            <div className="input-field">
+              <div className="row1">
+                <div className="inputref">
+                  <select
+                    id="paymentmode"
+                    name="paymentmode"
+                    className="referaldropdown"
+                    required
+                    value={paymentmode}
+                    onChange={(e) => setPaymentMode(e.target.value)}
+                  >
+                    <option value="" disabled selected>
+                      Payment Mode
+                    </option>
+                    {paymentmodelist.map((paymentmode) => (
+                      <option
+                        key={paymentmode.PAYM_ID}
+                        value={paymentmode.PAYM_ID}
+                      >
+                        {paymentmode.PAYM_NAME}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="text"
+                    id="input-amount"
+                    name="amount"
+                    placeholder="Amount to pay"
+                    autoComplete="new-password"
+                    onChange={(e) => {
+                      setstudentamount(e.target.value);
+                    }}
+                    required
+                  ></input>
+                </div>
+              </div>
+              <div className="row2">
+                <div className="paymentDate">
+                  <label
+                    id="strt"
+                    htmlFor="startdate"
+                    className="text-muted pymtdate"
+                  >
+                    PaymentDate
+                  </label>
+                  <input
+                    type="date"
+                    id="startdate"
+                    name="startdate"
+                    placeholder="Start date"
+                    value={paymentDate}
+                    onChange={(e) => {
+                      setPaymentDate(e.target.value);
+                    }}
+                    required
+                  />
+                </div>
+                <div className="inputref">
+                  <input
+                    type="text"
+                    id="input-transitionid"
+                    name="TransitionID"
+                    placeholder="Transition ID"
+                    autoComplete="new-password"
+                    onChange={(e) => {
+                      settransitionID(e.target.value);
+                    }}
+                    required
+                  ></input>
+                </div>
+              </div>
+            </div>
+            <div className="butn">
+              <button type="submit" id="btn-createrefmodal">
+                Create
+              </button>
+              <button
+                variant="secondary"
+                id="btn-createrefmodal"
+                onClick={payhandleClose}
+              >
+                Close
+              </button>
+            </div>
+          </form>
+          <div className="payment-table">
+            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "3%" }}>
+              <TableContainer sx={{ maxHeight: 540 }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "lightblue" }}>
+                      {payment.map((payment) => (
+                        <TableCell
+                          key={payment.id}
+                          align={payment.align}
+                          style={{
+                            backgroundColor: " #002333",
+                            color: "#ffffff",
+                            fontSize: "18px",
+                          }}
+                        >
+                          {payment.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {/* {apiData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((apiData) => {
+                    return search.toLowerCase() === ""
+                      ? apiData
+                      : apiData.name.toLowerCase().includes(search) ||
+                          apiData.name.includes(search);
+                  })
+                  .map((apiData) => {
+                    return (
+                      <TableRow key={apiData.id} hover role="checkbox">
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          {apiData.name}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          {apiData.mobilenumber}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          {apiData.email}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          12
+                          {apiData.referralStudents.length}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          <Type count={15} />
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          <BiSolidMessageSquareEdit
+                            id="edit-icon"
+                            onClick={() => handlerefedit(apiData)}
+                          />
+                          <MdDelete
+                            id="dlt-icon"
+                            onClick={() => deleteref(apiData)}
+                          />
+                          <BiDollar
+                            id="pay-icon"
+                            onClick={() => handlepay(apiData)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })} */}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={apiStudentData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </div>
+        </Modal.Body>
       </Modal>
     </>
   );

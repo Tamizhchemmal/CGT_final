@@ -23,7 +23,7 @@ import {
 } from "react-bootstrap";
 import { Card } from "@mui/material";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { BiSolidMessageSquareEdit } from "react-icons/bi";
+import { BiSolidMessageSquareEdit, BiDollar } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import Modalpopup from "./Modalpopup";
 
@@ -60,11 +60,23 @@ const columns = [
     format: (value) => value.toLocaleString("en-US"),
   },
   {
-    id: "Edit/Delete",
+    id: "Edit/Delete/Pay",
     label: "Edit/Delete",
     minWidth: 170,
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
+  },
+];
+
+const payment = [
+  { id: "paymentmode", label: "Payment Mode", minWidth: 170, align: "center" },
+  { id: "paymentdate", label: "Payment Date", minWidth: 170, align: "center" },
+  { id: "amount", label: "Amount", minWidth: 170, align: "center" },
+  {
+    id: "transitionId",
+    label: "Transition ID",
+    minWidth: 170,
+    align: "center",
   },
 ];
 
@@ -81,22 +93,14 @@ export default function RefTable({ search, referralCount }) {
   const [showModal, setShowModal] = useState(false);
   const [showRef, setShowref] = useState([]);
 
+  const [payShow, setpayShow] = useState(false);
+  const [paymentDate, setPaymentDate] = useState([]);
+  const [useramount, setuseramount] = useState("");
+  const [transitionID, settransitionID] = useState("");
+
   const handleShow = () => {};
 
-  const [paymentmodelist, setPaymentList] = useState([
-    {
-      id: 1,
-      name: "GPAY NUMBER",
-    },
-    {
-      id: 2,
-      name: "UPI",
-    },
-    {
-      id: 3,
-      name: "BANK ACCOUNT",
-    },
-  ]);
+  const [paymentmodelist, setPaymentList] = useState([]);
 
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
@@ -129,6 +133,18 @@ export default function RefTable({ search, referralCount }) {
   //   // .catch((err) => console.log(r));
   // };
 
+  const callapiPayment = async (e) => {
+    CrmService.userLoggedIn();
+    await CrmService.getPaymentmode()
+      .then((response) => {
+        // console.log(response.data);
+        setPaymentList(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   const callApiData = async (e) => {
     // const refData = await axios.get(
     //   "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
@@ -154,6 +170,7 @@ export default function RefTable({ search, referralCount }) {
 
   useEffect(() => {
     callApiData();
+    callapiPayment();
   }, []);
 
   const [show, setShow] = useState(false);
@@ -173,6 +190,15 @@ export default function RefTable({ search, referralCount }) {
   const opnetable = (apiData) => {
     setShowref(apiData);
     setShowModal(true);
+  };
+
+  // Pay
+  const handlepay = (id) => {
+    setpayShow(true);
+  };
+
+  const payhandleClose = () => {
+    setpayShow(false);
   };
 
   const handleCloseModal = (e) => {
@@ -246,11 +272,12 @@ export default function RefTable({ search, referralCount }) {
       userid: selectedrefdata.id,
       company: updatedrefdata.companyname,
       primaryphone: updatedrefdata.mobilenumber,
-      course: selectedrefdata.course, //course id
-      // payment mode ID
-      paymentdetails: selectedrefdata.paymentdetails, // Account no. or Gpay no.
-      ifsccode: selectedrefdata.ifscCode, // ifsc code if bank selected or else give empty
-      password: selectedrefdata.password,
+      course: "", //course id
+
+      paymentmode: updatedrefdata.paymentmode, // payment mode ID
+      paymentdetails: updatedrefdata.paymentdetails, // Account no. or Gpay no.
+      ifsccode: updatedrefdata.ifscCode, // ifsc code if bank selected or else give empty
+      password: updatedrefdata.password,
     };
     await CrmService.editTrainer(editBody)
       .then((response) => {
@@ -288,6 +315,9 @@ export default function RefTable({ search, referralCount }) {
       return <div>Gold</div>;
     }
   };
+
+  // submit payment
+  const submitRefPay = () => {};
 
   return (
     <>
@@ -379,6 +409,10 @@ export default function RefTable({ search, referralCount }) {
                             id="dlt-icon"
                             onClick={() => deleteref(apiData)}
                           />
+                          <BiDollar
+                            id="pay-icon"
+                            onClick={() => handlepay(apiData)}
+                          />
                         </TableCell>
                       </TableRow>
                     );
@@ -454,7 +488,12 @@ export default function RefTable({ search, referralCount }) {
                       pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
                       required
                       value={updatedrefdata.email}
-                      onChange={testhandlechange}
+                      onChange={(e) => {
+                        setupdatedrefdata({
+                          ...updatedrefdata,
+                          email: e.target.value,
+                        });
+                      }}
                     ></input>
                   </div>
                   <div className="inputref">
@@ -503,64 +542,52 @@ export default function RefTable({ search, referralCount }) {
                       required
                     ></input>
                   </div> */}
-                  {/* <div>
+                  <div className="inputref">
                     <select
                       id="paymentmode"
                       name="paymentmode"
                       className="referaldropdown"
                       required
                       value={updatedrefdata.paymentmode}
-                      onChange={(e) =>
-                        setEditedRefData({
-                          ...editedRefData,
-                          paymentmode: e.target.value,
-                        })
-                      }
+                      onChange={testhandlechange}
                     >
                       <option value="" disabled selected>
                         Select Payment Mode
                       </option>
-                      {paymentmodelist.map((paymentmode, index1) => (
-                        <option key={index1} value={paymentmode.name}>
-                          {paymentmode.name}
+                      {paymentmodelist.map((paymentmode) => (
+                        <option
+                          key={paymentmode.PAYM_ID}
+                          value={paymentmode.PAYM_ID}
+                        >
+                          {paymentmode.PAYM_NAME}
                         </option>
                       ))}
                     </select>
-                  </div> */}
-                  {/* {selectedrefdata.paymentmode === "3" && (
-                    <div className="inputstudent">
+                  </div>
+                  {selectedrefdata.paymentmode == "3" && (
+                    <div className="inputref">
                       <input
                         type="text"
                         name="paymentdetails"
                         placeholder="Enter IFSC Code"
                         autoComplete="off"
                         value={updatedrefdata.ifscCode}
-                        onChange={(e) =>
-                          setEditedRefData({
-                            ...editedRefData,
-                            ifscCode: e.target.value,
-                          })
-                        }
+                        onChange={testhandlechange}
                         required
                       ></input>
-                    </div> */}
-                  {/* )} */}
-                  {/* <div className="inputstudent">
+                    </div>
+                  )}
+                  <div className="inputref">
                     <input
                       type="text"
                       name="paymentdetails"
                       placeholder="Payment Details (Ac.no/Upi id)"
                       autoComplete="off"
                       value={updatedrefdata.paymentdetails}
-                      onChange={(e) =>
-                        setEditedRefData({
-                          ...editedRefData,
-                          paymentdetails: e.target.value,
-                        })
-                      }
+                      onChange={testhandlechange}
                       required
                     ></input>
-                  </div> */}
+                  </div>
                   {/* <div className="inputstudent">
                     <input
                       type="text"
@@ -637,6 +664,224 @@ export default function RefTable({ search, referralCount }) {
             Close
           </Button>
         </Modal.Footer>
+      </Modal>
+
+      {/* Modal for Payment */}
+      <Modal
+        data={apiData}
+        show={payShow}
+        onHide={payhandleClose}
+        className="mods"
+        backdrop="static"
+        keyboard={false}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header style={{ backgroundColor: " #002333 ", color: "white" }}>
+          <Modal.Title style={{ color: "white" }}> Payment Details</Modal.Title>
+
+          <CloseButton variant="white" onClick={payhandleClose} />
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={submitRefPay}>
+            <div className="input-field">
+              <div className="row1">
+                <div className="inputref">
+                  <select
+                    id="paymentmode"
+                    name="paymentmode"
+                    className="referaldropdown"
+                    required
+                    value={paymentmode}
+                    onChange={(e) => setPaymentmode(e.target.value)}
+                  >
+                    <option value="" disabled selected>
+                      Payment Mode
+                    </option>
+                    {paymentmodelist.map((paymentmode) => (
+                      <option
+                        key={paymentmode.PAYM_ID}
+                        value={paymentmode.PAYM_ID}
+                      >
+                        {paymentmode.PAYM_NAME}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="inputref">
+                  <input
+                    type="text"
+                    id="input-amount"
+                    name="amount"
+                    placeholder="Amount to pay"
+                    autoComplete="new-password"
+                    onChange={(e) => {
+                      setuseramount(e.target.value);
+                    }}
+                    required
+                  ></input>
+                </div>
+              </div>
+              <div className="row2">
+                <div className="paymentDate">
+                  <label
+                    id="strt"
+                    htmlFor="startdate"
+                    className="text-muted pymtdate"
+                  >
+                    PaymentDate
+                  </label>
+                  <input
+                    type="date"
+                    id="startdate"
+                    name="startdate"
+                    placeholder="Start date"
+                    value={paymentDate}
+                    onChange={(e) => {
+                      setPaymentDate(e.target.value);
+                    }}
+                    required
+                  />
+                </div>
+                <div className="inputref">
+                  <input
+                    type="text"
+                    id="input-transitionid"
+                    name="TransitionID"
+                    placeholder="Transition ID"
+                    autoComplete="new-password"
+                    onChange={(e) => {
+                      settransitionID(e.target.value);
+                    }}
+                    required
+                  ></input>
+                </div>
+              </div>
+            </div>
+            <div className="butn">
+              <button type="submit" id="btn-createrefmodal">
+                Create
+              </button>
+              <button
+                variant="secondary"
+                id="btn-createrefmodal"
+                onClick={payhandleClose}
+              >
+                Close
+              </button>
+            </div>
+          </form>
+          <div className="payment-table">
+            <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "3%" }}>
+              <TableContainer sx={{ maxHeight: 540 }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "lightblue" }}>
+                      {payment.map((payment) => (
+                        <TableCell
+                          key={payment.id}
+                          align={payment.align}
+                          style={{
+                            backgroundColor: " #002333",
+                            color: "#ffffff",
+                            fontSize: "18px",
+                          }}
+                        >
+                          {payment.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {/* {apiData
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .filter((apiData) => {
+                    return search.toLowerCase() === ""
+                      ? apiData
+                      : apiData.name.toLowerCase().includes(search) ||
+                          apiData.name.includes(search);
+                  })
+                  .map((apiData) => {
+                    return (
+                      <TableRow key={apiData.id} hover role="checkbox">
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          {apiData.name}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          {apiData.mobilenumber}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          {apiData.email}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          12
+                          {apiData.referralStudents.length}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                          onClick={() => opnetable(apiData)}
+                        >
+                          <Type count={15} />
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          <BiSolidMessageSquareEdit
+                            id="edit-icon"
+                            onClick={() => handlerefedit(apiData)}
+                          />
+                          <MdDelete
+                            id="dlt-icon"
+                            onClick={() => deleteref(apiData)}
+                          />
+                          <BiDollar
+                            id="pay-icon"
+                            onClick={() => handlepay(apiData)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })} */}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={apiData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </div>
+        </Modal.Body>
       </Modal>
     </>
   );

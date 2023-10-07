@@ -69,8 +69,22 @@ function App() {
           }
         ></Route>
 
-        <Route path="/refprofile" element={<RefProfile />}></Route>
-        <Route path="/trainerprofile" element={<TrainerProfile />}></Route>
+        <Route
+          path="/refprofile"
+          element={
+            <ProductedProfileReferral>
+              <RefProfile />
+            </ProductedProfileReferral>
+          }
+        ></Route>
+        <Route
+          path="/trainerprofile"
+          element={
+            <ProductedProfileTrainer>
+              <TrainerProfile />
+            </ProductedProfileTrainer>
+          }
+        ></Route>
 
         <Route path="/error" element={<Noaccess />}></Route>
       </Routes>
@@ -104,6 +118,24 @@ const ProductedHome = ({ children }) => {
 const ProductedHomeTrainer = ({ children }) => {
   const roless = localStorage.getItem("role");
   if (roless == "trainer" || roless == "referral") {
+    return children;
+  } else {
+    return <Noaccess />;
+  }
+};
+
+const ProductedProfileTrainer = ({ children }) => {
+  const roless = localStorage.getItem("role");
+  if (roless == "trainer") {
+    return children;
+  } else {
+    return <Noaccess />;
+  }
+};
+
+const ProductedProfileReferral = ({ children }) => {
+  const roless = localStorage.getItem("role");
+  if (roless == "referral") {
     return children;
   } else {
     return <Noaccess />;

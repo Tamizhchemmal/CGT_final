@@ -53,6 +53,10 @@ class CrmService {
     return axios.get(`${baseURL}api/crm/paymentmethod/list`);
   }
 
+  getinduvidualusers(referralId) {
+    return axios.get(`${baseURL}api/crm/user/${referralId}`);
+  }
+
   // Delete Data
 
   deleteBatch(body) {
@@ -70,7 +74,7 @@ class CrmService {
 
     axios.interceptors.request.use((config) => {
       config.headers.apitoken = token;
-      // console.log(config.headers);
+
       return config;
     });
   }

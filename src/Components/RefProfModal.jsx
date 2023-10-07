@@ -14,6 +14,7 @@ import Button from "@mui/material/Button";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
+import CrmService from "../API/CrmService";
 
 const columns = [
   { id: "name", label: "Name", minWidth: 170, align: "center" },
@@ -50,6 +51,21 @@ export default function RefProfModal() {
     setPage(newPage);
   };
 
+  var referralId = localStorage.getItem("uuid");
+  console.log(referralId);
+
+  const getreferraldetails = async () => {
+    CrmService.userLoggedIn();
+    await CrmService.getinduvidualusers(referralId).then((response) => {
+      console.log(response);
+      setApiData(response.data);
+    });
+  };
+
+  useEffect(() => {
+    getreferraldetails();
+  }, []);
+
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangeRowsPerPage = (event) => {
@@ -57,16 +73,16 @@ export default function RefProfModal() {
     setPage(0);
   };
 
-  const callApiData = async (e) => {
-    const refData = await axios.get(
-      "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
-    );
-    setApiData(refData.data);
-  };
+  // const callApiData = async (e) => {
+  //   const refData = await axios.get(
+  //     "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
+  //   );
+  //   setApiData(refData.data);
+  // };
 
-  useEffect(() => {
-    callApiData();
-  }, []);
+  // useEffect(() => {
+  //   callApiData();
+  // }, []);
 
   return (
     <>
@@ -93,7 +109,7 @@ export default function RefProfModal() {
                                 <div className="ref-label">Name</div>
                               </td>
                               <td>
-                                <div className="details">{}</div>
+                                <div className="details">{apiData.name}</div>
                               </td>
                             </tr>
 
@@ -103,7 +119,7 @@ export default function RefProfModal() {
                               </td>
                               <td>
                                 <div className="details">
-                                  {/* : {apiData.mobilenumber} */}
+                                  {apiData.mobilenumber}
                                 </div>
                               </td>
                             </tr>
@@ -113,9 +129,7 @@ export default function RefProfModal() {
                               </td>
                               <td>
                                 {" "}
-                                <div className="details">
-                                  {/* : {apiData.email} */}
-                                </div>
+                                <div className="details">{apiData.email}</div>
                               </td>
                             </tr>
                             <tr>
@@ -159,7 +173,7 @@ export default function RefProfModal() {
                   </div>
                 </div>
                 <div className="column2">
-                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
+                  {/* <Paper sx={{ width: "100%", overflow: "hidden" }}>
                     <TableContainer sx={{ maxHeight: 540 }}>
                       <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -180,7 +194,37 @@ export default function RefProfModal() {
                             ))}
                           </TableRow>
                         </TableHead>
-                        <TableBody></TableBody>
+                        <TableBody>
+                          {apiData.map((data) => (
+                            <TableRow
+                              key={data.STUDENT_ID}
+                              hover
+                              role="checkbox"
+                            >
+                              <TableCell
+                                align="center"
+                                id="table-body"
+                                style={{ fontSize: 16 }}
+                              >
+                                {data.STUDENT_NAME}
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                id="table-body"
+                                style={{ fontSize: 16 }}
+                              >
+                                {data.STUDENT_TOTAL_FEES}
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                id="table-body"
+                                style={{ fontSize: 16 }}
+                              >
+                                {data.STUDENT_FEES_PAID}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
                       </Table>
                     </TableContainer>
                     <TablePagination
@@ -192,7 +236,7 @@ export default function RefProfModal() {
                       onPageChange={handleChangePage}
                       onRowsPerPageChange={handleChangeRowsPerPage}
                     />
-                  </Paper>
+                  </Paper> */}
                 </div>
               </div>
             </Container>

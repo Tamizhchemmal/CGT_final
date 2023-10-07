@@ -14,6 +14,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { useEffect, useState } from "react";
 import { Modal, Button, ModalTitle, CloseButton } from "react-bootstrap";
 import { log } from "util";
+import CrmService from "../API/CrmService";
 
 const columns = [
   { id: "studentname", label: "Student Name", minWidth: 270, align: "center" },
@@ -86,6 +87,25 @@ export default function BatchModalPopUp({ user }) {
     setPage(newPage);
   };
 
+  const [trainerData, settrainerData] = useState([]);
+  // Referral data dropdown
+
+  const callapitrainerdata = async (e) => {
+    await CrmService.getTrainerList()
+      .then((response) => {
+        settrainerData(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect = () => {
+    callapitrainerdata();
+  };
+
+  // get Course name in Table
+
   //
   // const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -156,7 +176,7 @@ export default function BatchModalPopUp({ user }) {
                             style={{ fontSize: 16 }}
                           >
                             {" "}
-                            {sdata.STUDENT_COURSE_ID}
+                            {sdata.BTACH_TRAINER_ID}
                           </TableCell>
                           <TableCell
                             align="center"

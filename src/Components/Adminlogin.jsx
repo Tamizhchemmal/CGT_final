@@ -42,7 +42,6 @@ function Adminlogin(props) {
       let body = {
         email: email,
         password: password,
-
         rememberMe: 0,
       };
       CrmService.login(body)
@@ -50,15 +49,21 @@ function Adminlogin(props) {
           console.log(response);
           console.log(response.data.apitoken);
 
-          localStorage.setItem("apitoken", response.data.apitoken);
+          const usertype = response.data.USER_TYPE;
 
-          setSuccess(true);
-          localStorage.setItem("isUserLoggedIn", true);
-          localStorage.setItem("access", true);
-          localStorage.setItem("role", role);
-          localStorage.setItem("id", userid);
-          setError("");
-          CrmService.userLoggedIn();
+          if (usertype == 3) {
+            localStorage.setItem("apitoken", response.data.apitoken);
+            setSuccess(true);
+            localStorage.setItem("isUserLoggedIn", true);
+            localStorage.setItem("access", true);
+            localStorage.setItem("role", role);
+            localStorage.setItem("userType", response.data.USER_TYPE);
+            localStorage.setItem("uuid", response.data.USER_UUID);
+            setError("");
+            CrmService.userLoggedIn();
+          } else {
+            setError("You are Not Admin");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -69,57 +74,84 @@ function Adminlogin(props) {
             setError(error.response.data.message);
           }
         });
+    } else if (role === "trainer") {
+      let body = {
+        email: email,
+        password: password,
+        rememberMe: 0,
+      };
+      CrmService.login(body)
+        .then((response) => {
+          console.log(response);
+          console.log(response.data.apitoken);
+          console.log(response.data.USER_TYPE);
+          const usertype = response.data.USER_TYPE;
 
-      //   if (email === "admin" && password === "12345") {
-      //     setSuccess(true);
-      //     localStorage.setItem("access", true);
-      //     localStorage.setItem("role", role);
-      //     localStorage.setItem("id", userid);
-      //     setError("");
-      //   } else if (email !== "admin") {
-      //     setError("Incorrect Email");
-      //     return error;
-      //   } else {
-      //     setError("incorrect password");
-      //     setEmail("");
-      //     setPassword("");
+          if (usertype == 1) {
+            localStorage.setItem("apitoken", response.data.apitoken);
 
-      //     return error;
-      //   }
-      // } else if (role === "trainer") {
-      //   if (email === "abc@gmail.com" && password === "12345") {
-      //     setSuccess(true);
-      //     setError("");
-      //     setSuccess(true);
-      //     localStorage.setItem("access", true);
-      //     localStorage.setItem("role", role);
-      //   } else if (email !== "abc@gmail.com") {
-      //     setError("Incorrect Email");
-      //     return error;
-      //   } else {
-      //     setError("incorrect password");
-      //     setEmail("");
-      //     setPassword("");
+            setSuccess(true);
+            localStorage.setItem("isUserLoggedIn", true);
+            localStorage.setItem("access", true);
+            localStorage.setItem("role", role);
+            localStorage.setItem("userType", response.data.USER_TYPE);
+            localStorage.setItem("uuid", response.data.USER_UUID);
+            setError("");
+            CrmService.userLoggedIn();
+          } else {
+            setError("You are not trainer");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.response.data.errmessage);
+          if (error.response.data.errmessage) {
+            setError(error.response.data.errmessage);
+          } else if (error.response.data.message) {
+            setError(error.response.data.message);
+          }
+        });
+    } else if (role === "referral") {
+      let body = {
+        email: email,
+        password: password,
+        rememberMe: 0,
+      };
+      CrmService.login(body)
+        .then((response) => {
+          console.log(response);
+          console.log(response.data.apitoken);
+          console.log(response.data.USER_TYPE);
+          const usertype = response.data.USER_TYPE;
 
-      //     return error;
-      //   }
-      // } else if (role === "referral") {
-      //   if (email === "abc@gmail.com" && password === "12345") {
-      //     setSuccess(true);
-      //     setError("");
-      //     localStorage.setItem("access", true);
-      //     localStorage.setItem("role", role);
-      //   } else if (email !== "abc@gmail.com") {
-      //     setError("Incorrect Email");
-      //     return error;
-      //   } else {
-      //     setError("incorrect password");
-      //     setEmail("");
-      //     setPassword("");
+          if (usertype == 2) {
+            localStorage.setItem("apitoken", response.data.apitoken);
 
-      //     return error;
-      //   }
+            setSuccess(true);
+            localStorage.setItem("isUserLoggedIn", true);
+            localStorage.setItem("access", true);
+            localStorage.setItem("role", role);
+            localStorage.setItem("userType", response.data.USER_TYPE);
+            localStorage.setItem("uuid", response.data.USER_UUID);
+            setError("");
+            CrmService.userLoggedIn();
+          } else {
+            setError("You are not Referral");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log(error.response.data.errmessage);
+          if (error.response.data.errmessage) {
+            setError(error.response.data.errmessage);
+          } else if (error.response.data.message) {
+            setError(error.response.data.message);
+          }
+        });
     }
+    // else {
+    //   setError("Invalid role");
+    // }
   };
 
   const handleaccess = (e) => {

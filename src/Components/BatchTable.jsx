@@ -18,8 +18,9 @@ import axios from "axios";
 
 import { Card } from "@mui/material";
 
-import { BiSolidMessageSquareEdit } from "react-icons/bi";
+import { BiSolidMessageSquareEdit, BiDollar } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
+
 import CrmService from "../API/CrmService";
 
 const columns = [
@@ -176,33 +177,6 @@ export default function BatchTable({ search }) {
     },
   ]);
 
-  const [trainerList, setTrainerList] = useState([
-    {
-      id: 1,
-      name: "Tamzih",
-    },
-    {
-      id: 2,
-      name: "Vignesh",
-    },
-    {
-      id: 3,
-      name: "Patrick",
-    },
-    {
-      id: 4,
-      name: "Swarna",
-    },
-    {
-      id: 5,
-      name: "Karthik Raja",
-    },
-    {
-      id: 6,
-      name: "Priya Saravanan",
-    },
-  ]);
-
   const [show, setShow] = useState(false);
 
   const naviagte = useNavigate();
@@ -218,6 +192,7 @@ export default function BatchTable({ search }) {
   const [errors, setErrors] = useState({});
   const [apiData, setApiData] = useState([]);
   const [editShow, setEditShow] = useState(false);
+
   const [showBatch, setShowBatch] = useState([]);
   const [deletePopUp, setdeletePopUp] = useState(false);
 
@@ -234,9 +209,6 @@ export default function BatchTable({ search }) {
   };
 
   const callApiData = async (e) => {
-    // const batchData = await axios.get(
-    //   "https://64b638a2df0839c97e1528f4.mockapi.io/batch"
-    // );
     await CrmService.getbatch().then((response) => {
       console.log(response);
       setApiData(response.data);
@@ -253,8 +225,21 @@ export default function BatchTable({ search }) {
   //   settrainerData(trainerData.data);
   // };
 
+  const [trainerData, settrainerData] = useState([]);
+  // trainer name
+  const callapitrainerdata = async (e) => {
+    await CrmService.getTrainerList()
+      .then((response) => {
+        settrainerData(response.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   useEffect(() => {
     callApiData();
+    callapitrainerdata();
   }, []);
 
   const openBatchTable = (apiData) => {
@@ -288,29 +273,31 @@ export default function BatchTable({ search }) {
     setdeletePopUp(false);
   };
 
-  const [editedData, setEditedData] = useState({
-    batchcode: "",
-    selectedBatchTime: "",
-    numofstudent: "",
-    trainername: "",
-    startBatchDate: "",
-    endBatchDate: "",
-  });
-
+  // const [editedData, setEditedData] = useState({
+  //   batchcode: "",
+  //   selectedBatchTime: "",
+  //   numofstudent: "",
+  //   trainername: "",
+  //   startBatchDate: "",
+  //   endBatchDate: "",
+  // });
   //Edit Batch
+
+  const [selectedbatchdata, setselectedbatchdata] = useState({});
+  const [updatedbatchdata, setupdatedbatchdata] = useState({});
 
   const handleedit = (rowData) => {
     setEditShow(true);
-    setEditedData({
-      ...rowData,
-    });
+    setselectedbatchdata(rowData);
+    setupdatedbatchdata({ ...rowData });
+    console.log(rowData);
   };
 
   const [startBatchDate, setStartBatchDate] = useState([]);
   const [endBatchDate, setEndBatchDate] = useState([]);
 
   //Date change
-  const handleStartDateChange = (e, editedData) => {
+  const handleStartDateChange = (e, updatedbatchdata) => {
     const selectedStartDate = new Date(e.target.value);
     const selectedEndDate = new Date(selectedStartDate);
     selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
@@ -319,8 +306,14 @@ export default function BatchTable({ search }) {
     const eDate = selectedEndDate.toISOString().substr(0, 10);
     setEndBatchDate(eDate);
 
-    setEditedData({ ...editedData, startBatchDate: e.target.value });
-    setEditedData({ ...editedData, endBatchDate: e.target.value });
+    setupdatedbatchdata({
+      ...updatedbatchdata,
+      BATCH_STARTED_DATE: e.target.value,
+    });
+    setupdatedbatchdata({
+      ...updatedbatchdata,
+      BATCH_END_DATE: e.target.value,
+    });
 
     //Search function
   };
@@ -349,12 +342,12 @@ export default function BatchTable({ search }) {
   const submitEdit = async (event) => {
     event.preventDefault();
 
-    const response = await axios.put(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + editedData.id,
-      editedData
-    );
+    // const response = await axios.put(
+    //   "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + editedData.id,
+    //   editedData
+    // );
 
-    console.log(response.data);
+    // console.log(response.data);
 
     setEditShow(false);
   };
@@ -363,37 +356,39 @@ export default function BatchTable({ search }) {
   const batchCodeHandleChange = (e) => {
     const newValue = e.target.value;
     setBatchList(newValue);
-    setEditedData({ ...editedData, newValue });
+    setupdatedbatchdata({ ...updatedbatchdata, newValue });
     combineDropdownValues(newValue, batchMonth, batchNumber);
   };
 
   const batchMonthHandleChange = (e) => {
     const newValue = e.target.value;
     setBatchMonth(newValue);
-    setEditedData({ ...editedData, newValue });
+    setupdatedbatchdata({ ...updatedbatchdata, newValue });
     combineDropdownValues(batchList, newValue, batchNumber);
   };
 
   const batchNumberHandleChange = (e) => {
     const newValue = e.target.value;
     setBatchNumber(newValue);
-    setEditedData({ ...editedData, newValue });
+    setupdatedbatchdata({ ...updatedbatchdata, newValue });
     combineDropdownValues(batchList, batchMonth, newValue);
   };
 
   const combineDropdownValues = (value1, value2, value3) => {
     const combined = `${value1}-${value2}-${value3}`;
     setbatchcode(combined);
+    setupdatedbatchdata(combined);
   };
 
   // gettrainer name
   const gettrainername = (trainerinfo) => {
     const arr = trainerinfo;
-    if (arr["UI_FIRST_NAME"] === undefined) {
-      return `typeof ${arr["UI_FIRST_NAME"]}`;
-    } else {
-      return arr["UI_FIRST_NAME"];
-    }
+    console.log(trainerinfo);
+    // if (arr["UI_FIRST_NAME"] === undefined) {
+    //   return `typeof ${arr["UI_FIRST_NAME"]}`;
+    // } else {
+    //   return arr["UI_FIRST_NAME"];
+    // }
   };
 
   return (
@@ -462,7 +457,7 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {gettrainername(apiData.trainerinfo)}
+                          {apiData.trainerinfo.UI_FIRST_NAME}
                           {/* {apiData.trainerinfo.UI_ID === null
                             ? `NA`
                             : apiData.trainerinfo.UI_ID} */}
@@ -548,11 +543,11 @@ export default function BatchTable({ search }) {
                       className="batchdropdown"
                       required
                       onChange={batchCodeHandleChange}
-                      value={editedData.batchcode}
+                      value={updatedbatchdata.batchcode}
                     >
                       <option value="null">Batch Code</option>
-                      {batchList.map((data, index) => (
-                        <option key={index} value={index.course}>
+                      {batchList.map((data) => (
+                        <option key={data.id} value={data.id}>
                           {data.course}
                         </option>
                       ))}
@@ -565,11 +560,11 @@ export default function BatchTable({ search }) {
                       className="batchdropdown"
                       required
                       onChange={batchMonthHandleChange}
-                      value={editedData.batchcode}
+                      value={updatedbatchdata.batchcode}
                     >
                       <option value="null">Batch Month</option>
-                      {batchMonth.map((data, index) => (
-                        <option key={index} value={index.month}>
+                      {batchMonth.map((data) => (
+                        <option key={data.id} value={data.id}>
                           {data.month}
                         </option>
                       ))}
@@ -582,11 +577,11 @@ export default function BatchTable({ search }) {
                       className="batchdropdown"
                       required
                       onChange={batchNumberHandleChange}
-                      value={editedData.batchcode}
+                      value={updatedbatchdata.batchcode}
                     >
                       <option value="null">Batch Number</option>
-                      {batchNumber.map((data, index) => (
-                        <option key={index} value={index.number}>
+                      {batchNumber.map((data) => (
+                        <option key={data.id} value={data.id}>
                           {data.number}
                         </option>
                       ))}
@@ -598,10 +593,10 @@ export default function BatchTable({ search }) {
                     type="time"
                     name="batchtiming"
                     id="batchtiming"
-                    value={editedData.selectedBatchTime}
+                    value={updatedbatchdata.selectedBatchTime}
                     onChange={(e) =>
-                      setEditedData({
-                        ...editedData,
+                      setupdatedbatchdata({
+                        ...updatedbatchdata,
                         selectedBatchTime: e.target.value,
                       })
                     }
@@ -613,10 +608,10 @@ export default function BatchTable({ search }) {
                     name="numofstudent"
                     id="numofstudent"
                     placeholder="No of Student"
-                    value={editedData.numofstudent}
+                    value={updatedbatchdata.numofstudent}
                     onChange={(e) =>
-                      setEditedData({
-                        ...editedData,
+                      setupdatedbatchdata({
+                        ...updatedbatchdata,
                         numofstudent: e.target.value,
                       })
                     }
@@ -629,16 +624,16 @@ export default function BatchTable({ search }) {
                     className="trainerdropdown"
                     required
                     onChange={(e) =>
-                      setEditedData({
-                        ...editedData,
-                        trainername: e.target.value,
+                      setupdatedbatchdata({
+                        ...updatedbatchdata,
+                        BATCH_TRAINER_ID: e.target.value,
                       })
                     }
-                    value={editedData.trainername}
+                    value={updatedbatchdata.BATCH_TRAINER_ID}
                   >
                     <option value="">Trainers Name</option>
-                    {trainerList.map((data, index) => (
-                      <option key={index} value={index.name}>
+                    {trainerData.map((data) => (
+                      <option key={data.id} value={data.id}>
                         {data.name}
                       </option>
                     ))}
@@ -659,7 +654,7 @@ export default function BatchTable({ search }) {
                         type="date"
                         id="batchstartdate"
                         placeholder="Start date"
-                        value={editedData.startBatchDate}
+                        value={updatedbatchdata.startBatchDate}
                         onChange={handleStartDateChange}
                         required
                       />
@@ -673,15 +668,14 @@ export default function BatchTable({ search }) {
                         id="batchenddate"
                         name="endBatchdate"
                         placeholder="End date"
-                        value={editedData.endBatchDate}
+                        value={updatedbatchdata.endBatchDate}
                         readOnly
                         disabled
                         onChange={(e) => {
-                          setEditedData({
+                          setupdatedbatchdata({
                             endBatchDate: e.target.value,
                           });
                         }}
-                        // onChange={(e) => set}
                       />
                     </div>
                   </div>
