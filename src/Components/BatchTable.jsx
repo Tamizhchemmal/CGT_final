@@ -7,18 +7,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import "../Css/HomePage.css";
 import Paper from "@mui/material/Paper";
-import { useNavigate } from "react-router-dom";
 import TablePagination from "@mui/material/TablePagination";
 import { useEffect, useState } from "react";
 import { Modal, Button, ModalTitle, CloseButton } from "react-bootstrap";
 
 import BatchPopUp from "./BatchPopUp";
 
-import axios from "axios";
-
-import { Card } from "@mui/material";
-
-import { BiSolidMessageSquareEdit, BiDollar } from "react-icons/bi";
+import { BiSolidMessageSquareEdit } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 
 import CrmService from "../API/CrmService";
@@ -68,128 +63,11 @@ const columns = [
 
 export default function BatchTable({ search }) {
   const [showBatchModal, setShowBatchModal] = useState(false);
-  const [batchcode, setbatchcode] = useState("");
-  const [numofstudent, setnumofstudent] = useState("");
-  const [trainername, settrainername] = useState("");
-
-  const [batchList, setBatchList] = useState([
-    {
-      id: 1,
-      course: "DEVP",
-    },
-    {
-      id: 2,
-      course: "TESTING",
-    },
-    {
-      id: 3,
-      course: "AWS",
-    },
-    {
-      id: 4,
-      course: "UI & UX",
-    },
-    {
-      id: 5,
-      course: "PYTHON",
-    },
-    {
-      id: 6,
-      course: "FULLSTACK",
-    },
-  ]);
-
-  const [batchNumber, setBatchNumber] = useState([
-    {
-      id: 1,
-      number: "1",
-    },
-    {
-      id: 2,
-      number: "2",
-    },
-    {
-      id: 3,
-      number: "3",
-    },
-    {
-      id: 4,
-      number: "4",
-    },
-    {
-      id: 5,
-      number: "5",
-    },
-    {
-      id: 6,
-      number: "6",
-    },
-  ]);
-
-  const [batchMonth, setBatchMonth] = useState([
-    {
-      id: 1,
-      month: "Jan",
-    },
-    {
-      id: 2,
-      month: "Feb",
-    },
-    {
-      id: 3,
-      month: "Mar",
-    },
-    {
-      id: 4,
-      month: "Apr",
-    },
-    {
-      id: 5,
-      month: "May",
-    },
-    {
-      id: 6,
-      month: "Jun",
-    },
-    {
-      id: 7,
-      month: "Jul",
-    },
-    {
-      id: 8,
-      month: "Aug",
-    },
-    {
-      id: 9,
-      month: "Sep",
-    },
-    {
-      id: 10,
-      month: "Oct",
-    },
-    {
-      id: 11,
-      month: "Nov",
-    },
-    {
-      id: 12,
-      month: "Dec",
-    },
-  ]);
-
-  const [show, setShow] = useState(false);
-
-  const naviagte = useNavigate();
-  const handleClose = () => {
-    setShow(false);
-  };
 
   const edithandleClose = () => {
     setEditShow(false);
-    setErrors("");
   };
 
-  const [errors, setErrors] = useState({});
   const [apiData, setApiData] = useState([]);
   const [editShow, setEditShow] = useState(false);
 
@@ -199,7 +77,7 @@ export default function BatchTable({ search }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -212,18 +90,9 @@ export default function BatchTable({ search }) {
     await CrmService.getbatch().then((response) => {
       console.log(response);
       setApiData(response.data);
+      CrmService.userLoggedIn();
     });
   };
-  // trainer dropdown
-
-  // const [trainerData, settrainerData] = useState([]);
-
-  // const callapitrainerdata = async (e) => {
-  //   const trainerData = await axios.get(
-  //     "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
-  //   );
-  //   settrainerData(trainerData.data);
-  // };
 
   const [trainerData, settrainerData] = useState([]);
   // trainer name
@@ -231,6 +100,7 @@ export default function BatchTable({ search }) {
     await CrmService.getTrainerList()
       .then((response) => {
         settrainerData(response.data);
+        CrmService.userLoggedIn();
       })
       .catch((err) => {
         console.error(err);
@@ -256,7 +126,6 @@ export default function BatchTable({ search }) {
   const deletebatch = (id) => {
     setdeletePopUp(true);
     setdeleteKey(id);
-    console.log(id);
   };
 
   const confirmDelete = async () => {
@@ -265,27 +134,41 @@ export default function BatchTable({ search }) {
       modifiedby: "123", // Logged in User unique ID
     };
 
-    await CrmService.deleteBatch(body).then((response) => {
-      console.log(response);
-    });
+    await CrmService.deleteBatch(body)
+      .then((response) => {})
+      .catch((error) => {
+        console.log(error);
+        CrmService.userLoggedIn();
+      });
     callApiData();
     setdeleteKey(null);
     setdeletePopUp(false);
   };
 
-  // const [editedData, setEditedData] = useState({
-  //   batchcode: "",
-  //   selectedBatchTime: "",
-  //   numofstudent: "",
-  //   trainername: "",
-  //   startBatchDate: "",
-  //   endBatchDate: "",
-  // });
   //Edit Batch
 
   const [selectedbatchdata, setselectedbatchdata] = useState({});
   const [updatedbatchdata, setupdatedbatchdata] = useState({});
 
+  //Date change
+  const handleStartDateChange = (e) => {
+    const sDate = e.target.value;
+    console.log(sDate);
+
+    const selectedStartDate = new Date(sDate);
+    const selectedEndDate = new Date(selectedStartDate);
+    selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
+
+    const eDate = selectedEndDate.toISOString().substr(0, 10);
+
+    setupdatedbatchdata({
+      ...updatedbatchdata,
+      BATCH_STARTED_DATE: sDate,
+      BATCH_END_DATE: eDate,
+    });
+
+    //Search function
+  };
   const handleedit = (rowData) => {
     setEditShow(true);
     setselectedbatchdata(rowData);
@@ -293,34 +176,7 @@ export default function BatchTable({ search }) {
     console.log(rowData);
   };
 
-  const [startBatchDate, setStartBatchDate] = useState([]);
-  const [endBatchDate, setEndBatchDate] = useState([]);
-
-  //Date change
-  const handleStartDateChange = (e, updatedbatchdata) => {
-    const selectedStartDate = new Date(e.target.value);
-    const selectedEndDate = new Date(selectedStartDate);
-    selectedEndDate.setMonth(selectedStartDate.getMonth() + 3);
-    const sDate = e.target.value;
-    setStartBatchDate(sDate);
-    const eDate = selectedEndDate.toISOString().substr(0, 10);
-    setEndBatchDate(eDate);
-
-    setupdatedbatchdata({
-      ...updatedbatchdata,
-      BATCH_STARTED_DATE: e.target.value,
-    });
-    setupdatedbatchdata({
-      ...updatedbatchdata,
-      BATCH_END_DATE: e.target.value,
-    });
-
-    //Search function
-  };
-
   // batch active/not
-
-  const [isActive, setisActive] = useState(false);
 
   const isDateWithRange = (startDate, endDate) => {
     const currentDate = new Date();
@@ -330,65 +186,39 @@ export default function BatchTable({ search }) {
     return currentDate >= strtDate && currentDate <= edDate;
   };
 
-  const [selectedBatchTime, setSelectedBatchTime] = useState("");
+  // const [selectedBatchTime, setSelectedBatchTime] = useState("");
 
-  const handleTimeChange = (e) => {
-    const btchTiming = e.target.value;
-    setSelectedBatchTime(btchTiming);
-  };
-
-  var count;
+  // const handleTimeChange = (e) => {
+  //   const btchTiming = e.target.value;
+  //   setSelectedBatchTime(btchTiming);
+  //   setupdatedbatchdata(selectedBatchTime);
+  // };
 
   const submitEdit = async (event) => {
     event.preventDefault();
+    console.log(updatedbatchdata);
+    console.log(updatedbatchdata.BATCH_TRAINER_ID);
+    let body = {
+      batchId: selectedbatchdata.BATCH_ID,
+      batchCode: selectedbatchdata.BATCH_CODE,
+      trainerId: updatedbatchdata.BATCH_TRAINER_ID,
 
-    // const response = await axios.put(
-    //   "https://64b638a2df0839c97e1528f4.mockapi.io/batch/" + editedData.id,
-    //   editedData
-    // );
+      batchSelectedTime: updatedbatchdata.BATCH_SELECTED_TIME,
+      startDate: updatedbatchdata.BATCH_STARTED_DATE,
+      endDate: updatedbatchdata.BATCH_END_DATE,
+    };
 
-    // console.log(response.data);
+    await CrmService.createBatch(body)
+      .then((response) => {
+        console.log(response);
+        CrmService.userLoggedIn();
+        alert("Batch Updated");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
 
     setEditShow(false);
-  };
-
-  // combined dropdown values
-  const batchCodeHandleChange = (e) => {
-    const newValue = e.target.value;
-    setBatchList(newValue);
-    setupdatedbatchdata({ ...updatedbatchdata, newValue });
-    combineDropdownValues(newValue, batchMonth, batchNumber);
-  };
-
-  const batchMonthHandleChange = (e) => {
-    const newValue = e.target.value;
-    setBatchMonth(newValue);
-    setupdatedbatchdata({ ...updatedbatchdata, newValue });
-    combineDropdownValues(batchList, newValue, batchNumber);
-  };
-
-  const batchNumberHandleChange = (e) => {
-    const newValue = e.target.value;
-    setBatchNumber(newValue);
-    setupdatedbatchdata({ ...updatedbatchdata, newValue });
-    combineDropdownValues(batchList, batchMonth, newValue);
-  };
-
-  const combineDropdownValues = (value1, value2, value3) => {
-    const combined = `${value1}-${value2}-${value3}`;
-    setbatchcode(combined);
-    setupdatedbatchdata(combined);
-  };
-
-  // gettrainer name
-  const gettrainername = (trainerinfo) => {
-    const arr = trainerinfo;
-    console.log(trainerinfo);
-    // if (arr["UI_FIRST_NAME"] === undefined) {
-    //   return `typeof ${arr["UI_FIRST_NAME"]}`;
-    // } else {
-    //   return arr["UI_FIRST_NAME"];
-    // }
   };
 
   return (
@@ -535,103 +365,38 @@ export default function BatchTable({ search }) {
             </ModalTitle>
             <form onSubmit={submitEdit}>
               <div className="inputbatch-box">
-                <div className="combine-dropdwn">
-                  <div className="inputbatch">
-                    <select
-                      id="batchcode"
-                      name="batchcode"
-                      className="batchdropdown"
-                      required
-                      onChange={batchCodeHandleChange}
-                      value={updatedbatchdata.batchcode}
-                    >
-                      <option value="null">Batch Code</option>
-                      {batchList.map((data) => (
-                        <option key={data.id} value={data.id}>
-                          {data.course}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="inputbatch">
-                    <select
-                      id="batchcode"
-                      name="batchcode"
-                      className="batchdropdown"
-                      required
-                      onChange={batchMonthHandleChange}
-                      value={updatedbatchdata.batchcode}
-                    >
-                      <option value="null">Batch Month</option>
-                      {batchMonth.map((data) => (
-                        <option key={data.id} value={data.id}>
-                          {data.month}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="inputbatch">
-                    <select
-                      id="batchcode"
-                      name="batchcode"
-                      className="batchdropdown"
-                      required
-                      onChange={batchNumberHandleChange}
-                      value={updatedbatchdata.batchcode}
-                    >
-                      <option value="null">Batch Number</option>
-                      {batchNumber.map((data) => (
-                        <option key={data.id} value={data.id}>
-                          {data.number}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
                 <div className="inputbatch">
                   <input
                     type="time"
                     name="batchtiming"
                     id="batchtiming"
-                    value={updatedbatchdata.selectedBatchTime}
+                    value={updatedbatchdata.BATCH_SELECTED_TIME}
                     onChange={(e) =>
                       setupdatedbatchdata({
                         ...updatedbatchdata,
-                        selectedBatchTime: e.target.value,
+                        BATCH_SELECTED_TIME: e.target.value,
                       })
                     }
                   />
                 </div>
-                <div className="inputbatch">
-                  <input
-                    type="number"
-                    name="numofstudent"
-                    id="numofstudent"
-                    placeholder="No of Student"
-                    value={updatedbatchdata.numofstudent}
-                    onChange={(e) =>
-                      setupdatedbatchdata({
-                        ...updatedbatchdata,
-                        numofstudent: e.target.value,
-                      })
-                    }
-                  />
-                </div>
+
                 <div className="inputbatch">
                   <select
                     id="trainername"
                     name="trainername"
                     className="trainerdropdown"
                     required
+                    value={updatedbatchdata.BATCH_TRAINER_ID}
                     onChange={(e) =>
                       setupdatedbatchdata({
                         ...updatedbatchdata,
                         BATCH_TRAINER_ID: e.target.value,
                       })
                     }
-                    value={updatedbatchdata.BATCH_TRAINER_ID}
                   >
-                    <option value="">Trainers Name</option>
+                    <option value="" disabled selected>
+                      Trainers Name
+                    </option>
                     {trainerData.map((data) => (
                       <option key={data.id} value={data.id}>
                         {data.name}
@@ -654,7 +419,7 @@ export default function BatchTable({ search }) {
                         type="date"
                         id="batchstartdate"
                         placeholder="Start date"
-                        value={updatedbatchdata.startBatchDate}
+                        value={updatedbatchdata.BATCH_STARTED_DATE}
                         onChange={handleStartDateChange}
                         required
                       />
@@ -668,12 +433,13 @@ export default function BatchTable({ search }) {
                         id="batchenddate"
                         name="endBatchdate"
                         placeholder="End date"
-                        value={updatedbatchdata.endBatchDate}
+                        value={updatedbatchdata.BATCH_END_DATE}
                         readOnly
                         disabled
                         onChange={(e) => {
                           setupdatedbatchdata({
-                            endBatchDate: e.target.value,
+                            ...updatedbatchdata,
+                            BATCH_END_DATE: e.target.value,
                           });
                         }}
                       />

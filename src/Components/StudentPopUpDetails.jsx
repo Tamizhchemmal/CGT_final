@@ -148,7 +148,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Degree</div>
                             </td>
                             <td>
-                              <div className="details"></div>
+                              <div className="details">
+                                {user.STUDENT_DEGREE}
+                              </div>
                             </td>
                           </tr>
                           <tr>
@@ -156,7 +158,9 @@ export default function StudentPopUpDetails({ user }) {
                               <div className="label">Course Name</div>
                             </td>
                             <td>
-                              <div className="details"></div>
+                              <div className="details">
+                                {user.course.COURSE_NAME}
+                              </div>
                             </td>
                           </tr>
                         </tbody>

@@ -1,5 +1,4 @@
-import Form from "react-bootstrap/Form";
-import React, { useRef } from "react";
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -9,20 +8,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import CrmService from "../API/CrmService";
-import axios from "axios";
-import {
-  Container,
-  Dropdown,
-  DropdownButton,
-  Modal,
-  Button,
-  ModalTitle,
-  CloseButton,
-} from "react-bootstrap";
-import { Card } from "@mui/material";
-import BorderColorIcon from "@mui/icons-material/BorderColor";
+
+import { Modal, Button, CloseButton } from "react-bootstrap";
+
 import { BiSolidMessageSquareEdit, BiDollar } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import Modalpopup from "./Modalpopup";
@@ -78,39 +68,32 @@ const payment = [
     minWidth: 170,
     align: "center",
   },
+  {
+    id: "action",
+    label: "Delete",
+    minWidth: 170,
+    align: "center",
+  },
 ];
 
-// const rows = [];
-
 export default function RefTable({ search, referralCount }) {
-  const [name, setName] = useState("");
-  const [mobilenumber, setMobilenumber] = useState("");
-
-  const [email, setEmail] = useState("");
-  const [companyname, setCompanyName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmpassword, setConfirmpassword] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showRef, setShowref] = useState([]);
-
+  //payment Trasaction
   const [payShow, setpayShow] = useState(false);
   const [paymentDate, setPaymentDate] = useState([]);
   const [useramount, setuseramount] = useState("");
   const [transitionID, settransitionID] = useState("");
-
-  const handleShow = () => {};
+  const [receiptpaymentmode, setReceiptpaymentmode] = useState("");
 
   const [paymentmodelist, setPaymentList] = useState([]);
+  const [reciptdata, setreciptdata] = useState([]);
 
-  const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [alertt, setAlertt] = useState(null);
-  const [paymentdetails, setPaymentdetails] = useState("");
-  const [reEnterDetails, setreEnterDetails] = useState("");
-  const [paymentmode, setPaymentmode] = useState("");
-  const [ifscCode, setifscCode] = useState("");
-  const handleChangePage = (event, newPage) => {
+
+  const [paymetuserdata, setPaymentuserdata] = useState([]);
+  const handleChangePage = (newPage) => {
     setPage(newPage);
   };
 
@@ -121,23 +104,10 @@ export default function RefTable({ search, referralCount }) {
 
   const [apiData, setApiData] = useState([]);
 
-  // Test api
-  // const callTestApiData = async (e) => {
-  //   await CrmService.getReferalList()
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.message);
-  //     });
-  //   // .catch((err) => console.log(r));
-  // };
-
   const callapiPayment = async (e) => {
     CrmService.userLoggedIn();
     await CrmService.getPaymentmode()
       .then((response) => {
-        // console.log(response.data);
         setPaymentList(response.data);
       })
       .catch((err) => {
@@ -146,9 +116,7 @@ export default function RefTable({ search, referralCount }) {
   };
 
   const callApiData = async (e) => {
-    // const refData = await axios.get(
-    //   "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
-    // );
+    CrmService.userLoggedIn();
 
     await CrmService.getReferalList()
       .then((response) => {
@@ -158,27 +126,12 @@ export default function RefTable({ search, referralCount }) {
       .catch((err) => {
         console.log(err);
       });
-    //     .then((response) => {
-    //       console.log(response.data);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err.message);
-    //     });
-    //   // .catch((err) => console.log(r));
-    // };
   };
 
   useEffect(() => {
     callApiData();
     callapiPayment();
   }, []);
-
-  const [show, setShow] = useState(false);
-
-  const naviagte = useNavigate();
-  const handleClose = () => {
-    setShow(false);
-  };
 
   const [editRefShow, setEditRefShow] = useState(false);
 
@@ -193,8 +146,11 @@ export default function RefTable({ search, referralCount }) {
   };
 
   // Pay
-  const handlepay = (id) => {
+  const handlepay = (apiData) => {
+    setPaymentuserdata(apiData);
     setpayShow(true);
+    setreciptdata(apiData.userpayments);
+    console.log(apiData);
   };
 
   const payhandleClose = () => {
@@ -206,18 +162,6 @@ export default function RefTable({ search, referralCount }) {
   };
   const [selectedrefdata, setselectedrefdata] = useState({});
   const [updatedrefdata, setupdatedrefdata] = useState({});
-  // const [editedRefData, setEditedRefData] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  //   confirmpassword: "",
-  //   companyname: "",
-  //   mobilenumber: "",
-  //   paymentdetails: "",
-  //   paymentmode: "",
-  //   reEnterDetails: "",
-  //   ifscCode: "",
-  // });
 
   const handlerefedit = (rowRefData) => {
     console.log(rowRefData);
@@ -233,8 +177,10 @@ export default function RefTable({ search, referralCount }) {
       [name]: value,
     });
   };
-  const [deleteKey, setdeleteKey] = useState(null);
+  const [deleteKey, setdeleteKey] = useState("");
   const [deletePopUp, setdeletePopUp] = useState(false);
+  const [deletepaymentpopup, setdeletepaymentpopup] = useState(false);
+
   // Delete Referral
   const deleteref = (data) => {
     setdeletePopUp(true);
@@ -244,18 +190,21 @@ export default function RefTable({ search, referralCount }) {
   const confirmDelete = async () => {
     let body = {
       userid: deleteKey, // user UUID
-      modifiedby: "123", // Logged in User unique ID
+      modifiedby: "2225", // Logged in User unique ID
     };
 
+    CrmService.userLoggedIn();
     await CrmService.deleteReferral(body)
       .then((response) => {
         console.log(response);
+        alert("deleted");
       })
       .catch((error) => {
         console.log(error);
       });
+
     callApiData();
-    setdeleteKey(null);
+
     setdeletePopUp(false);
   };
 
@@ -288,36 +237,65 @@ export default function RefTable({ search, referralCount }) {
         console.log(err);
       });
     setEditRefShow(false);
-
-    // if (password !== confirmpassword) {
-    //   setErrors("Password should be same");
-    // } else if (paymentdetails !== reEnterDetails) {
-    //   setErrors("Payment Details should be same");
-    // } else {
-    //   // const refResponse = await axios.put(
-    //   //   "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData/" +
-    //   //     editedRefData.id,
-    //   //   editedRefData
-    //   // );
-
-    //   console.log(refResponse.data);
-
-    //
-    // }
   };
 
-  var count;
+  // delete payment history
 
-  const Type = ({ count }) => {
-    if (count <= 10) {
-      return <div>Silver</div>;
-    } else if ((count) => 10) {
-      return <div>Gold</div>;
+  const [deletepay, setDeletePay] = useState(null);
+  const deleteHistory = async (data) => {
+    setdeletepaymentpopup(true);
+    setDeletePay(data.UPR_ID);
+  };
+
+  const deletePaymentHistroy = async () => {
+    let body = {
+      transactionId: deletepay,
+      userid: paymetuserdata.uuid, // user unique UUID
+      modifiedby: "123", // logged in users unqiue uuID
+    };
+    await CrmService.deletePaymentDetails(body).then((response) => {
+      console.log(response);
+      setdeletepaymentpopup(false);
+
+      setpayShow(false);
+    });
+
+    callApiData();
+  };
+
+  const getType = (count) => {
+    console.log("count", count);
+    if (count >= 4) {
+      return <div className="gold">Gold</div>;
+    } else if (count < 4) {
+      return <div className="silver">silver</div>;
     }
   };
 
   // submit payment
-  const submitRefPay = () => {};
+  const submitRefPay = async (e) => {
+    e.preventDefault();
+    let body = {
+      id: 0, // for create give ID as 0 for edit give ID as Receipt ID(SRP_ID)
+      userid: paymetuserdata.uuid, // user unique UUID
+      receivedAmount: useramount,
+      paymentMode: receiptpaymentmode, // payment mode paym id
+      refNumber: transitionID,
+      paymentDate: paymentDate, // payment date
+      createdBy: 123,
+    };
+
+    await CrmService.createPymentDetails(body)
+      .then((response) => {
+        console.log(response);
+        alert("Payment updated Successfully");
+        setpayShow(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    e.target.reset();
+  };
 
   return (
     <>
@@ -394,7 +372,7 @@ export default function RefTable({ search, referralCount }) {
                           style={{ fontSize: 16 }}
                           onClick={() => opnetable(apiData)}
                         >
-                          {/* <Type count={15} /> */}
+                          {getType(apiData.referralStudents.length)}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -564,14 +542,14 @@ export default function RefTable({ search, referralCount }) {
                       ))}
                     </select>
                   </div>
-                  {selectedrefdata.paymentmode == "3" && (
+                  {updatedrefdata.paymentmode == "3" && (
                     <div className="inputref">
                       <input
                         type="text"
-                        name="paymentdetails"
+                        name="ifscCode"
                         placeholder="Enter IFSC Code"
                         autoComplete="off"
-                        value={updatedrefdata.ifscCode}
+                        value={updatedrefdata.ifsccode}
                         onChange={testhandlechange}
                         required
                       ></input>
@@ -693,8 +671,8 @@ export default function RefTable({ search, referralCount }) {
                     name="paymentmode"
                     className="referaldropdown"
                     required
-                    value={paymentmode}
-                    onChange={(e) => setPaymentmode(e.target.value)}
+                    value={receiptpaymentmode}
+                    onChange={(e) => setReceiptpaymentmode(e.target.value)}
                   >
                     <option value="" disabled selected>
                       Payment Mode
@@ -716,6 +694,7 @@ export default function RefTable({ search, referralCount }) {
                     name="amount"
                     placeholder="Amount to pay"
                     autoComplete="new-password"
+                    value={useramount}
                     onChange={(e) => {
                       setuseramount(e.target.value);
                     }}
@@ -735,7 +714,7 @@ export default function RefTable({ search, referralCount }) {
                   <input
                     type="date"
                     id="startdate"
-                    name="startdate"
+                    name="paymentdate"
                     placeholder="Start date"
                     value={paymentDate}
                     onChange={(e) => {
@@ -751,6 +730,7 @@ export default function RefTable({ search, referralCount }) {
                     name="TransitionID"
                     placeholder="Transition ID"
                     autoComplete="new-password"
+                    value={transitionID}
                     onChange={(e) => {
                       settransitionID(e.target.value);
                     }}
@@ -772,6 +752,8 @@ export default function RefTable({ search, referralCount }) {
               </button>
             </div>
           </form>
+          {/* Payment mode */}
+
           <div className="payment-table">
             <Paper sx={{ width: "100%", overflow: "hidden", marginTop: "3%" }}>
               <TableContainer sx={{ maxHeight: 540 }}>
@@ -794,86 +776,73 @@ export default function RefTable({ search, referralCount }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/* {apiData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((apiData) => {
-                    return search.toLowerCase() === ""
-                      ? apiData
-                      : apiData.name.toLowerCase().includes(search) ||
-                          apiData.name.includes(search);
-                  })
-                  .map((apiData) => {
-                    return (
-                      <TableRow key={apiData.id} hover role="checkbox">
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.name}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.mobilenumber}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.email}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          12
-                          {apiData.referralStudents.length}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          <Type count={15} />
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                        >
-                          <BiSolidMessageSquareEdit
-                            id="edit-icon"
-                            onClick={() => handlerefedit(apiData)}
-                          />
-                          <MdDelete
-                            id="dlt-icon"
-                            onClick={() => deleteref(apiData)}
-                          />
-                          <BiDollar
-                            id="pay-icon"
-                            onClick={() => handlepay(apiData)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })} */}
+                    {reciptdata
+                      // .slice(
+                      //   page * rowsPerPage,
+                      //   page * rowsPerPage + rowsPerPage
+                      // )
+                      // .filter((apiData) => {
+                      //   return search.toLowerCase() === ""
+                      //     ? apiData
+                      //     : apiData.name.toLowerCase().includes(search) ||
+                      //         apiData.name.includes(search);
+                      // })
+                      .map((apiData) => {
+                        return (
+                          <TableRow key={apiData.UPR_ID} hover role="checkbox">
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.paymentmethod.PAYM_NAME}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.UPR_CREATED_DATE}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.UPR_AMOUNT}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.UPR_PAYMENT_REF_NUMBER}
+                            </TableCell>
+
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              <MdDelete
+                                id="dlt-icon"
+                                onClick={() => deleteHistory(apiData)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                   </TableBody>
                 </Table>
               </TableContainer>
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={apiData.length}
+                count={reciptdata.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
@@ -882,6 +851,35 @@ export default function RefTable({ search, referralCount }) {
             </Paper>
           </div>
         </Modal.Body>
+      </Modal>
+
+      {/* Modal for want to delete Payhistory */}
+      <Modal
+        show={deletepaymentpopup}
+        backdrop="static"
+        keyboard={false}
+        className="mods"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <h4 style={{ color: "green" }}>Delete</h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are You sure want to delete receipt ? </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={deletePaymentHistroy}>
+            Okay
+          </Button>
+          <Button
+            variant="secondary"
+            id="btn-createrefmodal"
+            onClick={() => setdeletepaymentpopup(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

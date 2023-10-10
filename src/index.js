@@ -8,13 +8,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import axios from "axios";
 
-let token = localStorage.getItem("apitoken");
+// let token = localStorage.getItem("apitoken");
 
-axios.interceptors.request.use((config) => {
-  config.headers.apitoken = token;
-  // console.log(config.headers);
-  return config;
-});
+// axios.interceptors.request.use((config) => {
+//   config.headers.apitoken = token;
+//   // console.log(config.headers);
+//   return config;
+// });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

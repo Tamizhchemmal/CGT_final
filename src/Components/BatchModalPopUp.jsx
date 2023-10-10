@@ -50,11 +50,13 @@ export default function BatchModalPopUp({ user }) {
   // const [apiData, setApiData] = useState([]);
   const arr = [...batchStudents];
 
+  console.log(user.batchStudents);
+
   // useEffect(() => {
   //   setApiData(batchStudents);
   // });
   // console.log(batchStudents.STUDENT_EMAIL);
-  console.log(typeof arr);
+  // console.log(arr);
 
   // console.log(user.batch_students);
   // setApiData(user.batch_students);
@@ -87,32 +89,32 @@ export default function BatchModalPopUp({ user }) {
     setPage(newPage);
   };
 
-  const [trainerData, settrainerData] = useState([]);
-  // Referral data dropdown
+  // const [trainerData, settrainerData] = useState([]);
+  // // Referral data dropdown
 
-  const callapitrainerdata = async (e) => {
-    await CrmService.getTrainerList()
-      .then((response) => {
-        settrainerData(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  // const callapitrainerdata = async (e) => {
+  //   await CrmService.getTrainerList()
+  //     .then((response) => {
+  //       settrainerData(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.error(err);
+  //     });
+  // };
 
-  useEffect = () => {
-    callapitrainerdata();
-  };
+  // useEffect = () => {
+  //   callapitrainerdata();
+  // };
 
   // get Course name in Table
 
   //
-  // const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(+event.target.value);
-  //   setPage(0);
-  // };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   // const callApiData = async (e) => {
   //   const batchData = await axios.get(
@@ -176,7 +178,7 @@ export default function BatchModalPopUp({ user }) {
                             style={{ fontSize: 16 }}
                           >
                             {" "}
-                            {sdata.BTACH_TRAINER_ID}
+                            {user.trainerinfo.UI_FIRST_NAME}
                           </TableCell>
                           <TableCell
                             align="center"
@@ -191,15 +193,15 @@ export default function BatchModalPopUp({ user }) {
                   </TableBody>
                 </Table>
               </TableContainer>
-              {/* <TablePagination
-              rowsPerPageOptions={[10, 25, 100]}
-              component="div"
-              count={apiData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            /> */}
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={arr.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
             </Paper>
           </div>
         </div>

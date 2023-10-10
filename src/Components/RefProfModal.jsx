@@ -57,8 +57,8 @@ export default function RefProfModal() {
   const getreferraldetails = async () => {
     CrmService.userLoggedIn();
     await CrmService.getinduvidualusers(referralId).then((response) => {
-      console.log(response);
-      setApiData(response.data);
+      console.log(response.data);
+      setApiData(response.data[0]);
     });
   };
 

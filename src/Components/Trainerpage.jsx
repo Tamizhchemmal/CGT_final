@@ -97,6 +97,12 @@ const payment = [
     minWidth: 170,
     align: "center",
   },
+  {
+    id: "action",
+    label: "Delete",
+    minWidth: 170,
+    align: "center",
+  },
 ];
 
 export default function Trainerpage() {
@@ -119,10 +125,14 @@ export default function Trainerpage() {
   const [ifscCode, setifscCode] = useState("");
   const [role, setRole] = useState("trainer");
 
+  //payment Trasaction
   const [payShow, setpayShow] = useState(false);
   const [paymentDate, setPaymentDate] = useState([]);
   const [useramount, setuseramount] = useState("");
   const [transitionID, settransitionID] = useState("");
+  const [receiptpaymentmode, setReceiptpaymentmode] = useState("");
+  const [reciptdata, setreciptdata] = useState([]);
+  const [paymetuserdata, setPaymentuserdata] = useState([]);
 
   // console.log(search);
   const [courseList, setCourseList] = useState([]);
@@ -157,8 +167,11 @@ export default function Trainerpage() {
   };
 
   // Pay
-  const handlepay = (id) => {
+  const handlepay = (apiData) => {
+    setPaymentuserdata(apiData);
     setpayShow(true);
+    setreciptdata(apiData.userpayments);
+    console.log(apiData);
   };
 
   const payhandleClose = () => {
@@ -225,31 +238,6 @@ export default function Trainerpage() {
     setErrors("");
   };
 
-  // const [editedTrainData, setEditedTrainData] = useState({
-  //   email: "",
-  //   firstname: "",
-  //   lastname: "",
-  //   usertype: 1, //userType Id
-  //   createdby: 1234, // Logged in User unique ID
-  //   userid: "",
-  //   company: "",
-  //   primaryphone: "",
-  //   course: "", //course id
-  //   role: role,
-  // });
-
-  // name: "",
-  //   email: "",
-  //   password: "",
-  //   confirmpassword: "",
-  //   course: "",
-  //   paymentdetails: "",
-  //   paymentmode: "",
-  //   ifscCode: "",
-  //   reEnterDetails: "",
-  //   companyname: "",
-  //   mobilenumber: "",
-
   const handletrainedit = (rowTrainData) => {
     setEditTrainShow(true);
     setselectedtraindata(rowTrainData);
@@ -281,14 +269,7 @@ export default function Trainerpage() {
 
   const submitTraintestEdit = async (e) => {
     e.preventDefault();
-    // const amnntt = updatedtraindata.paymentmode;
-    // const amount = (amnntt) => {
-    //   if (typeof updatedtraindata.paymentmode == "string") {
-    //     return selectedtraindata.paymentmode;
-    //   } else {
-    //     return updatedtraindata.paymentmode;
-    //   }
-    // };
+
     let editBody = {
       email: updatedtraindata.email,
       firstname: updatedtraindata.name,
@@ -298,7 +279,7 @@ export default function Trainerpage() {
       userid: selectedtraindata.id,
       company: updatedtraindata.companyname,
       primaryphone: updatedtraindata.mobilenumber,
-      course: updatedtraindata.course, //course id
+      course: updatedtraindata.courseId, //course id
       // payment mode ID
       paymentmode: updatedtraindata.paymentmode,
       paymentdetails: updatedtraindata.paymentdetails, // Account no. or Gpay no.
@@ -319,6 +300,7 @@ export default function Trainerpage() {
   // delete trainer
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
+  const [deletepaymentpopup, setdeletepaymentpopup] = useState();
 
   const deleteTrainerData = (data) => {
     setdeletePopUp(true);
@@ -333,6 +315,7 @@ export default function Trainerpage() {
     await CrmService.deleteReferral(body)
       .then((response) => {
         console.log(response);
+        alert("Deleted Successfully");
       })
       .catch((error) => {
         console.log(error);
@@ -403,7 +386,54 @@ export default function Trainerpage() {
 
   // trainer payment
 
-  const submitTrainerPay = () => {};
+  const submitTrainerPay = async (e) => {
+    e.preventDefault();
+    let body = {
+      id: 0, // for create give ID as 0 for edit give ID as Receipt ID(SRP_ID)
+      userid: paymetuserdata.uuid, // user unique UUID
+      receivedAmount: useramount,
+      paymentMode: receiptpaymentmode, // payment mode paym id
+      refNumber: transitionID,
+      paymentDate: paymentDate, // payment date
+      createdBy: 123,
+    };
+
+    await CrmService.createPymentDetails(body)
+      .then((response) => {
+        console.log(response);
+        alert("Payment updated Successfully");
+        setpayShow(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    e.target.reset();
+  };
+
+  // delete payment history
+
+  const [deletepay, setDeletePay] = useState(null);
+  const deleteHistory = async (data) => {
+    setdeletepaymentpopup(true);
+    setDeletePay(data.UPR_ID);
+  };
+
+  const deletePaymentHistroy = async () => {
+    let body = {
+      transactionId: deletepay,
+      userid: paymetuserdata.uuid, // user unique UUID
+      modifiedby: "123", // logged in users unqiue uuID
+    };
+    await CrmService.deletePaymentDetails(body).then((response) => {
+      console.log(response);
+      setdeletepaymentpopup(false);
+
+      setpayShow(false);
+    });
+    // console.log(data);
+    callTestApiData();
+  };
+
   return (
     <>
       <div>
@@ -541,7 +571,7 @@ export default function Trainerpage() {
                           <div className="inputstudent">
                             <input
                               type="text"
-                              name="paymentdetails"
+                              name="ifscCode"
                               placeholder="Enter IFSC Code"
                               autoComplete="off"
                               value={ifscCode}
@@ -582,7 +612,9 @@ export default function Trainerpage() {
                             value={course}
                             onChange={(e) => setCourse(e.target.value)}
                           >
-                            <option value="none">Course</option>
+                            <option value="" disabled selected>
+                              Course
+                            </option>
                             {courseList.map((courseData) => (
                               <option
                                 key={courseData.COURSE_ID}
@@ -739,14 +771,14 @@ export default function Trainerpage() {
                             ))}
                           </select>
                         </div>
-                        {selectedtraindata.paymentmode == "3" && (
+                        {updatedtraindata.paymentmode == "3" && (
                           <div className="inputstudent">
                             <input
                               type="text"
-                              name="paymentdetails"
+                              name="ifscCode"
                               placeholder="Enter IFSC Code"
                               autoComplete="off"
-                              value={updatedtraindata.ifscCode}
+                              value={updatedtraindata.ifsccode}
                               onChange={testhandlechange}
                               required
                             ></input>
@@ -770,11 +802,11 @@ export default function Trainerpage() {
                             name="course"
                             className="referaldropdown"
                             required
-                            value={updatedtraindata.course}
+                            value={updatedtraindata.courseId}
                             onChange={(e) => {
                               setupdatedtraindata({
                                 ...updatedtraindata,
-                                course: e.target.value,
+                                courseId: e.target.value,
                               });
                             }}
                           >
@@ -951,7 +983,7 @@ export default function Trainerpage() {
                               page * rowsPerPage + rowsPerPage
                             )
                             // .filter((apiTrainerData) => {
-                            //   return search.toLowerCase() === ""
+                            //   return search.toLowerCase() == ""
                             //     ? apiTrainerData
                             //     : apiTrainerData.name
                             //         .toLowerCase()
@@ -1007,9 +1039,7 @@ export default function Trainerpage() {
                                       opneTraintable(apiTrainerData)
                                     }
                                   >
-                                    {getcoursename(
-                                      apiTrainerData.STUDENT_COURSE_ID
-                                    )}
+                                    {apiTrainerData.courseName}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1029,7 +1059,7 @@ export default function Trainerpage() {
                                       opneTraintable(apiTrainerData)
                                     }
                                   >
-                                    {apiTrainerData.paymentmode}
+                                    {apiTrainerData.paymentmodename}
                                   </TableCell>
                                   <TableCell
                                     align="center"
@@ -1323,8 +1353,8 @@ export default function Trainerpage() {
                     name="paymentmode"
                     className="referaldropdown"
                     required
-                    value={paymentmode}
-                    onChange={(e) => setPaymentmode(e.target.value)}
+                    value={receiptpaymentmode}
+                    onChange={(e) => setReceiptpaymentmode(e.target.value)}
                   >
                     <option value="" disabled selected>
                       Payment Mode
@@ -1346,6 +1376,7 @@ export default function Trainerpage() {
                     name="amount"
                     placeholder="Amount to pay"
                     autoComplete="new-password"
+                    value={useramount}
                     onChange={(e) => {
                       setuseramount(e.target.value);
                     }}
@@ -1365,7 +1396,7 @@ export default function Trainerpage() {
                   <input
                     type="date"
                     id="startdate"
-                    name="startdate"
+                    name="paymentdate"
                     placeholder="Start date"
                     value={paymentDate}
                     onChange={(e) => {
@@ -1381,6 +1412,7 @@ export default function Trainerpage() {
                     name="TransitionID"
                     placeholder="Transition ID"
                     autoComplete="new-password"
+                    value={transitionID}
                     onChange={(e) => {
                       settransitionID(e.target.value);
                     }}
@@ -1424,79 +1456,66 @@ export default function Trainerpage() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/* {apiData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((apiData) => {
-                    return search.toLowerCase() === ""
-                      ? apiData
-                      : apiData.name.toLowerCase().includes(search) ||
-                          apiData.name.includes(search);
-                  })
-                  .map((apiData) => {
-                    return (
-                      <TableRow key={apiData.id} hover role="checkbox">
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.name}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.mobilenumber}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.email}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          12
-                          {apiData.referralStudents.length}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          <Type count={15} />
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                        >
-                          <BiSolidMessageSquareEdit
-                            id="edit-icon"
-                            onClick={() => handlerefedit(apiData)}
-                          />
-                          <MdDelete
-                            id="dlt-icon"
-                            onClick={() => deleteref(apiData)}
-                          />
-                          <BiDollar
-                            id="pay-icon"
-                            onClick={() => handlepay(apiData)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })} */}
+                    {reciptdata
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      // .filter((apiData) => {
+                      //   return search.toLowerCase() === ""
+                      //     ? apiData
+                      //     : apiData.name.toLowerCase().includes(search) ||
+                      //         apiData.name.includes(search);
+                      // })
+                      .map((apiData) => {
+                        return (
+                          <TableRow key={apiData.UPR_ID} hover role="checkbox">
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.paymentmethod.PAYM_NAME}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.UPR_CREATED_DATE}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.UPR_AMOUNT}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                              // onClick={() => opnetable(apiData)}
+                            >
+                              {apiData.UPR_PAYMENT_REF_NUMBER}
+                            </TableCell>
+
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              <MdDelete
+                                id="dlt-icon"
+                                onClick={() => deleteHistory(apiData)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -1512,6 +1531,34 @@ export default function Trainerpage() {
             </Paper>
           </div>
         </Modal.Body>
+      </Modal>
+      {/* Modal for want to delete Payhistory */}
+      <Modal
+        show={deletepaymentpopup}
+        backdrop="static"
+        keyboard={false}
+        className="mods"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <h4 style={{ color: "green" }}>Delete</h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are You sure want to delete receipt ? </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={deletePaymentHistroy}>
+            Okay
+          </Button>
+          <Button
+            variant="secondary"
+            id="btn-createrefmodal"
+            onClick={() => setdeletepaymentpopup(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

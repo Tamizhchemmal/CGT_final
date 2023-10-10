@@ -290,3 +290,14 @@ input::-webkit-inner-spin-button {
   display: flex;
   justify-content: center;
 }
+
+.gold {
+  border: 2px solid gold;
+  padding: 8px;
+  border-radius: 12px;
+}
+.silver {
+  border: 2px solid silver;
+  padding: 8px;
+  border-radius: 12px;
+}

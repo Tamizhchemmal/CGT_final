@@ -113,6 +113,12 @@ const payment = [
     minWidth: 170,
     align: "center",
   },
+  {
+    id: "action",
+    label: "Delete",
+    minWidth: 170,
+    align: "center",
+  },
 ];
 
 function Studentpage() {
@@ -157,14 +163,17 @@ function Studentpage() {
   const [paymentmodelist, setPaymentList] = useState([]);
 
   const [batchCode, setBatchCode] = useState("");
+  const [paymentstudentdata, setpaymentstudentdata] = useState([]);
 
-  // const [paymentDate, setPaymentDate] = useState([]);
+  const [paymentDate, setPaymentDate] = useState([]);
 
   // payment
   const [payShow, setpayShow] = useState(false);
-  const [paymentDate, setPaymentDate] = useState([]);
+  const [studentpaymentDate, setstudentPaymentDate] = useState([]);
   const [studentamount, setstudentamount] = useState("");
   const [transitionID, settransitionID] = useState("");
+  const [receiptpaymentmode, setReceiptpaymentmode] = useState("");
+  const [reciptdata, setreciptdata] = useState([]);
 
   const handleStudentClose = () => {
     setShow(false);
@@ -217,15 +226,15 @@ function Studentpage() {
     //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData"
     // );
     // setApiStudentData(studentData.data);
-
+    CrmService.userLoggedIn();
     await CrmService.getStudentList().then((response) => {
-      console.log(response.data);
       setApiStudentData(response.data);
     });
   };
 
   // batch data for dropdown
   const callapibatchdata = async (e) => {
+    CrmService.userLoggedIn();
     await CrmService.getbatch().then((response) => {
       setbatchData(response.data);
     });
@@ -239,6 +248,7 @@ function Studentpage() {
   // Referral data dropdown
 
   const callapireferraldata = async (e) => {
+    CrmService.userLoggedIn();
     await CrmService.getReferalList()
       .then((response) => {
         setreferralData(response.data);
@@ -275,13 +285,16 @@ function Studentpage() {
   // delete student
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
+  const [deletepaymentpopup, setdeletepaymentpopup] = useState(false);
 
   const deletestudentData = (data) => {
     setdeletePopUp(true);
-    setdeleteKey(data.STUDENT_ID);
+    setdeleteKey(data);
   };
 
-  const confirmDelete = async () => {
+  const confirmstudentDelete = async () => {
+    console.log("key", deleteKey);
+    CrmService.userLoggedIn();
     let body = {
       studentid: deleteKey,
       modifiedby: "123", // Logged in User unique ID
@@ -289,6 +302,7 @@ function Studentpage() {
 
     await CrmService.deleteStudent(body).then((response) => {
       console.log(response);
+      alert("Students Deleted");
     });
     callApiStudentData();
     setdeleteKey(null);
@@ -296,8 +310,11 @@ function Studentpage() {
   };
 
   // Pay
-  const handlepay = (id) => {
+  const handlepay = (apiStudentData) => {
     setpayShow(true);
+    setpaymentstudentdata(apiStudentData);
+    setreciptdata(apiStudentData.studentpayments);
+    console.log("data", paymentstudentdata);
   };
 
   const payhandleClose = () => {
@@ -414,13 +431,13 @@ function Studentpage() {
       company: "",
       primaryphone: updatedstudentdata.STUDENT_PHONE,
       passedoutyear: updatedstudentdata.STUDENT_PASSED_YEAR,
-      startDate: selectedstudentdata.STUDENT_STARTED_DATE,
-      endDate: selectedstudentdata.STUDENT_END_DATE,
+      startDate: updatedstudentdata.STUDENT_START_DATE,
+      endDate: updatedstudentdata.STUDENT_END_DATE,
       totalFees: updatedstudentdata.STUDENT_TOTAL_FEES,
       paidFees: updatedstudentdata.STUDENT_FEES_PAID,
       college: updatedstudentdata.STUDENT_COLLEGE,
       degree: updatedstudentdata.STUDENT_DEGREE,
-      paymentMode: updatedstudentdata.STUDENT_PAYMENT_MODE,
+      paymentMode: "",
       referralId: updatedstudentdata.STUDENT_REFERRAL_ID,
       batchId: updatedstudentdata.STUDENT_BATCH_ID,
       trainerId: updatedstudentdata.STUDENT_TRAINER_ID,
@@ -430,7 +447,7 @@ function Studentpage() {
     await CrmService.editstudent(body)
       .then((response) => {
         console.log(response);
-        alert("Updated");
+        alert("Student Updated");
       })
       .catch((err) => {
         console.log(err);
@@ -441,7 +458,51 @@ function Studentpage() {
   };
 
   // submit payment details
-  const submitStudentPay = () => {};
+  const submitStudentPay = async (e) => {
+    e.preventDefault();
+    console.log("id", paymentstudentdata.STUDENT_ID);
+    let body = {
+      id: 0, // for create give ID as 0 for edit give ID as Receipt ID(SRP_ID)
+      studentid: paymentstudentdata.STUDENT_ID, // student id
+      receivedAmount: studentamount,
+      paymentMode: receiptpaymentmode, // payment mode paym id
+      refNumber: transitionID,
+      paymentDate: studentpaymentDate, // payment date
+      createdBy: 124, // logged in users unqiue uuID
+    };
+
+    await CrmService.createStudentPymentDetails(body)
+      .then((response) => {
+        console.log(response);
+        alert("Payment updated Successfully");
+        setpayShow(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    e.target.reset();
+  };
+
+  const [deletepay, setDeletePay] = useState(null);
+  const deletestudentpay = async (data) => {
+    setdeletepaymentpopup(true);
+    setDeletePay(data.SRP_ID);
+  };
+
+  const deletestudentPaymentHistroy = async () => {
+    let body = {
+      transactionId: deletepay,
+      studentid: studentpaymentDate.STUDENT_ID, // user unique UUID
+      modifiedby: "123", // logged in users unqiue uuID
+    };
+    await CrmService.deletestudentpaymentdetials(body).then((response) => {
+      console.log(response);
+      setdeletepaymentpopup(false);
+
+      setpayShow(false);
+    });
+    // console.log(data);
+  };
 
   return (
     <>
@@ -857,7 +918,7 @@ function Studentpage() {
                             onChange={(e) => {
                               setupdatedstudentdata({
                                 ...updatedstudentdata,
-                                STUDENT_PASSED_YEAR: e.target.value,
+                                STUDENT_COLLEGE: e.target.value,
                               });
                             }}
                             required
@@ -944,7 +1005,7 @@ function Studentpage() {
                             required
                           ></input>
                         </div>
-                        {/* <div style={{ marginLeft: "30px" }}>
+                        <div style={{ marginLeft: "30px" }}>
                           <label
                             id="strt"
                             htmlFor="startdate"
@@ -966,7 +1027,7 @@ function Studentpage() {
                             }}
                             required
                           />
-                        </div> */}
+                        </div>
                         <div>
                           <select
                             id="referralName"
@@ -1329,7 +1390,7 @@ function Studentpage() {
           <h5>Are You sure want to delete ? </h5>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={confirmDelete}>
+          <Button variant="primary" onClick={confirmstudentDelete}>
             Okay
           </Button>
           <Button
@@ -1369,8 +1430,8 @@ function Studentpage() {
                     name="paymentmode"
                     className="referaldropdown"
                     required
-                    value={paymentmode}
-                    onChange={(e) => setPaymentMode(e.target.value)}
+                    value={receiptpaymentmode}
+                    onChange={(e) => setReceiptpaymentmode(e.target.value)}
                   >
                     <option value="" disabled selected>
                       Payment Mode
@@ -1392,6 +1453,7 @@ function Studentpage() {
                     name="amount"
                     placeholder="Amount to pay"
                     autoComplete="new-password"
+                    value={studentamount}
                     onChange={(e) => {
                       setstudentamount(e.target.value);
                     }}
@@ -1413,9 +1475,9 @@ function Studentpage() {
                     id="startdate"
                     name="startdate"
                     placeholder="Start date"
-                    value={paymentDate}
+                    value={studentpaymentDate}
                     onChange={(e) => {
-                      setPaymentDate(e.target.value);
+                      setstudentPaymentDate(e.target.value);
                     }}
                     required
                   />
@@ -1427,6 +1489,7 @@ function Studentpage() {
                     name="TransitionID"
                     placeholder="Transition ID"
                     autoComplete="new-password"
+                    value={transitionID}
                     onChange={(e) => {
                       settransitionID(e.target.value);
                     }}
@@ -1470,79 +1533,63 @@ function Studentpage() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/* {apiData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .filter((apiData) => {
-                    return search.toLowerCase() === ""
-                      ? apiData
-                      : apiData.name.toLowerCase().includes(search) ||
-                          apiData.name.includes(search);
-                  })
-                  .map((apiData) => {
-                    return (
-                      <TableRow key={apiData.id} hover role="checkbox">
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.name}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.mobilenumber}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          {apiData.email}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          12
-                          {apiData.referralStudents.length}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                          onClick={() => opnetable(apiData)}
-                        >
-                          <Type count={15} />
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          id="table-body"
-                          style={{ fontSize: 16 }}
-                        >
-                          <BiSolidMessageSquareEdit
-                            id="edit-icon"
-                            onClick={() => handlerefedit(apiData)}
-                          />
-                          <MdDelete
-                            id="dlt-icon"
-                            onClick={() => deleteref(apiData)}
-                          />
-                          <BiDollar
-                            id="pay-icon"
-                            onClick={() => handlepay(apiData)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })} */}
+                    {reciptdata
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      )
+                      // .filter((apiData) => {
+                      //   return search.toLowerCase() === ""
+                      //     ? apiData
+                      //     : apiData.name.toLowerCase().includes(search) ||
+                      //         apiData.name.includes(search);
+                      // })
+                      .map((apiData) => {
+                        return (
+                          <TableRow key={apiData.SRP_ID} hover role="checkbox">
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              {apiData.paymentmethod.PAYM_NAME}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              {apiData.SRP_CREATED_DATE}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              {apiData.SRP_AMOUNT}
+                            </TableCell>
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              12
+                              {apiData.SRP_PAYMENT_REF_NUMBER}
+                            </TableCell>
+
+                            <TableCell
+                              align="center"
+                              id="table-body"
+                              style={{ fontSize: 16 }}
+                            >
+                              <MdDelete
+                                id="dlt-icon"
+                                onClick={() => deletestudentpay(apiData)}
+                              />
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -1558,6 +1605,34 @@ function Studentpage() {
             </Paper>
           </div>
         </Modal.Body>
+      </Modal>
+      {/* Modal for want to delete Payhistory */}
+      <Modal
+        show={deletepaymentpopup}
+        backdrop="static"
+        keyboard={false}
+        className="mods"
+      >
+        <Modal.Header>
+          <Modal.Title>
+            <h4 style={{ color: "green" }}>Delete</h4>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h5>Are You sure want to delete receipt ? </h5>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={deletestudentPaymentHistroy}>
+            Okay
+          </Button>
+          <Button
+            variant="secondary"
+            id="btn-createrefmodal"
+            onClick={() => setdeletepaymentpopup(false)}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
       </Modal>
     </>
   );

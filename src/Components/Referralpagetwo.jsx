@@ -254,7 +254,7 @@ function Referralpagetwo() {
                           <div className="inputref">
                             <input
                               type="text"
-                              name="paymentdetails"
+                              name="ifscCode"
                               placeholder="Enter IFSC Code"
                               autoComplete="off"
                               value={ifscCode}

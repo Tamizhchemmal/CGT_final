@@ -28,6 +28,29 @@ class CrmService {
     return axios.post(`${baseURL}api/crm/user/add`, body);
   }
 
+  createStudentPymentDetails(body) {
+    return axios.post(`${baseURL}api/crm/student/receivepayment/paid`, body);
+  }
+
+  createPymentDetails(body) {
+    return axios.post(`${baseURL}api/crm/user/sentpayment/paid`, body);
+  }
+
+  deletePaymentDetails(body) {
+    return axios.post(`${baseURL}api/crm/user/sentpayment/changestatus`, body);
+  }
+
+  deletestudentpaymentdetials(body) {
+    return axios.post(
+      `${baseURL}api/crm/student/receivepayment/changestatus`,
+      body
+    );
+  }
+
+  editPymentDetails(receiptId) {
+    return axios.post(`${baseURL}api/crm/user/sentpayment/{receiptId}`);
+  }
+
   editstudent(body) {
     return axios.post(`${baseURL}api/crm/students/update`, body);
   }
