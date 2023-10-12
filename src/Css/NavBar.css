@@ -4,6 +4,7 @@
   background-color: #002333;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .nav-logo {
@@ -21,12 +22,17 @@
 
 .nav-btn {
   margin: 0 25px !important;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .btn-list {
   list-style: none;
   display: flex;
   padding: 14px;
+  margin: 0 !important;
 }
 
 .btn-list > li {
@@ -39,6 +45,7 @@
   text-decoration: none;
   border-radius: 8px;
   padding: 3px 5px;
+  transition: all 1s !important;
 }
 
 .logout-btn {
@@ -51,6 +58,7 @@
   color: #002333 !important;
   background-color: #57f8aa !important;
   border-radius: 8px;
+  padding: 6px 12px !important;
 }
 
 #inactive-button:hover {
@@ -82,7 +90,8 @@
   .btn-list {
     list-style: none;
     display: flex;
-    padding: 15px;
+    padding: 14px;
+    margin: 0 !important;
   }
 
   .btn-list > li {
@@ -90,15 +99,20 @@
   }
   #inactive-button {
     color: #fff !important;
-    font-size: 12px !important ;
+    font-size: 18px !important ;
   }
   .nav-btn {
     margin: 0 10px !important;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .active {
     color: #2b2b2b !important;
     background-color: #57f8aa !important;
     border-radius: 8px;
+    padding: 6px 12px !important;
   }
 
   .logout-btn {
@@ -134,6 +148,7 @@
     list-style: none;
     display: flex;
     padding: 13px;
+    align-items: center;
   }
 
   .btn-list > li {
@@ -151,6 +166,7 @@
     color: #2b2b2b !important;
     background-color: #57f8aa !important;
     border-radius: 8px;
+    padding: 4px 10px !important;
   }
 
   .logout-btn {
@@ -158,6 +174,24 @@
     background-color: #57f8aa !important;
     border-radius: 8px;
     font-size: 10px !important;
+  }
+  #inactive-button {
+    color: #fff !important;
+    font-size: 16px !important ;
+  }
+}
+
+@media screen and (max-width: 501px) {
+  #inactive-button {
+    color: #fff !important;
+    font-size: 12px !important ;
+  }
+  .logout-btn {
+    color: #002333 !important;
+    background-color: #57f8aa !important;
+    border-radius: 8px;
+    font-size: 8px !important;
+    padding: 4px !important;
   }
 }
 
@@ -169,6 +203,23 @@
   .nav-logo > div::first-letter {
     color: #57f8aa;
     font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .nav-btn {
+    font-size: 6px !important;
+  }
+  #inactive-button {
+    color: #fff !important;
+    font-size: 10px !important ;
+  }
+  .logout-btn {
+    color: #002333 !important;
+    background-color: #57f8aa !important;
+    border-radius: 8px;
+    font-size: 8px !important;
+    padding: 4px !important;
   }
 }
 

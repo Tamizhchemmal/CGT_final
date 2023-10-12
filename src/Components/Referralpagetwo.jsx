@@ -51,7 +51,7 @@ function Referralpagetwo() {
 
   const [errors, setErrors] = useState("");
   const callapiPayment = async (e) => {
-    CrmService.userLoggedIn();
+    // CrmService.userLoggedIn();
     await CrmService.getPaymentmode()
       .then((response) => {
         // console.log(response.data);
@@ -69,13 +69,14 @@ function Referralpagetwo() {
 
   const submitReferral = async (e) => {
     e.preventDefault();
-    CrmService.userLoggedIn();
+    let uuid = localStorage.getItem("uuid");
+    // CrmService.userLoggedIn();
     let body = {
       email: email,
       firstname: name,
       lastname: "",
       usertype: 2, //userType Id
-      createdby: 123, // Logged in User unique ID
+      createdby: uuid, // Logged in User unique ID
       userid: 0,
       company: companyname,
       primaryphone: mobilenumber,
@@ -93,8 +94,6 @@ function Referralpagetwo() {
     } else {
       await CrmService.createReferralOrTrainer(body)
         .then((response) => {
-          console.log(response);
-
           if (response.data.errmessage) {
             setErrors(response.data.errmessage);
           } else {
@@ -292,6 +291,7 @@ function Referralpagetwo() {
                             name="password"
                             placeholder="Password"
                             autoComplete="off"
+                            value={password}
                             onChange={(e) => {
                               setPassword(e.target.value);
                             }}
@@ -305,6 +305,7 @@ function Referralpagetwo() {
                             name="confirmpassword"
                             placeholder="Confirm Password"
                             autoComplete="off"
+                            value={confirmpassword}
                             onChange={(e) => {
                               setConfirmpassword(e.target.value);
                             }}

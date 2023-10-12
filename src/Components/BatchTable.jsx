@@ -19,7 +19,7 @@ import { MdDelete } from "react-icons/md";
 import CrmService from "../API/CrmService";
 
 const columns = [
-  { id: "batchcode", label: "Batch Code", minWidth: 100, align: "center" },
+  { id: "batchcode", label: "Batch Code", minWidth: 170, align: "center" },
 
   {
     id: "startdate",
@@ -87,11 +87,14 @@ export default function BatchTable({ search }) {
   };
 
   const callApiData = async (e) => {
-    await CrmService.getbatch().then((response) => {
-      console.log(response);
-      setApiData(response.data);
-      CrmService.userLoggedIn();
-    });
+    await CrmService.getbatch()
+      .then((response) => {
+        setApiData(response.data);
+        // CrmService.userLoggedIn();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const [trainerData, settrainerData] = useState([]);
@@ -100,7 +103,7 @@ export default function BatchTable({ search }) {
     await CrmService.getTrainerList()
       .then((response) => {
         settrainerData(response.data);
-        CrmService.userLoggedIn();
+        // CrmService.userLoggedIn();
       })
       .catch((err) => {
         console.error(err);
@@ -153,7 +156,6 @@ export default function BatchTable({ search }) {
   //Date change
   const handleStartDateChange = (e) => {
     const sDate = e.target.value;
-    console.log(sDate);
 
     const selectedStartDate = new Date(sDate);
     const selectedEndDate = new Date(selectedStartDate);
@@ -173,7 +175,6 @@ export default function BatchTable({ search }) {
     setEditShow(true);
     setselectedbatchdata(rowData);
     setupdatedbatchdata({ ...rowData });
-    console.log(rowData);
   };
 
   // batch active/not
@@ -196,8 +197,7 @@ export default function BatchTable({ search }) {
 
   const submitEdit = async (event) => {
     event.preventDefault();
-    console.log(updatedbatchdata);
-    console.log(updatedbatchdata.BATCH_TRAINER_ID);
+
     let body = {
       batchId: selectedbatchdata.BATCH_ID,
       batchCode: selectedbatchdata.BATCH_CODE,
@@ -210,14 +210,13 @@ export default function BatchTable({ search }) {
 
     await CrmService.createBatch(body)
       .then((response) => {
-        console.log(response);
         CrmService.userLoggedIn();
         alert("Batch Updated");
       })
       .catch((error) => {
         console.log(error.message);
       });
-
+    callApiData();
     setEditShow(false);
   };
 
@@ -248,12 +247,13 @@ export default function BatchTable({ search }) {
               <TableBody>
                 {apiData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  // .filter((apiData) => {
-                  //   return search.toLowerCase() === ""
-                  //     ? apiData
-                  //     : apiData.trainername.toLowerCase().includes(search) ||
-                  //         apiData.batchcode.toLowerCase().includes(search);
-                  // })
+                  .filter((apiData) => {
+                    return search.toLowerCase() === ""
+                      ? apiData
+                      : apiData.BATCH_CODE.includes(search);
+                    // ||
+                    // apiData.batchcode.toLowerCase().includes(search);
+                  })
                   .map((apiData) => {
                     return (
                       <TableRow key={apiData.BATCH_ID} hover role="checkbox">
@@ -287,7 +287,9 @@ export default function BatchTable({ search }) {
                           style={{ fontSize: 16 }}
                           onClick={() => openBatchTable(apiData)}
                         >
-                          {apiData.trainerinfo.UI_FIRST_NAME}
+                          {apiData.trainers === null
+                            ? "NA"
+                            : apiData.trainers.userinfo.UI_FIRST_NAME}
                           {/* {apiData.trainerinfo.UI_ID === null
                             ? `NA`
                             : apiData.trainerinfo.UI_ID} */}

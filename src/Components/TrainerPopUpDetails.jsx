@@ -97,7 +97,7 @@ export default function TrainerPopUpDetails({ user }) {
                           <div className="label">Email ID</div>
                         </td>
                         <td>
-                          <div className="details">{user.email}</div>
+                          <div className="details">: {user.email}</div>
                         </td>
                       </tr>
                       <tr>
@@ -105,7 +105,7 @@ export default function TrainerPopUpDetails({ user }) {
                           <div className="label">Contact No</div>
                         </td>
                         <td>
-                          <div className="details">{user.mobilenumber}</div>
+                          <div className="details">: {user.mobilenumber}</div>
                         </td>
                       </tr>
                       <tr>
@@ -113,7 +113,9 @@ export default function TrainerPopUpDetails({ user }) {
                           <div className="label">Payment</div>
                         </td>
                         <td>
-                          <div className="details">{user.paymentmode}</div>
+                          <div className="details">
+                            : {user.paymentmodename}
+                          </div>
                         </td>
                       </tr>
                       <tr>
@@ -121,7 +123,7 @@ export default function TrainerPopUpDetails({ user }) {
                           <div className="label">Payment Details</div>
                         </td>
                         <td>
-                          <div className="details">{user.paymentdetails}</div>
+                          <div className="details">: {user.paymentdetails}</div>
                         </td>
                       </tr>
                     </tbody>

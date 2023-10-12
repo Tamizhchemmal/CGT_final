@@ -9,7 +9,7 @@ import {
   ModalTitle,
   CloseButton,
 } from "react-bootstrap";
-import axios from "axios";
+
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import BrowserUpdatedIcon from "@mui/icons-material/BrowserUpdated";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
@@ -22,21 +22,16 @@ import { rolecontext } from "../App";
 
 import CrmService from "../API/CrmService";
 
-export default function HomePage({ callApiData }) {
+export default function HomePage() {
   const [search, setSearch] = useState("");
   const [batchcode, setBatchcode] = useState(" ");
   const [batchCourse, setBatchCourse] = useState("");
   const [batchMonth, setBatchMonth] = useState("");
   const [batchNumber, setBatchNumber] = useState("");
 
-  const role = useContext(rolecontext);
-
-  const [numofstudent, setnumofstudent] = useState("");
   const [trainername, settrainername] = useState("");
 
   const [show, setShow] = useState(false);
-
-  const navigate = useNavigate();
 
   const [batchCourseList, setBatchCourseList] = useState([
     {
@@ -153,15 +148,6 @@ export default function HomePage({ callApiData }) {
 
   // trainer dropdown
 
-  const [trainerData, settrainerData] = useState([]);
-
-  const callapitrainerdata = async (e) => {
-    const trainerData = await axios.get(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
-    );
-    settrainerData(trainerData.data);
-  };
-
   // Test api
   const [testtrainerData, setTesttrainerData] = useState([]);
 
@@ -169,22 +155,20 @@ export default function HomePage({ callApiData }) {
     await CrmService.getTrainerList()
       .then((response) => {
         setTesttrainerData(response.data);
-        console.log(response.data);
       })
       .catch((err) => {
         console.log(err.message);
       });
-    // .catch((err) => console.log(r));
   };
 
   useEffect(() => {
-    callapitrainerdata();
     callTestTrainerApiData();
   }, []);
 
   const [errors, setErrors] = useState({});
 
   const submitBatch = async (e) => {
+    let uuid = localStorage.getItem("uuid");
     const batchcode = `${batchCourse}-${batchMonth}-${batchNumber}`;
     setTimeout(() => {
       setBatchcode(batchcode);
@@ -200,27 +184,16 @@ export default function HomePage({ callApiData }) {
       batchSelectedTime: selectedBatchTime,
       startDate: startBatchDate,
       endDate: endBatchDate,
-      createdby: 123,
+      createdby: uuid,
     };
     await CrmService.createBatch(body)
-      .then((response) => {
-        console.log(response);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.log(error.message);
       });
-    // await axios.post("https://64b638a2df0839c97e1528f4.mockapi.io/batch", {
-    //   batchcode,
-    //   selectedBatchTime,
-    //   numofstudent,
-    //   trainername,
-    //   startBatchDate,
-    //   endBatchDate,
-    // });
+
     e.target.reset();
     setShow(false);
-
-    // callApiData();
   };
 
   //Date change Automatic
@@ -291,7 +264,7 @@ export default function HomePage({ callApiData }) {
                   <div
                     style={{
                       display: "flex",
-                      width: "50%",
+
                       justifyContent: "space-around",
                     }}
                   >
@@ -304,7 +277,11 @@ export default function HomePage({ callApiData }) {
                       ></input>
                       <FcSearch id="search-icon" title="Search" />
                     </div>
-                    <button className="create ref" onClick={handleShow}>
+                    <button
+                      className="create ref"
+                      id="batchcreate"
+                      onClick={handleShow}
+                    >
                       Create Batch
                     </button>
                   </div>

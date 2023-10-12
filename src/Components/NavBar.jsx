@@ -1,31 +1,31 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import "../Css/NavBar.css";
-import { useState } from "react";
-import HomeIcon from "@mui/icons-material/Home";
-import ContactsIcon from "@mui/icons-material/Contacts";
-import ThreePIcon from "@mui/icons-material/ThreeP";
-import PhotoCameraFrontIcon from "@mui/icons-material/PhotoCameraFront";
+
 import LogoutIcon from "@mui/icons-material/Logout";
 import Button from "@mui/material/Button";
 import { AppBar } from "@mui/material";
-import { FaBars, FaTimes } from "react-icons/fa";
+
 import { useNavigate, NavLink } from "react-router-dom";
+import CrmService from "../API/CrmService";
 
 export default function NavBar() {
-  const [showSidebar, setShowSidebar] = useState(false);
-  const [showBars, setShowbars] = useState(true);
-
-  // const role = useContext(rolecontext);
-
   const navigate = useNavigate();
 
-  const HandleOpen = () => {
-    setShowSidebar(true);
-    setShowbars(false);
-  };
-  const HandleClose = () => {
-    setShowSidebar(false);
-    setShowbars(true);
+  const logOut = () => {
+    CrmService.logoutapi()
+      .then((response) => {
+        console.log(response);
+        localStorage.removeItem("role");
+        localStorage.removeItem("access");
+        localStorage.removeItem("uuid");
+        localStorage.removeItem("apitoken");
+        localStorage.removeItem("isUserLoggedIn");
+        localStorage.removeItem("userType");
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   useEffect(() => {
@@ -93,12 +93,7 @@ export default function NavBar() {
                   variant="text"
                   endIcon={<LogoutIcon />}
                   className="logout-btn"
-                  onClick={() => {
-                    localStorage.removeItem("access");
-                    localStorage.removeItem("role");
-                    localStorage.removeItem("apitoken");
-                    navigate("/");
-                  }}
+                  onClick={logOut}
                 >
                   Logout
                 </Button>

@@ -3,18 +3,6 @@
   top: 0;
 }
 
-/* .crd-bg1 {
-  display: flex;
-  justify-content: center;
-}
-
-.ref-profdetails1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Poppins", sans-serif;
-} */
-
 .colum {
   display: flex;
   width: 100%;
@@ -32,7 +20,7 @@
 }
 
 .refmodal-table tr div {
-  padding: 8px 0 !important;
+  padding: 4px 0 !important;
 }
 
 .ref-bio1 {

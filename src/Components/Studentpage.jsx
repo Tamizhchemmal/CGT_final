@@ -12,23 +12,19 @@ import { Card } from "@mui/material";
 import StudentPopUp from "./StudentPopUp";
 import {
   Container,
-  Dropdown,
-  DropdownButton,
   Modal,
   Button,
   ModalTitle,
   CloseButton,
-  Navbar,
 } from "react-bootstrap";
-import axios from "axios";
+
 import { FcSearch } from "react-icons/fc";
 import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import { BiSolidMessageSquareEdit, BiDollar } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
 import CrmService from "../API/CrmService.js";
-import { log } from "util";
 
 //Table
 const columns = [
@@ -64,13 +60,7 @@ const columns = [
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
   },
-  {
-    id: "paymentdate",
-    label: "Payment Date",
-    minWidth: 170,
-    align: "center",
-    format: (value) => value.toLocaleString("en-US"),
-  },
+
   {
     id: "feespaid",
     label: "Fees Paid",
@@ -143,21 +133,6 @@ function Studentpage() {
 
   const [errors, setErrors] = useState("");
 
-  const [refList, setRefList] = useState([
-    {
-      id: 1,
-      name: "Tamizh",
-    },
-    {
-      id: 2,
-      name: "Karthik",
-    },
-    {
-      id: 3,
-      name: "Patrick",
-    },
-  ]);
-
   const [courseList, setCourseList] = useState([]);
 
   const [paymentmodelist, setPaymentList] = useState([]);
@@ -175,6 +150,21 @@ function Studentpage() {
   const [receiptpaymentmode, setReceiptpaymentmode] = useState("");
   const [reciptdata, setreciptdata] = useState([]);
 
+  // referral amounts state
+  const [referralPaid, setreferralPaid] = useState("");
+
+  const [referralAmount, setreferralAmount] = useState("");
+  const [referralPaidList, setreferralPaidList] = useState([
+    {
+      id: 0,
+      value: "Not Paid",
+    },
+    {
+      id: 1,
+      value: "Paid",
+    },
+  ]);
+
   const handleStudentClose = () => {
     setShow(false);
   };
@@ -184,10 +174,9 @@ function Studentpage() {
 
   // Student Table Content
 
-  const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [alertt, setAlertt] = useState(null);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -198,10 +187,8 @@ function Studentpage() {
   };
 
   const callapiPayment = async (e) => {
-    CrmService.userLoggedIn();
     await CrmService.getPaymentmode()
       .then((response) => {
-        // console.log(response.data);
         setPaymentList(response.data);
       })
       .catch((err) => {
@@ -209,46 +196,41 @@ function Studentpage() {
       });
   };
 
-  // const callTestApiData = async (e) => {
-  //   await CrmService.getStudent().then((response) => {
-  //     console.log(response.data);
-  //   });
-  // };
-  // useEffect(() => {
-  //   // callTestApiData();
-  // }, []);
-
   const [apiStudentData, setApiStudentData] = useState([]);
   const [batchData, setbatchData] = useState([]);
 
   const callApiStudentData = async (e) => {
-    // const studentData = await axios.get(
-    //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData"
-    // );
-    // setApiStudentData(studentData.data);
-    CrmService.userLoggedIn();
-    await CrmService.getStudentList().then((response) => {
-      setApiStudentData(response.data);
-    });
+    await CrmService.getStudentList()
+      .then((response) => {
+        setApiStudentData(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   // batch data for dropdown
   const callapibatchdata = async (e) => {
-    CrmService.userLoggedIn();
-    await CrmService.getbatch().then((response) => {
-      setbatchData(response.data);
-    });
+    await CrmService.getbatch()
+      .then((response) => {
+        setbatchData(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
-    await CrmService.getCourse().then((response) => {
-      setCourseList(response.data);
-    });
+    await CrmService.getCourse()
+      .then((response) => {
+        setCourseList(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const [referralData, setreferralData] = useState([]);
-  // Referral data dropdown
 
   const callapireferraldata = async (e) => {
-    CrmService.userLoggedIn();
     await CrmService.getReferalList()
       .then((response) => {
         setreferralData(response.data);
@@ -265,23 +247,6 @@ function Studentpage() {
     callapiPayment();
   }, []);
 
-  // const [editedStudentData, setEditedStudentData] = useState({
-  //   name: "",
-  //   email: "",
-  //   course: "",
-  //   mobilenumber: "",
-  //   yearofpassedout: "",
-  //   paymentDate: "",
-  //   endDate: "",
-  //   totalfees: "",
-  //   feespaid: "",
-  //   pendingfees: "",
-  //   college: "",
-  //   degree: "",
-  //   referral: "",
-  //   paymentmode: "",
-  // });
-
   // delete student
   const [deleteKey, setdeleteKey] = useState(null);
   const [deletePopUp, setdeletePopUp] = useState(false);
@@ -293,17 +258,20 @@ function Studentpage() {
   };
 
   const confirmstudentDelete = async () => {
-    console.log("key", deleteKey);
+    let uuid = localStorage.getItem("uuid");
     CrmService.userLoggedIn();
     let body = {
       studentid: deleteKey,
-      modifiedby: "123", // Logged in User unique ID
+      modifiedby: uuid, // Logged in User unique ID
     };
 
-    await CrmService.deleteStudent(body).then((response) => {
-      console.log(response);
-      alert("Students Deleted");
-    });
+    await CrmService.deleteStudent(body)
+      .then((response) => {
+        alert("Students Deleted");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     callApiStudentData();
     setdeleteKey(null);
     setdeletePopUp(false);
@@ -314,7 +282,6 @@ function Studentpage() {
     setpayShow(true);
     setpaymentstudentdata(apiStudentData);
     setreciptdata(apiStudentData.studentpayments);
-    console.log("data", paymentstudentdata);
   };
 
   const payhandleClose = () => {
@@ -343,16 +310,8 @@ function Studentpage() {
     setEditStudentShow(true);
     setselectedstudentdata(rowStudentData);
     setupdatedstudentdata({ ...rowStudentData });
-    console.log(rowStudentData);
   };
-  const testhandlechange = (e) => {
-    const { value } = e.target;
-    setupdatedstudentdata({
-      ...updatedstudentdata,
-      [name]: value,
-    });
-    console.log(updatedstudentdata);
-  };
+
   // get batch name in Table
   const getbatchname = (id) => {
     const batch = batchData.find((batch) => batch.BATCH_ID == id);
@@ -366,73 +325,61 @@ function Studentpage() {
   };
   const submitStudent = async (e) => {
     e.preventDefault();
+    let uuid = localStorage.getItem("uuid");
+
+    const refid = referral == "" ? 0 : referral;
 
     let body = {
       email: email,
       name: name,
-      createdby: 224, // Logged in User unique ID
+      createdby: uuid, // Logged in User unique ID
       company: "",
       primaryphone: mobilenumber,
       passedoutyear: yearofpassedout,
-      startDate: paymentDate,
-      endDate: paymentDate,
+      startDate: "2023-10-12",
+      endDate: "2023-10-12",
       totalFees: totalfees,
       paidFees: feespaid,
       college: college,
       degree: degree,
-      paymentMode: paymentmode,
-      referralId: referral, // call get referral list API and use the primary key of referral data
+      paymentMode: "",
+      referralId: refid, // call get referral list API and use the primary key of referral data
 
       batchId: batchCode, // call get batch list API and use the primary key of batch data
 
       trainerId: "", // call get trainer list API and use the primary key of trainer data
 
       courseId: course, // call get course list API and use the primary key of course data
+      referralPaid: referralPaid, // call get
+      referralAmount: referralAmount, // call get
     };
-    await CrmService.createStudent(body).then((response) => {
-      console.log(response);
-    });
-
-    // await axios.post(
-    //   "https://64bea16d5ee688b6250cba32.mockapi.io/StudentData",
-    //   {
-    //     name,
-    //     email,
-    //     course,
-    //     mobilenumber,
-    //     yearofpassedout,
-    //     totalfees,
-    //     feespaid,
-    //     pendingfees,
-    //     college,
-    //     degree,
-    //     referral,
-    //     paymentmode,
-    //     batchCode,
-    //     paymentDate,
-    //   }
-    // );
-
-    alert("Student Created");
+    await CrmService.createStudent(body)
+      .then((response) => {
+        alert("Student Created");
+        setShow(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     e.target.reset();
-    // callApiStudentData();
-    setShow(false);
+    callApiStudentData();
   };
 
   //Submit Edit
 
   const submitStudentEdit = async (e) => {
+    let uuid = localStorage.getItem("uuid");
     e.preventDefault();
     let body = {
       studentid: selectedstudentdata.STUDENT_ID,
       email: updatedstudentdata.STUDENT_EMAIL,
       name: updatedstudentdata.STUDENT_NAME,
-      modifiedby: 123, // Logged in User unique ID
+      modifiedby: uuid, // Logged in User unique ID
       company: "",
       primaryphone: updatedstudentdata.STUDENT_PHONE,
       passedoutyear: updatedstudentdata.STUDENT_PASSED_YEAR,
-      startDate: updatedstudentdata.STUDENT_START_DATE,
-      endDate: updatedstudentdata.STUDENT_END_DATE,
+      startDate: "2023-10-12",
+      endDate: "2023-10-12",
       totalFees: updatedstudentdata.STUDENT_TOTAL_FEES,
       paidFees: updatedstudentdata.STUDENT_FEES_PAID,
       college: updatedstudentdata.STUDENT_COLLEGE,
@@ -442,25 +389,26 @@ function Studentpage() {
       batchId: updatedstudentdata.STUDENT_BATCH_ID,
       trainerId: updatedstudentdata.STUDENT_TRAINER_ID,
       courseId: updatedstudentdata.STUDENT_COURSE_ID,
+      referralAmount: updatedstudentdata.STUDENT_REFERRAL_AMOUNT,
+      referralPaid: updatedstudentdata.STUDENT_REFERRAL_PAID,
     };
 
     await CrmService.editstudent(body)
       .then((response) => {
-        console.log(response);
         alert("Student Updated");
+        setEditStudentShow(false);
       })
       .catch((err) => {
         console.log(err);
       });
 
-    setEditStudentShow(false);
     callApiStudentData();
   };
 
   // submit payment details
   const submitStudentPay = async (e) => {
     e.preventDefault();
-    console.log("id", paymentstudentdata.STUDENT_ID);
+    let uuid = localStorage.getItem("uuid");
     let body = {
       id: 0, // for create give ID as 0 for edit give ID as Receipt ID(SRP_ID)
       studentid: paymentstudentdata.STUDENT_ID, // student id
@@ -468,12 +416,11 @@ function Studentpage() {
       paymentMode: receiptpaymentmode, // payment mode paym id
       refNumber: transitionID,
       paymentDate: studentpaymentDate, // payment date
-      createdBy: 124, // logged in users unqiue uuID
+      createdBy: uuid, // logged in users unqiue uuID
     };
 
     await CrmService.createStudentPymentDetails(body)
       .then((response) => {
-        console.log(response);
         alert("Payment updated Successfully");
         setpayShow(false);
       })
@@ -481,6 +428,7 @@ function Studentpage() {
         console.log(err);
       });
     e.target.reset();
+    callapiPayment();
   };
 
   const [deletepay, setDeletePay] = useState(null);
@@ -490,18 +438,21 @@ function Studentpage() {
   };
 
   const deletestudentPaymentHistroy = async () => {
+    let uuid = localStorage.getItem("uuid");
     let body = {
       transactionId: deletepay,
       studentid: studentpaymentDate.STUDENT_ID, // user unique UUID
-      modifiedby: "123", // logged in users unqiue uuID
+      modifiedby: uuid, // logged in users unqiue uuID
     };
-    await CrmService.deletestudentpaymentdetials(body).then((response) => {
-      console.log(response);
-      setdeletepaymentpopup(false);
+    await CrmService.deletestudentpaymentdetials(body)
+      .then((response) => {
+        setdeletepaymentpopup(false);
 
-      setpayShow(false);
-    });
-    // console.log(data);
+        setpayShow(false);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -562,7 +513,7 @@ function Studentpage() {
                   </ModalTitle>
                   <form onSubmit={submitStudent}>
                     <div className="inputref-box">
-                      <div className="student-grid">
+                      <div className="student-grid" id="studentFlex">
                         <div className="inputstudent">
                           <input
                             type="text"
@@ -686,7 +637,7 @@ function Studentpage() {
                             required
                           ></input>
                         </div>
-                        <div className="inputstudent">
+                        {/* <div className="inputstudent">
                           <select
                             id="paymentmode"
                             name="paymentmode"
@@ -707,8 +658,8 @@ function Studentpage() {
                               </option>
                             ))}
                           </select>
-                        </div>
-                        <div className="paymentDate">
+                        </div> */}
+                        {/* <div className="paymentDate">
                           <label
                             id="strt"
                             htmlFor="startdate"
@@ -727,7 +678,7 @@ function Studentpage() {
                             }}
                             required
                           />
-                        </div>
+                        </div> */}
                         <div>
                           <select
                             id="batchCode"
@@ -754,15 +705,15 @@ function Studentpage() {
                             id="referralName"
                             name="referralname"
                             className="referaldropdown"
-                            required
                             value={referral}
                             onChange={(e) => {
-                              setReferral(e.target.value);
+                              const selectedValue = e.target.value;
+                              setReferral(
+                                isNaN(selectedValue) ? 0 : selectedValue
+                              );
                             }}
                           >
-                            <option value="" disabled selected>
-                              Referral name
-                            </option>
+                            <option value="">Referral name</option>
                             {referralData.map((data) => (
                               <option key={data.id} value={data.id}>
                                 {data.name}
@@ -790,6 +741,40 @@ function Studentpage() {
                                 value={courseData.COURSE_ID}
                               >
                                 {courseData.COURSE_NAME}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="inputstudent">
+                          <input
+                            type="number"
+                            name="referralAmount"
+                            placeholder="Referral Amount"
+                            autoComplete="off"
+                            value={referralAmount}
+                            onChange={(e) => {
+                              setreferralAmount(e.target.value);
+                            }}
+                            required
+                          ></input>
+                        </div>
+                        <div>
+                          <select
+                            id="referralPaid"
+                            name="referralPaid"
+                            className="referaldropdown"
+                            required
+                            value={referralPaid}
+                            onChange={(e) => {
+                              setreferralPaid(e.target.value);
+                            }}
+                          >
+                            <option value="" disabled selected>
+                              Payment Status
+                            </option>
+                            {referralPaidList.map((Data) => (
+                              <option key={Data.id} value={Data.id}>
+                                {Data.value}
                               </option>
                             ))}
                           </select>
@@ -989,7 +974,7 @@ function Studentpage() {
                             required
                           ></input>
                         </div>
-                        <div className="inputstudent">
+                        {/* <div className="inputstudent">
                           <input
                             type="text"
                             name="paymentmode"
@@ -1004,8 +989,8 @@ function Studentpage() {
                             }}
                             required
                           ></input>
-                        </div>
-                        <div style={{ marginLeft: "30px" }}>
+                        </div> */}
+                        {/* <div style={{ marginLeft: "30px" }}>
                           <label
                             id="strt"
                             htmlFor="startdate"
@@ -1027,7 +1012,7 @@ function Studentpage() {
                             }}
                             required
                           />
-                        </div>
+                        </div> */}
                         <div>
                           <select
                             id="referralName"
@@ -1099,6 +1084,46 @@ function Studentpage() {
                             ))}
                           </select>
                         </div>
+                        <div className="inputstudent">
+                          <input
+                            type="number"
+                            name="referralAmount"
+                            placeholder="Referral Amount"
+                            autoComplete="off"
+                            value={updatedstudentdata.STUDENT_REFERRAL_AMOUNT}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_REFERRAL_AMOUNT: e.target.value,
+                              });
+                            }}
+                            required
+                          ></input>
+                        </div>
+                        <div>
+                          <select
+                            id="referralPaid"
+                            name="referralPaid"
+                            className="referaldropdown"
+                            required
+                            value={updatedstudentdata.STUDENT_REFERRAL_PAID}
+                            onChange={(e) => {
+                              setupdatedstudentdata({
+                                ...updatedstudentdata,
+                                STUDENT_REFERRAL_PAID: e.target.value,
+                              });
+                            }}
+                          >
+                            <option value="" disabled selected>
+                              Payment Status
+                            </option>
+                            {referralPaidList.map((Data) => (
+                              <option key={Data.id} value={Data.id}>
+                                {Data.value}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                       </div>
                     </div>
                     <Modal.Footer>
@@ -1147,18 +1172,21 @@ function Studentpage() {
                               page * rowsPerPage,
                               page * rowsPerPage + rowsPerPage
                             )
-                            // .filter((apiStudentData) => {
-                            //   return search.toLowerCase() === ""
-                            //     ? apiStudentData
-                            //     : apiStudentData.name
-                            //         .toLowerCase()
-                            //         .includes(search) ||
-                            //         apiStudentData.name.includes(search) ||
-                            //         apiStudentData.course
-                            //           .toLowerCase()
-                            //           .includes(search) ||
-                            //         apiStudentData.course.includes(search);
-                            // })
+                            .filter((apiStudentData) => {
+                              return search.toLowerCase() == ""
+                                ? apiStudentData
+                                : apiStudentData.STUDENT_NAME.toLowerCase().includes(
+                                    search
+                                  ) ||
+                                    apiStudentData.STUDENT_NAME.includes(
+                                      search
+                                    );
+                              // ||
+                              // apiStudentData.course
+                              //   .toLowerCase()
+                              //   .includes(search) ||
+                              // apiStudentData.course.includes(search);
+                            })
                             .map((apiStudentData) => {
                               return (
                                 <TableRow
@@ -1220,16 +1248,7 @@ function Studentpage() {
                                       apiStudentData.STUDENT_BATCH_ID
                                     )}
                                   </TableCell>
-                                  <TableCell
-                                    align="center"
-                                    id="table-body"
-                                    style={{ fontSize: 16 }}
-                                    onClick={() =>
-                                      openStudentTable(apiStudentData)
-                                    }
-                                  >
-                                    {apiStudentData.STUDENT_STARTED_DATE}
-                                  </TableCell>
+
                                   <TableCell
                                     align="center"
                                     id="table-body"

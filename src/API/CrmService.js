@@ -1,4 +1,7 @@
 import axios from "axios";
+import App from "../App";
+import { useEffect } from "react";
+import { useState } from "react";
 
 let baseURL = `http://127.0.0.1:8000/`;
 
@@ -8,10 +11,12 @@ class CrmService {
   }
 
   userLoggedIn() {
-    let status = localStorage.getItem("isUserLoggedIn");
-    if (status) {
-      this.setupAxiosInterceptors();
-    }
+    // let status = localStorage.getItem("isUserLoggedIn");
+    // console.log(status);
+    // if (status) {
+    //   this.setupAxiosInterceptors();
+    // }
+    //  TokenStorage();
   }
   //Create ApI
   createStudent(body) {
@@ -38,6 +43,12 @@ class CrmService {
 
   deletePaymentDetails(body) {
     return axios.post(`${baseURL}api/crm/user/sentpayment/changestatus`, body);
+  }
+
+  //Logout
+
+  logoutapi() {
+    return axios.get(`${baseURL}api/crm/logout`);
   }
 
   deletestudentpaymentdetials(body) {
@@ -76,10 +87,13 @@ class CrmService {
     return axios.get(`${baseURL}api/crm/paymentmethod/list`);
   }
 
-  getinduvidualusers(referralId) {
-    return axios.get(`${baseURL}api/crm/user/${referralId}`);
+  getinduvidualusers(userId) {
+    return axios.get(`${baseURL}api/crm/user/${userId}`);
   }
 
+  getmyreferrals() {
+    return axios.get(`${baseURL}api/crm/user/getMyReferrals`);
+  }
   // Delete Data
 
   deleteBatch(body) {
@@ -92,15 +106,19 @@ class CrmService {
     return axios.post(`${baseURL}api/crm/student/changeStatus`, body);
   }
 
-  setupAxiosInterceptors() {
-    let token = localStorage.getItem("apitoken");
-
-    axios.interceptors.request.use((config) => {
-      config.headers.apitoken = token;
-
-      return config;
-    });
-  }
+  setupAxiosInterceptors = () => {
+    axios.interceptors.request.use(
+      (config) => {
+        config.headers.apitoken = localStorage.getItem("apitoken");
+        console.log(config);
+        return config;
+      },
+      (err) => {
+        console.log(err);
+        return Promise.reject(err);
+      }
+    );
+  };
 }
 
 export default new CrmService();

@@ -176,22 +176,6 @@ input[type="number"]::-webkit-outer-spin-button {
   .home-count3 {
     font-size: 18px !important;
   }
-
-  .commonhome-count1,
-  .commonhome-count2,
-  .commonhome-count3 {
-    font-size: 24px !important;
-  }
-
-  .commonhome-count1 h2 {
-    font-size: 30px !important;
-  }
-  .commonhome-count2 h2 {
-    font-size: 30px !important;
-  }
-  .commonhome-count3 h2 {
-    font-size: 30px !important;
-  }
 }
 
 @media screen and (max-width: 768px) {
@@ -262,27 +246,27 @@ input[type="number"]::-webkit-outer-spin-button {
 .commonhome-count1,
 .commonhome-count2,
 .commonhome-count3 {
-  font-size: 38px !important;
+  font-size: 24px !important;
 }
 
 .commonhome-count1 h2 {
-  font-size: 42px !important;
+  font-size: 36px !important;
 }
 .commonhome-count2 h2 {
-  font-size: 42px !important;
+  font-size: 36px !important;
 }
 .commonhome-count3 h2 {
-  font-size: 42px !important;
+  font-size: 36px !important;
 }
 
 .commonhome-crd1,
 .commonhome-crd2,
 .commonhome-crd3 {
-  height: 40%;
-  width: 40%;
+  height: 30%;
+  width: 30%;
   box-sizing: border-box;
   border: 2px solid #2f217e;
-  border-radius: 40px !important;
+  border-radius: 20px !important;
   display: flex;
   align-items: center;
   padding: 20px;
@@ -293,7 +277,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .commonicon1,
 .commonicon2,
 .commonicon3 {
-  font-size: 128px !important;
+  font-size: 86px !important;
   margin: 5px;
 }
 
@@ -303,4 +287,153 @@ input[type="number"]::-webkit-outer-spin-button {
 
 .commonhome-crd3 {
   border: 2px solid #e12323 !important;
+}
+
+@media screen and (max-width: 735px) {
+  .commonhome-crd1,
+  .commonhome-crd2,
+  .commonhome-crd3 {
+    height: 25%;
+    width: 25%;
+    box-sizing: border-box;
+    border: 2px solid #2f217e;
+    border-radius: 20px !important;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin: 10px;
+    box-shadow: rgba(147, 145, 145, 0.7) 0px 3px 15px;
+  }
+
+  .commonicon1,
+  .commonicon2,
+  .commonicon3 {
+    font-size: 64px !important;
+    margin: 5px;
+  }
+
+  .commonhome-count1,
+  .commonhome-count2,
+  .commonhome-count3 {
+    font-size: 18px !important;
+  }
+
+  .commonhome-count1 h2 {
+    font-size: 24px !important;
+  }
+  .commonhome-count2 h2 {
+    font-size: 24px !important;
+  }
+  .commonhome-count3 h2 {
+    font-size: 24px !important;
+  }
+}
+
+@media screen and (max-width: 675px) {
+  .commonhome-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 15px;
+    height: 100vh;
+    align-items: center;
+  }
+  .commonhome-crd1,
+  .commonhome-crd2,
+  .commonhome-crd3 {
+    height: 50%;
+    width: 50%;
+    box-sizing: border-box !important;
+    border: 2px solid #2f217e;
+    border-radius: 20px !important;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin: 10px;
+    box-shadow: rgba(147, 145, 145, 0.7) 0px 3px 15px;
+  }
+  .commonicon1,
+  .commonicon2,
+  .commonicon3 {
+    font-size: 88px !important;
+    margin: 5px;
+  }
+
+  .commonhome-count1,
+  .commonhome-count2,
+  .commonhome-count3 {
+    font-size: 24px !important;
+  }
+
+  .commonhome-count1 h2 {
+    font-size: 36px !important;
+  }
+  .commonhome-count2 h2 {
+    font-size: 36px !important;
+  }
+  .commonhome-count3 h2 {
+    font-size: 36px !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .home-crd1,
+  .home-crd2,
+  .home-crd3 {
+    width: 20%;
+    box-sizing: border-box;
+    border: 2px solid #2f217e;
+    border-radius: 12px;
+    display: flex;
+    padding: 6px;
+    margin: 10px;
+  }
+
+  .icon1,
+  .icon2,
+  .icon3 {
+    font-size: 24px !important;
+    margin: 2px !important;
+  }
+  .home-count1,
+  .home-count2,
+  .home-count3 {
+    font-size: 12px !important;
+  }
+
+  .commonhome-card {
+    margin-top: 10%;
+  }
+  .commonhome-crd1,
+  .commonhome-crd2,
+  .commonhome-crd3 {
+    height: 60%;
+    width: 60%;
+    box-sizing: border-box !important;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .commonicon1,
+  .commonicon2,
+  .commonicon3 {
+    font-size: 64px !important;
+    margin: 5px;
+  }
+
+  .commonhome-count1,
+  .commonhome-count2,
+  .commonhome-count3 {
+    font-size: 18px !important;
+  }
+
+  .commonhome-count1 h2 {
+    font-size: 24px !important;
+  }
+  .commonhome-count2 h2 {
+    font-size: 24px !important;
+  }
+  .commonhome-count3 h2 {
+    font-size: 24px !important;
+  }
 }

@@ -8,5 +8,13 @@
 }
 
 #student-details {
-  margin-top: 0 !important;
+  margin: 0 !important;
+}
+
+#studentPopUpcolumn1 {
+  padding: 0 !important;
+}
+
+#student-label {
+  padding: 20px !important;
 }

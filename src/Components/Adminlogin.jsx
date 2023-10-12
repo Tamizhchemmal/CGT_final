@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../Css/login.css";
 import boss from "../Assets/Images/boss.png";
@@ -7,15 +7,14 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
+
 import { teal } from "@mui/material/colors";
 import Modal from "react-bootstrap/Modal";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
-import { RollerShadesClosedRounded } from "@mui/icons-material";
+
 import { v4 as uuidv4 } from "uuid";
-import { encrypt, decrypt } from "n-krypta";
+
 import CrmService from "../API/CrmService.js";
 
 function Adminlogin(props) {
@@ -36,8 +35,8 @@ function Adminlogin(props) {
 
   const submitAdminLogin = (e) => {
     e.preventDefault();
-    const key = "key";
-    const userid = uuidv4();
+    // const key = "key";
+    // const userid = uuidv4();
     if (role === "admin") {
       let body = {
         email: email,
@@ -46,8 +45,8 @@ function Adminlogin(props) {
       };
       CrmService.login(body)
         .then((response) => {
-          console.log(response);
-          console.log(response.data.apitoken);
+          // console.log(response);
+          // console.log(response.data.apitoken);
 
           const usertype = response.data.USER_TYPE;
 
@@ -82,9 +81,9 @@ function Adminlogin(props) {
       };
       CrmService.login(body)
         .then((response) => {
-          console.log(response);
-          console.log(response.data.apitoken);
-          console.log(response.data.USER_TYPE);
+          // console.log(response);
+          // console.log(response.data.apitoken);
+          // console.log(response.data.USER_TYPE);
           const usertype = response.data.USER_TYPE;
 
           if (usertype == 1) {
@@ -119,9 +118,9 @@ function Adminlogin(props) {
       };
       CrmService.login(body)
         .then((response) => {
-          console.log(response);
-          console.log(response.data.apitoken);
-          console.log(response.data.USER_TYPE);
+          // console.log(response);
+          // console.log(response.data.apitoken);
+          // console.log(response.data.USER_TYPE);
           const usertype = response.data.USER_TYPE;
 
           if (usertype == 2) {
@@ -149,6 +148,7 @@ function Adminlogin(props) {
           }
         });
     }
+
     // else {
     //   setError("Invalid role");
     // }

@@ -122,7 +122,7 @@ export default function Trainerpage() {
   const [confirmpassword, setConfirmpassword] = useState("");
   const [paymentdetails, setPaymentdetails] = useState("");
   const [reEnterDetails, setreEnterDetails] = useState("");
-  const [ifscCode, setifscCode] = useState("");
+  const [ifsccode, setifsccode] = useState("");
   const [role, setRole] = useState("trainer");
 
   //payment Trasaction
@@ -140,10 +140,8 @@ export default function Trainerpage() {
   const [paymentmodelist, setPaymentList] = useState([]);
 
   const callapiPayment = async (e) => {
-    CrmService.userLoggedIn();
     await CrmService.getPaymentmode()
       .then((response) => {
-        // console.log(response.data);
         setPaymentList(response.data);
       })
       .catch((err) => {
@@ -193,33 +191,21 @@ export default function Trainerpage() {
     setPage(0);
   };
 
-  // const [apiTrainerData, setApiTrainerData] = useState([]);
   const [apitestTrainerData, settestApiTrainerData] = useState([]);
 
-  // const callTrainerApiData = async () => {
-  //   const trainerData = await axios.get(
-  //     "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
-  //   );
-
-  //   setApiTrainerData(trainerData.data);
-  // };
   // Test api
   const callTestApiData = async (e) => {
-    CrmService.userLoggedIn();
     await CrmService.getTrainerList()
       .then((response) => {
-        console.log(response.data);
         settestApiTrainerData(response.data);
       })
       .catch((err) => {
         console.log(err.message);
         setErrors(err.message);
       });
-    // .catch((err) => console.log(r));
   };
 
   useEffect(() => {
-    // callTrainerApiData();
     callTestApiData();
     callapiPayment();
   }, []);
@@ -242,13 +228,7 @@ export default function Trainerpage() {
     setEditTrainShow(true);
     setselectedtraindata(rowTrainData);
     setupdatedtraindata({ ...rowTrainData });
-
-    console.log(rowTrainData);
   };
-
-  // var editTestData = {
-  //   email: "",
-  // };
 
   const [selectedtraindata, setselectedtraindata] = useState({});
   const [updatedtraindata, setupdatedtraindata] = useState({});
@@ -269,13 +249,13 @@ export default function Trainerpage() {
 
   const submitTraintestEdit = async (e) => {
     e.preventDefault();
-
+    let uuid = localStorage.getItem("uuid");
     let editBody = {
       email: updatedtraindata.email,
       firstname: updatedtraindata.name,
       lastname: "",
       usertype: 1, //userType Id
-      createdby: 123, // Logged in User unique ID
+      createdby: uuid, // Logged in User unique ID
       userid: selectedtraindata.id,
       company: updatedtraindata.companyname,
       primaryphone: updatedtraindata.mobilenumber,
@@ -283,18 +263,18 @@ export default function Trainerpage() {
       // payment mode ID
       paymentmode: updatedtraindata.paymentmode,
       paymentdetails: updatedtraindata.paymentdetails, // Account no. or Gpay no.
-      ifsccode: updatedtraindata.ifscCode, // ifsc code if bank selected or else give empty
+      ifsccode: updatedtraindata.ifsccode, // ifsc code if bank selected or else give empty
       password: updatedtraindata.password,
     };
     await CrmService.editTrainer(editBody)
       .then((response) => {
-        console.log(response);
         alert("Updated");
+        setEditTrainShow(false);
       })
       .catch((err) => {
         console.log(err);
       });
-    setTestShow(false);
+    callTestApiData();
   };
 
   // delete trainer
@@ -308,21 +288,21 @@ export default function Trainerpage() {
   };
 
   const confirmDelete = async () => {
+    let uuid = localStorage.getItem("uuid");
     let body = {
       userid: deleteKey, // user UUID
-      modifiedby: "123", // Logged in User unique ID
+      modifiedby: uuid, // Logged in User unique ID
     };
     await CrmService.deleteReferral(body)
       .then((response) => {
-        console.log(response);
         alert("Deleted Successfully");
+        setdeletePopUp(false);
       })
       .catch((error) => {
         console.log(error);
       });
     callTestApiData();
     setdeleteKey(null);
-    setdeletePopUp(false);
   };
 
   const opneTraintable = (apiTrainerData) => {
@@ -341,20 +321,20 @@ export default function Trainerpage() {
 
   const submitTrainer = async (e) => {
     e.preventDefault();
-
+    let uuid = localStorage.getItem("uuid");
     let body = {
       email: email,
       firstname: name,
       lastname: "",
       usertype: 1, //userType Id
-      createdby: 123, // Logged in User unique ID
+      createdby: uuid, // Logged in User unique ID
       userid: 0,
       company: companyname,
       primaryphone: mobilenumber,
       course: course, //course id
       paymentmode: paymentmode, // payment mode ID
       paymentdetails: paymentdetails, // Account no. or Gpay no.
-      ifsccode: ifscCode, // ifsc code if bank selected or else give empty
+      ifsccode: ifsccode, // ifsc code if bank selected or else give empty
       password: password,
     };
     console.log(body);
@@ -363,8 +343,6 @@ export default function Trainerpage() {
     } else {
       await CrmService.createReferralOrTrainer(body)
         .then((response) => {
-          console.log(response.data);
-
           if (response.data.errmessage) {
             setErrors(response.data.errmessage);
           } else {
@@ -376,17 +354,16 @@ export default function Trainerpage() {
         })
         .catch((err) => {
           console.log(err.data.errmessages);
-
-          // setErrors(response.message);
         });
     }
 
-    // callTestApiData();
+    callTestApiData();
   };
 
   // trainer payment
 
   const submitTrainerPay = async (e) => {
+    let uuid = localStorage.getItem("uuid");
     e.preventDefault();
     let body = {
       id: 0, // for create give ID as 0 for edit give ID as Receipt ID(SRP_ID)
@@ -395,12 +372,11 @@ export default function Trainerpage() {
       paymentMode: receiptpaymentmode, // payment mode paym id
       refNumber: transitionID,
       paymentDate: paymentDate, // payment date
-      createdBy: 123,
+      createdBy: uuid,
     };
 
     await CrmService.createPymentDetails(body)
       .then((response) => {
-        console.log(response);
         alert("Payment updated Successfully");
         setpayShow(false);
       })
@@ -419,18 +395,18 @@ export default function Trainerpage() {
   };
 
   const deletePaymentHistroy = async () => {
+    let uuid = localStorage.getItem("uuid");
     let body = {
       transactionId: deletepay,
       userid: paymetuserdata.uuid, // user unique UUID
-      modifiedby: "123", // logged in users unqiue uuID
+      modifiedby: uuid, // logged in users unqiue uuID
     };
     await CrmService.deletePaymentDetails(body).then((response) => {
-      console.log(response);
       setdeletepaymentpopup(false);
 
       setpayShow(false);
     });
-    // console.log(data);
+
     callTestApiData();
   };
 
@@ -574,8 +550,8 @@ export default function Trainerpage() {
                               name="ifscCode"
                               placeholder="Enter IFSC Code"
                               autoComplete="off"
-                              value={ifscCode}
-                              onChange={(e) => setifscCode(e.target.value)}
+                              value={ifsccode}
+                              onChange={(e) => setifsccode(e.target.value)}
                               required
                             ></input>
                           </div>
@@ -775,7 +751,7 @@ export default function Trainerpage() {
                           <div className="inputstudent">
                             <input
                               type="text"
-                              name="ifscCode"
+                              name="ifsccode"
                               placeholder="Enter IFSC Code"
                               autoComplete="off"
                               value={updatedtraindata.ifsccode}
@@ -982,18 +958,19 @@ export default function Trainerpage() {
                               page * rowsPerPage,
                               page * rowsPerPage + rowsPerPage
                             )
-                            // .filter((apiTrainerData) => {
-                            //   return search.toLowerCase() == ""
-                            //     ? apiTrainerData
-                            //     : apiTrainerData.name
-                            //         .toLowerCase()
-                            //         .includes(search) ||
-                            //         apiTrainerData.name.includes(search) ||
-                            //         apiTrainerData.course
-                            //           .toLowerCase()
-                            //           .includes(search) ||
-                            //         apiTrainerData.course.includes(search);
-                            // })
+                            .filter((apiTrainerData) => {
+                              return search.toLowerCase() == ""
+                                ? apiTrainerData
+                                : apiTrainerData.name
+                                    .toLowerCase()
+                                    .includes(search);
+                              // ||
+                              // apiTrainerData.name.includes(search) ||
+                              // apiTrainerData.course
+                              //   .toLowerCase()
+                              //   .includes(search) ||
+                              // apiTrainerData.course.includes(search);
+                            })
                             .map((apiTrainerData) => {
                               return (
                                 <TableRow

@@ -1,6 +1,5 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { Route, Routes, json } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Studentpage from "./Components/Studentpage";
 import HomePage from "./Components/HomePage";
 import Trainerpage from "./Components/Trainerpage";
@@ -8,22 +7,14 @@ import Referralpagetwo from "./Components/Referralpagetwo";
 import TrainerProfile from "./Components/TrainerProfile";
 import RefProfile from "./Components/RefProfile";
 import CommonHomePage from "./Components/CommonHomePage";
-import React, { createContext, useContext, useState } from "react";
-
-import { encrypt, decrypt } from "n-krypta";
+import React, { createContext } from "react";
 
 import Noaccess from "./Components/Noaccess";
 import Adminlogin from "./Components/Adminlogin";
 
-import HomeTrainer from "./Components/HomeTrainer";
-
 export const rolecontext = createContext();
 
 function App() {
-  // const [roles, setRoles] = useState("");
-  // const getrole = (role) => {
-  //   setRoles(role);
-  // };
   return (
     <>
       <Routes>

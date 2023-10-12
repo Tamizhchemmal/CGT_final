@@ -16,9 +16,13 @@
   font-family: "Poppins", sans-serif;
 }
 
-.refmodal-table tr div {
-  padding: 8px 0 !important;
+.details {
+  word-break: break-all !important;
 }
+
+/* .refmodal-table tr div {
+  padding: 4px 0 !important;
+} */
 
 .colum {
   display: flex;
@@ -96,7 +100,8 @@
 
 .referral-label {
   width: 100%;
-  margin: 0 24px;
+  display: flex;
+  justify-content: center;
 }
 
 .ref-label {
@@ -107,9 +112,52 @@
 .ref-details {
   display: flex;
   font-family: "Open Sans", sans-serif;
-  /* width: calc(100% / 2); */
+  padding: 25px;
 }
 
 .mods {
   z-index: 9999999;
+}
+
+#referralcolum {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 50px;
+  width: 100% !important;
+}
+
+.leo-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+@media screen and (max-width: 992px) {
+  #referralleo-profile {
+    margin-top: 20%;
+  }
+}
+@media screen and (max-width: 845px) {
+  #referralleo-profile {
+    margin-top: 30%;
+  }
+}
+
+@media screen and (max-width: 636px) {
+  #referralleo-profile {
+    margin-top: 50%;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  #referralleo-profile {
+    margin-top: 40%;
+  }
+}
+
+@media screen and (max-width: 396px) {
+  #referralleo-profile {
+    margin-top: 90%;
+  }
 }

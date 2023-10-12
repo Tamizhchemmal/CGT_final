@@ -212,12 +212,13 @@ export default function RefTable({ search, referralCount }) {
 
   const submitRefEdit = async (e) => {
     e.preventDefault();
+    let uuid = localStorage.getItem("uuid");
     let editBody = {
       email: updatedrefdata.email,
       firstname: updatedrefdata.name,
       lastname: "",
-      usertype: 1, //userType Id
-      createdby: 123, // Logged in User unique ID
+      usertype: 2, //userType Id
+      createdby: uuid, // Logged in User unique ID
       userid: selectedrefdata.id,
       company: updatedrefdata.companyname,
       primaryphone: updatedrefdata.mobilenumber,
@@ -225,7 +226,7 @@ export default function RefTable({ search, referralCount }) {
 
       paymentmode: updatedrefdata.paymentmode, // payment mode ID
       paymentdetails: updatedrefdata.paymentdetails, // Account no. or Gpay no.
-      ifsccode: updatedrefdata.ifscCode, // ifsc code if bank selected or else give empty
+      ifsccode: updatedrefdata.ifsccode, // ifsc code if bank selected or else give empty
       password: updatedrefdata.password,
     };
     await CrmService.editTrainer(editBody)
@@ -236,6 +237,7 @@ export default function RefTable({ search, referralCount }) {
       .catch((err) => {
         console.log(err);
       });
+    callApiData();
     setEditRefShow(false);
   };
 
@@ -324,12 +326,12 @@ export default function RefTable({ search, referralCount }) {
               <TableBody>
                 {apiData
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  // .filter((apiData) => {
-                  //   return search.toLowerCase() === ""
-                  //     ? apiData
-                  //     : apiData.name.toLowerCase().includes(search) ||
-                  //         apiData.name.includes(search);
-                  // })
+                  .filter((apiData) => {
+                    return search.toLowerCase() === ""
+                      ? apiData
+                      : apiData.name.toLowerCase().includes(search) ||
+                          apiData.name.includes(search);
+                  })
                   .map((apiData) => {
                     return (
                       <TableRow key={apiData.id} hover role="checkbox">
@@ -546,7 +548,7 @@ export default function RefTable({ search, referralCount }) {
                     <div className="inputref">
                       <input
                         type="text"
-                        name="ifscCode"
+                        name="ifsccode"
                         placeholder="Enter IFSC Code"
                         autoComplete="off"
                         value={updatedrefdata.ifsccode}

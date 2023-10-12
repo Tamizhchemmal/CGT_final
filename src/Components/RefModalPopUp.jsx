@@ -33,6 +33,20 @@ const columns = [
     align: "center",
     format: (value) => value.toLocaleString("en-US"),
   },
+  {
+    id: "referralamount",
+    label: "Referral Amount",
+    minWidth: 150,
+    align: "center",
+    format: (value) => value.toLocaleString("en-US"),
+  },
+  {
+    id: "referralpaid",
+    label: "Paid Status",
+    minWidth: 150,
+    align: "center",
+    format: (value) => value.toLocaleString("en-US"),
+  },
 ];
 
 export default function RefModalPopUp({ user }) {
@@ -42,9 +56,23 @@ export default function RefModalPopUp({ user }) {
   const apiData = [...arr];
   console.log("apiData", apiData);
   const [page, setPage] = React.useState(0);
+
+  const allstudent = user.referralStudents ?? [];
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
+
+  let total = 0;
+  for (let x of allstudent) {
+    console.log(x.STUDENT_REFERRAL_AMOUNT);
+    const sum = Number(x.STUDENT_REFERRAL_AMOUNT);
+    total += sum;
+  }
+  // console.log("total", total);
+
+  // const totalAmount = () => {
+  //   for (let i = 0; i < apiData.length; i++) {}
+  // };
 
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -53,21 +81,18 @@ export default function RefModalPopUp({ user }) {
     setPage(0);
   };
 
-  // const callApiData = async (e) => {
-  //   const refData = await axios.get(
-  //     "https://64a587de00c3559aa9bfdbd4.mockapi.io/refData"
-  //   );
-  //   setApiData(refData.data);
-  // };
-
-  // useEffect(() => {
-  //   callApiData();
-  // }, []);
+  const getType = (count) => {
+    console.log("count", count);
+    if (count >= 4) {
+      return "Gold";
+    } else if (count < 4) {
+      return "Silver";
+    }
+  };
 
   return (
     <>
       <div className="refProfileModel">
-        {/* <Container> */}
         <div className="colum">
           <div className="column1">
             <div className="ref-bio1">
@@ -87,7 +112,7 @@ export default function RefModalPopUp({ user }) {
                           <div className="ref-label">Name</div>
                         </td>
                         <td>
-                          <div className="details">{user.name}</div>
+                          <div className="details">: {user.name}</div>
                         </td>
                       </tr>
 
@@ -96,7 +121,7 @@ export default function RefModalPopUp({ user }) {
                           <div className="ref-label">Contact No</div>
                         </td>
                         <td>
-                          <div className="details">{user.mobilenumber}</div>
+                          <div className="details">: {user.mobilenumber}</div>
                         </td>
                       </tr>
                       <tr>
@@ -104,7 +129,7 @@ export default function RefModalPopUp({ user }) {
                           <div className="ref-label">Email ID</div>
                         </td>
                         <td>
-                          <div className="details">{user.email}</div>
+                          <div className="details">: {user.email}</div>
                         </td>
                       </tr>
                       <tr>
@@ -112,7 +137,7 @@ export default function RefModalPopUp({ user }) {
                           <div className="ref-label">Total Students</div>
                         </td>
                         <td>
-                          <div className="details">{/* : 12 */}</div>
+                          <div className="details">: {apiData.length}</div>
                         </td>
                       </tr>
                       <tr>
@@ -120,15 +145,9 @@ export default function RefModalPopUp({ user }) {
                           <div className="ref-label">Referral Type</div>
                         </td>
                         <td>
-                          <div className="details">{/* : Gold */}</div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div className="ref-label">Amount Benefited</div>
-                        </td>
-                        <td>
-                          <div className="details">{/* : 12000 */}</div>
+                          <div className="details">
+                            : {getType(apiData.length)}
+                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -141,10 +160,10 @@ export default function RefModalPopUp({ user }) {
               <div>
                 <span className="ruppess">
                   <CurrencyRupeeOutlinedIcon className="rupee-icon" />
-                  10,000
+                  {total}
                 </span>
               </div>
-              <div className="request-money">
+              {/* <div className="request-money">
                 <Button
                   variant="contained"
                   startIcon={<CurrencyRupeeOutlinedIcon />}
@@ -152,7 +171,7 @@ export default function RefModalPopUp({ user }) {
                 >
                   Request Money
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="column2">
@@ -200,6 +219,22 @@ export default function RefModalPopUp({ user }) {
                         >
                           {data.STUDENT_FEES_PAID}
                         </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          {data.STUDENT_REFERRAL_AMOUNT}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          id="table-body"
+                          style={{ fontSize: 16 }}
+                        >
+                          {data.STUDENT_REFERRAL_PAID == 0
+                            ? "Not paid"
+                            : "Paid"}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -217,8 +252,6 @@ export default function RefModalPopUp({ user }) {
             </Paper>
           </div>
         </div>
-
-        {/* </Container> */}
       </div>
     </>
   );

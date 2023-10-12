@@ -3,18 +3,6 @@
   top: 0;
 }
 
-.crd-bg {
-  display: flex;
-  justify-content: center;
-}
-
-.trainer-profdetails {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: "Poppins", sans-serif;
-}
-
 .trainmodal-table tr div {
   padding: 8px !important;
 }
@@ -34,7 +22,7 @@
 }
 
 .trainer-bio {
-  width: 120%;
+  width: 100%;
   height: auto;
   /* border: 2px solid #3b3b33; */
   border-radius: 10px;
@@ -56,12 +44,43 @@
   text-align: center;
 }
 
+.details {
+  word-break: break-all;
+}
 .trainer-label {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .trainer-details {
   display: flex;
   font-family: "Open Sans", sans-serif;
-  margin-top: 20px;
+  /* margin: 20px 40px; */
+}
+
+#trainercolum {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 50px;
+  width: 100% !important;
+}
+
+.leo-profile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+@media screen and (max-width: 470px) {
+  .leo-profile {
+    margin-top: 10%;
+  }
+}
+
+@media screen and (max-width: 396px) {
+  .leo-profile {
+    margin-top: 20%;
+  }
 }

@@ -3,16 +3,15 @@ import "../Css/TrainerProfile.css";
 import { Container } from "react-bootstrap";
 import ProfileLogo from "../Assets/Images/boss.png";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import Button from "@mui/material/Button";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
+import CrmService from "../API/CrmService";
 // import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
@@ -57,127 +56,123 @@ export default function TrainerProfModal() {
     setPage(0);
   };
 
-  const callApiData = async (e) => {
-    const trainerData = await axios.get(
-      "https://64b638a2df0839c97e1528f4.mockapi.io/trainers"
-    );
-    setApiData(trainerData.data);
+  const getTrainerdetails = async () => {
+    var trainerId = localStorage.getItem("uuid");
+    CrmService.userLoggedIn();
+    await CrmService.getinduvidualusers(trainerId)
+      .then((response) => {
+        console.log(response.data);
+        setApiData(response.data[0]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-
   useEffect(() => {
-    callApiData();
+    getTrainerdetails();
   }, []);
 
   return (
     <>
-      <div className="trainerProfileModel">
-        <div className="crd-bg">
-          <div className="trainer-profdetails">
-            <Container>
-              <div className="colum">
-                <div className="column1">
-                  <div className="trainer-bio">
-                    <div className="profile">
-                      <img
-                        src={ProfileLogo}
-                        alt="profile-logo"
-                        className="prof-logo"
-                      />
-                    </div>
-                    <div className="trainer-details">
-                      <div className="trainer-label">
-                        <table>
-                          <tbody className="trainmodal-table">
-                            <tr>
-                              <td>
-                                <div className="label">Name</div>
-                              </td>
-                              <td>
-                                <div className="details">
-                                  {/* : {apiData.name} */}
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div className="label">Email ID</div>
-                              </td>
-                              <td>
-                                <div className="details">
-                                  {/* : {apiData.mobilenumber} */}
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div className="label">Contact No</div>
-                              </td>
-                              <td>
-                                <div className="details">
-                                  {/* : {apiData.email} */}
-                                </div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div className="label">Payment</div>
-                              </td>
-                              <td>
-                                <div className="details">{/* : 12 */}</div>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <div className="label"></div>
-                              </td>
-                              <td>
-                                <div className="details">{/* : Gold */}</div>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="column2">
-                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                    <TableContainer sx={{ maxHeight: 540 }}>
-                      <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                          <TableRow sx={{ backgroundColor: "lightblue" }}>
-                            {columns.map((column) => (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{
-                                  minWidth: column.minWidth,
-                                  backgroundColor: " #002333",
-                                  color: "#ffffff",
-                                  fontSize: "18px",
-                                }}
-                              >
-                                {column.label}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody></TableBody>
-                      </Table>
-                    </TableContainer>
-                    <TablePagination
-                      rowsPerPageOptions={[10, 25, 100]}
-                      component="div"
-                      count={apiData.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </Paper>
+      <div className="leo-profile">
+        <div className="colum" id="trainercolum">
+          <div className="column1" id="trainercolum1">
+            <div className="trainer-bio">
+              <div className="profile">
+                <img
+                  src={ProfileLogo}
+                  alt="profile-logo"
+                  className="prof-logo"
+                />
+              </div>
+              <div className="trainer-details">
+                <div className="trainer-label">
+                  <table>
+                    <tbody className="trainmodal-table">
+                      <tr>
+                        <td>
+                          <div className="label">Name</div>
+                        </td>
+                        <td>
+                          <div className="details">: {apiData.name}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="label">Email ID</div>
+                        </td>
+                        <td>
+                          <div className="details">: {apiData.email}</div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="label">Contact No</div>
+                        </td>
+                        <td>
+                          <div className="details">
+                            : {apiData.mobilenumber}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="label">Payment</div>
+                        </td>
+                        <td>
+                          <div className="details">
+                            : {apiData.paymentmodename}
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div className="label">Expertise</div>
+                        </td>
+                        <td>
+                          <div className="details">: {apiData.courseName}</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-            </Container>
+            </div>
+          </div>
+          <div className="column2" id="trainercolum2">
+            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+              <TableContainer sx={{ maxHeight: 540 }}>
+                <Table stickyHeader aria-label="sticky table">
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "lightblue" }}>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{
+                            backgroundColor: " #002333",
+                            color: "#ffffff",
+                            fontSize: "18px",
+                          }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody></TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={apiData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
           </div>
         </div>
       </div>
