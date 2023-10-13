@@ -13,7 +13,6 @@ export default function NavBarTwo() {
   const logOut = () => {
     CrmService.logoutapi()
       .then((response) => {
-        console.log(response);
         localStorage.removeItem("role");
         localStorage.removeItem("access");
         localStorage.removeItem("uuid");

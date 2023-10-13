@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,7 +19,7 @@ import {
   ModalTitle,
   CloseButton,
 } from "react-bootstrap";
-import axios from "axios";
+
 import { FcSearch } from "react-icons/fc";
 import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
@@ -123,7 +123,6 @@ export default function Trainerpage() {
   const [paymentdetails, setPaymentdetails] = useState("");
   const [reEnterDetails, setreEnterDetails] = useState("");
   const [ifsccode, setifsccode] = useState("");
-  const [role, setRole] = useState("trainer");
 
   //payment Trasaction
   const [payShow, setpayShow] = useState(false);
@@ -169,7 +168,6 @@ export default function Trainerpage() {
     setPaymentuserdata(apiData);
     setpayShow(true);
     setreciptdata(apiData.userpayments);
-    console.log(apiData);
   };
 
   const payhandleClose = () => {
@@ -181,7 +179,7 @@ export default function Trainerpage() {
   const navigate = useNavigate();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [alertt, setAlertt] = useState(null);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -210,17 +208,10 @@ export default function Trainerpage() {
     callapiPayment();
   }, []);
 
-  const [testShow, setTestShow] = useState(false);
-
   const [editTrainShow, setEditTrainShow] = useState(false);
 
   const edithandleClose = () => {
     setEditTrainShow(false);
-    setErrors("");
-  };
-
-  const testhandleClose = () => {
-    setTestShow(false);
     setErrors("");
   };
 
@@ -232,12 +223,6 @@ export default function Trainerpage() {
 
   const [selectedtraindata, setselectedtraindata] = useState({});
   const [updatedtraindata, setupdatedtraindata] = useState({});
-  // testdata
-  const handletraintestedit = (rowTrainData) => {
-    setTestShow(true);
-    setselectedtraindata(rowTrainData);
-    setupdatedtraindata({ ...rowTrainData });
-  };
 
   const testhandlechange = (e) => {
     const { name, value } = e.target;
@@ -337,7 +322,7 @@ export default function Trainerpage() {
       ifsccode: ifsccode, // ifsc code if bank selected or else give empty
       password: password,
     };
-    console.log(body);
+
     if (password !== confirmpassword) {
       setErrors("Password Should Be Same");
     } else {
@@ -797,40 +782,6 @@ export default function Trainerpage() {
                             ))}
                           </select>
                         </div>
-                        {/* <div className="inputtrainer">
-                          <input
-                            type="Password"
-                            id="input-pwd"
-                            name="password"
-                            placeholder="Password"
-                            autoComplete="off"
-                            value={updatedtraindata.password}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                password: e.target.value,
-                              })
-                            }
-                            required
-                          ></input>
-                        </div> */}
-                        {/* <div className="inputtrainer">
-                          <input
-                            type="Password"
-                            id="input-conpwd"
-                            name="confirmpassword"
-                            placeholder="Confirm Password"
-                            autoComplete="off"
-                            value={editedTrainData.confirmpassword}
-                            onChange={(e) =>
-                              setEditedTrainData({
-                                ...editedTrainData,
-                                confirmpassword: e.target.value,
-                              })
-                            }
-                            required
-                          ></input>
-                        </div> */}
                       </div>
                     </div>
                     <Modal.Footer>
@@ -848,86 +799,7 @@ export default function Trainerpage() {
                   </form>
                 </Modal.Body>
               </Modal>
-              {/* Test Edit */}
-              {/* 
-              <Modal
-                // data={apiTrainerData}
-                show={testShow}
-                onHide={testhandleClose}
-                className="mods"
-                backdrop="static"
-                keyboard={false}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-              >
-                <Modal.Header
-                  style={{ backgroundColor: " #002333 ", color: "white" }}
-                >
-                  <Modal.Title style={{ color: "white" }}>
-                    Update Trainer
-                  </Modal.Title>
 
-                  <CloseButton variant="white" onClick={testhandleClose} />
-                </Modal.Header>
-                <Modal.Body>
-                  <ModalTitle style={{ textAlign: "center" }}>
-                    Update AN TRAINER
-                  </ModalTitle>
-                  <form onSubmit={submitTraintestEdit}>
-                    <div className="inputref-box">
-                      <div className="student-grid">
-                        <div className="inputstudent">
-                          <input
-                            type="text"
-                            id="input-name"
-                            name="name"
-                            placeholder="Fullname"
-                            autoComplete="new-password"
-                            value={updatedtraindata.name}
-                            onChange={testhandlechange}
-                            required
-                          ></input>
-
-                          <input
-                            type="tel"
-                            id="input-tele"
-                            name="mobilenumber"
-                            placeholder="Mobile Number"
-                            pattern="[6789][0-9]{9}"
-                            autoComplete="new-password"
-                            value={updatedtraindata.mobilenumber}
-                            onChange={testhandlechange}
-                            required
-                          ></input>
-                          <input
-                            type="email"
-                            id="input-email"
-                            name="email"
-                            placeholder="Email Address"
-                            pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$"
-                            required
-                            value={updatedtraindata.email}
-                            onChange={testhandlechange}
-                          ></input>
-                        </div>
-                      </div>
-                    </div>
-                    <Modal.Footer>
-                      <button type="submit" id="btn-createrefmodal">
-                        Update
-                      </button>
-                      <Button
-                        variant="secondary"
-                        id="btn-createrefmodal"
-                        onClick={testhandleClose}
-                      >
-                        Close
-                      </Button>
-                    </Modal.Footer>
-                  </form>
-                </Modal.Body>
-              </Modal> */}
               {/* Table for Trainer */}
               <div id="reftable">
                 <div className="tableData">
@@ -1124,144 +996,6 @@ export default function Trainerpage() {
                 </div>
               </div>
               <hr></hr>
-              {/* Test api table
-               */}
-              {/* <div id="reftable">
-                <div className="tableData">
-                  <Paper sx={{ width: "100%", overflow: "hidden" }}>
-                    <TableContainer sx={{ maxHeight: 540 }}>
-                      <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                          <TableRow sx={{ backgroundColor: "lightblue" }}>
-                            {columns.map((column) => (
-                              <TableCell
-                                key={column.id}
-                                align={column.align}
-                                style={{
-                                  minWidth: column.minWidth,
-                                  backgroundColor: " #002333",
-                                  color: "#ffffff",
-                                  fontSize: "18px",
-                                }}
-                              >
-                                {column.label}
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {apitestTrainerData
-                            .slice(
-                              page * rowsPerPage,
-                              page * rowsPerPage + rowsPerPage
-                            )
-                            // .filter((apiTrainerData) => {
-                            //   return search.toLowerCase() === ""
-                            //     ? apiTrainerData
-                            //     : apiTrainerData.name
-                            //         .toLowerCase()
-                            //         .includes(search) ||
-                            //         apiTrainerData.name.includes(search) ||
-                            //         apiTrainerData.course
-                            //           .toLowerCase()
-                            //           .includes(search) ||
-                            //         apiTrainerData.course.includes(search);
-                            // })
-                            .map((apitestTrainerData) => {
-                              return (
-                                <TableRow
-                                  key={apitestTrainerData.id}
-                                  hover
-                                  role="checkbox"
-                                >
-                                  <TableCell
-                                    align="center"
-                                    id="table-body"
-                                    style={{ fontSize: 16 }}
-                                    onClick={() =>
-                                      opneTraintable(apitestTrainerData)
-                                    }
-                                  >
-                                    {apitestTrainerData.email}
-                                  </TableCell>
-                                  <TableCell
-                                    align="center"
-                                    id="table-body"
-                                    style={{ fontSize: 16 }}
-                                    onClick={() =>
-                                      opneTraintable(apitestTrainerData)
-                                    }
-                                  ></TableCell>
-                                  <TableCell
-                                    align="center"
-                                    id="table-body"
-                                    style={{ fontSize: 16 }}
-                                  >
-                                    <BiSolidMessageSquareEdit
-                                      id="edit-icon"
-                                      onClick={() =>
-                                        handletraintestedit(apitestTrainerData)
-                                      }
-                                    />
-                                    <MdDelete
-                                      id="dlt-icon"
-                                      onClick={() =>
-                                        deleteTrainerData(apitestTrainerData.id)
-                                      }
-                                    />
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                        </TableBody>
-                      </Table>
-                    </TableContainer>
-                    <TablePagination
-                      rowsPerPageOptions={[10, 25, 100]}
-                      component="div"
-                      count={apitestTrainerData.length}
-                      rowsPerPage={rowsPerPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                    />
-                  </Paper>
-                  {/* model profile */}
-              {/* <Modal
-                    show={tableshow}
-                    onHide={handleTrainClose}
-                    backdrop="static"
-                    keyboard={false}
-                    size="lg"
-                    aria-labelledby="contained-modal-title-vcenter"
-                    centered
-                  >
-                    <Modal.Header
-                      style={{ backgroundColor: " #002333 ", color: "white" }}
-                    >
-                      <Modal.Title style={{ color: "white" }}>
-                        Trainer Profile
-                      </Modal.Title>
-
-                      <CloseButton variant="white" onClick={handleTrainClose} />
-                    </Modal.Header>
-                    <Modal.Body>
-                      <div>
-                        <TrainerProfModal />
-                      </div>
-                      <hr></hr>
-                      <Modal.Footer>
-                        <Button variant="secondary" onClick={handleTrainClose}>
-                          Close
-                        </Button>
-                        <button type="submit" id="btn-createrefmodal">
-                          Create
-                        </button>
-                      </Modal.Footer>
-                    </Modal.Body>
-                  </Modal> */}
-              {/* </div>
-              </div> */}{" "}
             </Container>
           </div>
         </div>

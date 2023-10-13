@@ -1,18 +1,24 @@
 import React from "react";
-import Alert from "@mui/material/Alert";
+
 import Stack from "@mui/material/Stack";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import "../Css/HomePage.css";
 import access from "../Assets/Images/Accessdenied.png";
 import Image from "react-bootstrap/Image";
-import { hover } from "@testing-library/user-event/dist/hover";
+import CrmService from "../API/CrmService";
 
 function Noaccess() {
   const navigate = useNavigate();
   const handleback = () => {
-    localStorage.clear();
-    navigate("/");
+    CrmService.logoutapi()
+      .then((response) => {
+        localStorage.clear();
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   return (
     <>

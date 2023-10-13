@@ -13,16 +13,14 @@ import Modal from "react-bootstrap/Modal";
 import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button } from "@mui/material";
 
-import { v4 as uuidv4 } from "uuid";
-
 import CrmService from "../API/CrmService.js";
 
-function Adminlogin(props) {
+function Adminlogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [role, setRole] = useState("");
-  const [token, setToken] = useState("");
+
   const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
@@ -35,8 +33,7 @@ function Adminlogin(props) {
 
   const submitAdminLogin = (e) => {
     e.preventDefault();
-    // const key = "key";
-    // const userid = uuidv4();
+
     if (role === "admin") {
       let body = {
         email: email,
@@ -45,9 +42,6 @@ function Adminlogin(props) {
       };
       CrmService.login(body)
         .then((response) => {
-          // console.log(response);
-          // console.log(response.data.apitoken);
-
           const usertype = response.data.USER_TYPE;
 
           if (usertype == 3) {
@@ -65,7 +59,6 @@ function Adminlogin(props) {
           }
         })
         .catch((error) => {
-          console.log(error);
           console.log(error.response.data.errmessage);
           if (error.response.data.errmessage) {
             setError(error.response.data.errmessage);
@@ -81,9 +74,6 @@ function Adminlogin(props) {
       };
       CrmService.login(body)
         .then((response) => {
-          // console.log(response);
-          // console.log(response.data.apitoken);
-          // console.log(response.data.USER_TYPE);
           const usertype = response.data.USER_TYPE;
 
           if (usertype == 1) {
@@ -102,7 +92,6 @@ function Adminlogin(props) {
           }
         })
         .catch((error) => {
-          console.log(error);
           console.log(error.response.data.errmessage);
           if (error.response.data.errmessage) {
             setError(error.response.data.errmessage);
@@ -118,9 +107,6 @@ function Adminlogin(props) {
       };
       CrmService.login(body)
         .then((response) => {
-          // console.log(response);
-          // console.log(response.data.apitoken);
-          // console.log(response.data.USER_TYPE);
           const usertype = response.data.USER_TYPE;
 
           if (usertype == 2) {
@@ -139,7 +125,6 @@ function Adminlogin(props) {
           }
         })
         .catch((error) => {
-          console.log(error);
           console.log(error.response.data.errmessage);
           if (error.response.data.errmessage) {
             setError(error.response.data.errmessage);
@@ -148,10 +133,6 @@ function Adminlogin(props) {
           }
         });
     }
-
-    // else {
-    //   setError("Invalid role");
-    // }
   };
 
   const handleaccess = (e) => {
@@ -174,8 +155,6 @@ function Adminlogin(props) {
           <div className="style-heading">
             <h4>Career Guidance Technologies</h4>
           </div>
-
-          {/* <h2>Login</h2> */}
 
           <div>
             <form onSubmit={submitAdminLogin}>
@@ -274,8 +253,6 @@ function Adminlogin(props) {
                 <Button
                   type="submit"
                   sx={{ width: "80%" }}
-                  // onClick={submitAdminLogin}
-
                   size="large"
                   variant="outlined"
                   className="btn-admin"
@@ -285,7 +262,7 @@ function Adminlogin(props) {
                 </Button>
               </div>
             </form>
-            {/* <Button onClick={(e)=>{setSuccess(true)}}>Click</Button> */}
+
             <Modal show={success} backdrop="static" keyboard={false}>
               <Modal.Header>
                 <Modal.Title>

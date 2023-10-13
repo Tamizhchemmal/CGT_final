@@ -12,7 +12,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 import CrmService from "../API/CrmService";
-// import CurrencyRupeeOutlinedIcon from "@mui/icons-material/CurrencyRupeeOutlined";
 
 const columns = [
   { id: "batchcode", label: "Batch Code", minWidth: 170, align: "center" },
@@ -86,7 +85,7 @@ export default function TrainerProfModal() {
                 />
               </div>
               <div className="trainer-details">
-                <div className="trainer-label">
+                <div className="trainer-label" id="trainerLabel">
                   <table>
                     <tbody className="trainmodal-table">
                       <tr>
@@ -140,7 +139,7 @@ export default function TrainerProfModal() {
             </div>
           </div>
           <div className="column2" id="trainercolum2">
-            <Paper sx={{ width: "100%", overflow: "hidden" }}>
+            {/* <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer sx={{ maxHeight: 540 }}>
                 <Table stickyHeader aria-label="sticky table">
                   <TableHead>
@@ -172,7 +171,7 @@ export default function TrainerProfModal() {
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
-            </Paper>
+            </Paper> */}
           </div>
         </div>
       </div>

@@ -66,6 +66,10 @@
   width: 100% !important;
 }
 
+#trainerLabel {
+  padding: 20px !important;
+}
+
 .leo-profile {
   display: flex;
   justify-content: center;
